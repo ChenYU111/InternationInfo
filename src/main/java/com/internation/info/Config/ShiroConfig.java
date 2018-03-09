@@ -85,10 +85,21 @@ public class ShiroConfig {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		map.put("/logout", "logout");
 		map.put("/login", "anon");
-		map.put("/logon", "anon");
+		map.put("/logout", "logout");
+		map.put("/loginSure", "anon");
 		map.put("/register", "anon");
+		map.put("/toregister", "anon");
 		map.put("/user", "authc");
-		//map.put("/**", "authc");
+		map.put("/main", "authc");
+		map.put("/loginSure", "anon");
+		map.put("/static/css/**", "anon");
+		map.put("/static/img/portfolio/**", "anon");
+		map.put("/static/img/**", "anon");
+		map.put("/static/js/**", "anon");
+		map.put("/static/mail*", "anon");
+		map.put("/static/scss/**", "anon");
+		map.put("/static/vendor/**", "anon");
+		map.put("/**", "authc");
 		// 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
 		shiroFilterFactoryBean.setLoginUrl("/login");
 		// 登录成功后要跳转的链接
@@ -104,7 +115,7 @@ public class ShiroConfig {
 		HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
 		hashedCredentialsMatcher.setHashAlgorithmName("md5");// 散列算法:这里使用MD5算法;
 		hashedCredentialsMatcher.setHashIterations(2);// 散列的次数，比如散列两次，相当于
-														// md5(md5(""));
+		hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);												// md5(md5(""));
 		return hashedCredentialsMatcher;
 	}
 

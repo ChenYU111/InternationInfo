@@ -35,7 +35,7 @@ public class userLogin {
 		return "login";
 	}
 
-	@RequestMapping(value = "/loginSure", produces = "application/json; charset=utf-8", method = { RequestMethod.POST })
+	@RequestMapping(value = "/loginSure", method = { RequestMethod.POST })
 	public String login(String username, String password) {
 		System.out.println("当前用户名：" + username);
 		Subject currentUser = SecurityUtils.getSubject();
@@ -79,7 +79,6 @@ public class userLogin {
 		String password = md5Encode.md5Pwd(user.getPassword(), user.getUserName());
 		user.setPassword(password);
 		user.setCreateTime(new Date());
-		user.setRoleId("1,3,2");
 		user.setStatus(1);
 		user.setSalt(user.getUserName());
 		int num = userMapper.insert(user);
