@@ -6,7 +6,7 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AddMD5Encode {
+public class AddMD5Encode {              
 	public static String md5Pwd(String password, String username) {
 		//加密方式
 		String hashAlgorithmName = "MD5";
