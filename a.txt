@@ -1,0 +1,13 @@
+因为  注册 时密码的加密  （SimpleHash）和 登录时  SimpleAuthenticationInfo 的 salt 问题 所以 无法登录
+	// 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
+	SimpleAuthenticationInfo
+			// 这块对比逻辑是先对比username，但是username肯定是相等的，所以真正对比的是password。
+			// 从这里传入的password（这里是从数据库获取的）和token（filter中登录时生成的）中的password做对比，
+			// 如果相同就允许登录，不相同就抛出异常。
+			// 如果验证成功，最终这里返回的信息authenticationInfo 的值与传入的第一个字段的值相同
+			
+			3.2 开题报告  解决  乱码  解决 用 salt登录问题  继续向后开发    登录上了    用用户的信息了       判断用户有哪些角色     可以用哪些功能 
+			    和资源   
+			    路径 的 过滤    shiro 的  Filter
+			
+			

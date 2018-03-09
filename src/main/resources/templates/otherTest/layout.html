@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body class="layout-fixed">
+
+	<div th:fragment="navbar" class="wrapper" role="navigation">
+		<div th:replace="head:: headInfo">Header hhhhh</div>
+		<div th:replace="sidebar :: sidebar">sidebar ssssss</div>
+		<div layout:fragment="content" id="content"></div>
+		<div th:replace="foot:: footer">footer  ffffffffff</div>
+	</div>
+
+</body>
+</html>

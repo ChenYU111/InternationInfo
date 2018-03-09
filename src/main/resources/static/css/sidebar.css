@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.sidebar{
+	margin-top:1000px;
+	background-image: url('img/msidebar.PNG');
+}
+#sidebar{
+	margin-top:1000px;
+	background-image: url('img/msidebar.PNG');
+}

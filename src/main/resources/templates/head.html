@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta name="content-type" content="text/html; charset=UTF-8">
+<body>
+<div th:fragment="headInfo">
+	<table style="background-image: url('img/head.PNG');width: 100%;height: 50px">
+		<tr>
+			<td style="width:7.2%"><img src="../static/img/logo.PNG" alt="logo"/></td>
+			<td style="width:7.2%"><a th:href="main">首页</a></td>
+			<td style="width:7.2%"><a th:href="main">资讯</a></td>
+			<td style="width:7.2%"><a th:href="main">问答</a></td>
+			<td style="width:10%"><a th:href="main">热门聊天室</a></td>
+			<td style="width:7.2%"><a th:href="main">热门资讯</a></td>
+			<td style="width:7.2%"><a th:href="main">下载</a></td>
+			<td style="width:18%"><form action="main"><input type="text" id="search" name="search" placeholder="搜搜发现新视界。。"/><input type="submit" value="搜"></input></form></td>
+			<td style="width:7.2%"><img src="" alt=""/><a href="#">个人中心</a></td>
+			<td style="width:7.2%"><a href="main">写资讯</a></td>
+			<td style="width:7.2%"><a th:href="main">注册</a></td>
+			<td style="width:7.2%"><a th:href="main">登录</a></td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

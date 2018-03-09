@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<context id="context1">
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/internationinfo" userId="root" password="111111"  />
+		<javaModelGenerator targetPackage="com.internation.info.model"
+			targetProject="src/main/java" />
+		<sqlMapGenerator targetPackage="com.internation.info.mapper"
+			targetProject="src/main/java" />
+		<javaClientGenerator targetPackage="com.internation.info.dao"
+			targetProject="src/main/java" type="ANNOTATEDMAPPER" />
+		<table tableName="action" domainObjectName="Action"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="true">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="integration" domainObjectName="Integration"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="true">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="role" domainObjectName="Role"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="true">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="user" domainObjectName="User"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="true">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+	</context>
+</generatorConfiguration>
