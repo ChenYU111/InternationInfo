@@ -47,11 +47,13 @@ public class userLogin {
 			try {
 				currentUser.login(token);
 				logger.info("用户" + username + "登录认证通过");
-				return "main";
+				return "user/successMain";
 			} catch (AuthenticationException e) {
 				System.out.println("登录失败");
 			}
-		}
+		}/*else{
+			return "main";
+		}*/
 		return "login";
 	}
 
@@ -93,5 +95,16 @@ public class userLogin {
 	@RequestMapping("/main")
 	public String toMain() {
 		return "main";
+	}
+	@RequestMapping("/logout")
+	public String toLogout(){
+		 Subject subject = SecurityUtils.getSubject();  
+		    if (subject.isAuthenticated()) {  
+		        subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存  
+		        /*if (LOG.isDebugEnabled()) {  
+		            LOG.debug("用户" + username + "退出登录");  
+		        }  *///提示用户退出成功。。。
+		    }  
+		return "login";
 	}
 }

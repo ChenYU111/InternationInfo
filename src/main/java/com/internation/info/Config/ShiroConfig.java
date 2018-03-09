@@ -90,11 +90,13 @@ public class ShiroConfig {
 		map.put("/register", "anon");
 		map.put("/toregister", "anon");
 		map.put("/user", "authc");
-		map.put("/main", "authc");
+		map.put("/main", "anon");
 		map.put("/loginSure", "anon");
 		map.put("/static/css/**", "anon");
 		map.put("/static/img/portfolio/**", "anon");
-		map.put("/static/img/**", "anon");
+		map.put("/static/img/about/*", "anon");
+		map.put("/static/img/logos/*", "anon");
+		map.put("/static/img/team/*", "anon");
 		map.put("/static/js/**", "anon");
 		map.put("/static/mail*", "anon");
 		map.put("/static/scss/**", "anon");
