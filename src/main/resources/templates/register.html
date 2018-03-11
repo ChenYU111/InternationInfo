@@ -5,7 +5,9 @@
 <title>注册新用户</title>
 </head>
 <body>
-	<form th:action="toregister">
+<div>
+	<img src="../../img/portfolio/05-thumbnail.jpg" alt="欢迎" style="float: left; width: 250px;height: 250px;margin-top: 70px;margin-left: 50px;"></img>
+	<form th:action="toregister" style="float: right;margin-top: 100px;margin-right: 80px;">
 		用户名：<input th:type="text" id="userName" name="userName" placeholder="用户名" required="required"/><br/>
 		手机号：<input th:type="tel" id="tel" name="tel" placeholder="手机号" required="required"/><br/>
 		密    码：<input th:type="password" id="password" name="password" placeholder="密码" required="required"/><br/>
@@ -14,5 +16,6 @@
             <input th:type="radio" name="sex" value="2" checked>女<br/>
 		<input th:type="submit" value="注册"><br/>
 	</form>
+</div>
 </body>
 </html>

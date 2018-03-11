@@ -83,7 +83,6 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		// 拦截器.
 		Map<String, String> map = new LinkedHashMap<String, String>();
-		map.put("/logout", "logout");
 		map.put("/login", "anon");
 		map.put("/logout", "logout");
 		map.put("/loginSure", "anon");
@@ -101,7 +100,8 @@ public class ShiroConfig {
 		map.put("/static/mail*", "anon");
 		map.put("/static/scss/**", "anon");
 		map.put("/static/vendor/**", "anon");
-		map.put("/**", "authc");
+		map.put("/writeInfo", "anon");
+		//map.put("/**", "authc");
 		// 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
 		shiroFilterFactoryBean.setLoginUrl("/login");
 		// 登录成功后要跳转的链接
