@@ -1,6 +1,10 @@
 package com.internation.info.controller.user;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -18,12 +22,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.internation.info.Config.AddMD5Encode;
 import com.internation.info.dao.UserMapper;
 import com.internation.info.model.User;
+import com.internation.info.model.UserExample;
 
 @Controller
 public class userLogin {
 	Logger logger = LoggerFactory.getLogger(userLogin.class);
 	@Autowired
 	UserMapper userMapper;
+	@Autowired
+	UserExample userExample;
 	@Autowired
 	AddMD5Encode md5Encode;
 
@@ -36,7 +43,7 @@ public class userLogin {
 	}
 
 	@RequestMapping(value = "/loginSure", method = { RequestMethod.POST })
-	public String login(String username, String password) {
+	public String login(String username, String password,HttpServletRequest req) {
 		System.out.println("当前用户名：" + username);
 		Subject currentUser = SecurityUtils.getSubject();
 		logger.info("检测用户" + username + "进行登录认证。。。。。");
@@ -45,7 +52,15 @@ public class userLogin {
 			token.setRememberMe(true);
 			logger.info(username + "认证成功。。。");
 			try {
-				currentUser.login(token);
+				currentUser.login(token);//登录成功把用户的信息放到session中
+				HttpSession session = req.getSession();
+				userExample.createCriteria().andUserNameEqualTo(username);
+				List<User> ulist = userMapper.selectByExample(userExample);
+				if(ulist!=null&&ulist.size()>0){
+					int userId =ulist.get(0).getId();
+					session.setAttribute("userId", userId);
+					session.setAttribute("userName", ulist.get(0).getUserName());
+				}
 				logger.info("用户" + username + "登录认证通过");
 				return "user/successMain";
 			} catch (AuthenticationException e) {

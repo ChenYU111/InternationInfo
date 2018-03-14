@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -13,10 +14,8 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 public class ShiroConfig {
@@ -75,9 +74,8 @@ public class ShiroConfig {
 	 * @author SHANHY
 	 * @create 2016年1月14日
 	 */
-	@Bean
+/*	@Bean
 	public ShiroFilterFactoryBean getShiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
-
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		// 必须设置 SecurityManager
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -91,13 +89,10 @@ public class ShiroConfig {
 		map.put("/user", "authc");
 		map.put("/main", "anon");
 		map.put("/loginSure", "anon");
-		map.put("/static/css/**", "anon");
-		map.put("/static/img/portfolio/**", "anon");
-		map.put("/static/img/about/*", "anon");
-		map.put("/static/img/logos/*", "anon");
-		map.put("/static/img/team/*", "anon");
+		map.put("/static/**", "anon");
+		map.put("/static/img/**", "anon");
 		map.put("/static/js/**", "anon");
-		map.put("/static/mail*", "anon");
+		map.put("/static/mail/*", "anon");
 		map.put("/static/scss/**", "anon");
 		map.put("/static/vendor/**", "anon");
 		map.put("/writeInfo", "anon");
@@ -110,8 +105,67 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setUnauthorizedUrl("/register");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
 		return shiroFilterFactoryBean;
+	}*/
+	
+	@Bean
+    public ShiroFilterFactoryBean shiroFilter( DefaultWebSecurityManager securityManager) {
+       
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+
+        // 必须设置 SecurityManager
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+
+        // 拦截器.
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        //配置记住我或认证通过可以访问的地址  
+        map.put("/", "user");  
+        map.put("/login", "anon");
+		map.put("/logout", "logout");
+		map.put("/loginSure", "anon");
+		map.put("/register", "anon");
+		map.put("/toregister", "anon");
+		map.put("/user", "authc");
+		map.put("/main", "anon");
+		map.put("/loginSure", "anon");;
+		map.put("/static/**", "anon");
+		map.put("/writeInfo", "authc");
+		map.put("/seeOneArticle", "authc");
+        map.put("/**", "authc");
+
+        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
+        shiroFilterFactoryBean.setLoginUrl("/login");
+        // 登录成功后要跳转的链接
+        shiroFilterFactoryBean.setSuccessUrl("/index");
+        // 未授权界面;
+        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
+        return shiroFilterFactoryBean;
+    }
+	/*@Bean
+	public SimpleCookie rememberMeCookie() {
+		// System.out.println("ShiroConfiguration.rememberMeCookie()");
+		// 这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
+		SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+		// <!-- 记住我cookie生效时间30天 ,单位秒;-->
+		simpleCookie.setMaxAge(259200);
+		return simpleCookie;
 	}
 
+	*//**
+	 * cookie管理对象;
+	 * 
+	 * @return
+	 *//*
+	@Bean
+	public CookieRememberMeManager rememberMeManager() {
+		// System.out.println("ShiroConfiguration.rememberMeManager()");
+		CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+		//cookieRememberMeManager.setCipherKey(Base64.decode("2AvVhdsgUs0FSA3SDFAdag=="));
+		cookieRememberMeManager.setCookie(rememberMeCookie());
+		return cookieRememberMeManager;
+	}
+*/
 	@Bean
 	public HashedCredentialsMatcher hashedCredentialsMatcher() {
 		HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
@@ -133,7 +187,7 @@ public class ShiroConfig {
 		DefaultWebSecurityManager dwsm = new DefaultWebSecurityManager();
 		dwsm.setRealm(myShiroRealm);
 		// 注入记住我管理器;
-		dwsm.setRememberMeManager(rememberMeManager());
+		//dwsm.setRememberMeManager(rememberMeManager());
 		// <!-- 用户授权/认证信息Cache, 采用EhCache 缓存 -->
 		return dwsm;
 	}
@@ -143,28 +197,7 @@ public class ShiroConfig {
 	 * 
 	 * @return
 	 */
-	@Bean
-	public SimpleCookie rememberMeCookie() {
-		// System.out.println("ShiroConfiguration.rememberMeCookie()");
-		// 这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-		SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-		// <!-- 记住我cookie生效时间30天 ,单位秒;-->
-		simpleCookie.setMaxAge(259200);
-		return simpleCookie;
-	}
-
-	/**
-	 * cookie管理对象;
-	 * 
-	 * @return
-	 */
-	@Bean
-	public CookieRememberMeManager rememberMeManager() {
-		// System.out.println("ShiroConfiguration.rememberMeManager()");
-		CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-		cookieRememberMeManager.setCookie(rememberMeCookie());
-		return cookieRememberMeManager;
-	}
+	
 	 /** 
      * 开启shiro aop注解支持. 
      * 使用代理方式;所以需要开启代码支持; 
