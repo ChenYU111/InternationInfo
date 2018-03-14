@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>发表成功</title>
+</head>
+<body>
+	<h4>发表失败。</h4><a th:href="">查看</a><a th:href="">在写一篇</a>
+</body>
+</html>
