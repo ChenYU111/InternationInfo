@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class testHtml {
 	@RequestMapping("/")
 	public String test(){
-		return "layout";
+		return "main";
 	}
 	@RequestMapping("/m")
 	public String testMain(){
 		return "main";
 	}
-	//@RequestMapping("/l")
+	@RequestMapping("/index")
 	public String testLayout(){
 		return "layout";
 	}

@@ -62,6 +62,7 @@ public class userLogin {
 					session.setAttribute("userName", ulist.get(0).getUserName());
 				}
 				logger.info("用户" + username + "登录认证通过");
+				req.setAttribute("user", ulist.get(0));
 				return "user/successMain";
 			} catch (AuthenticationException e) {
 				System.out.println("登录失败");

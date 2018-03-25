@@ -7,24 +7,53 @@
 <title>index</title>
 </head>
 <body>
-	<!-- Navigation -->
-	<nav layout:fragment="navigationInfo" class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="width: 100%;padding-left: 0px;padding-right: 0px;padding-bottom: 0px;margin-bottom: 0px;padding-top: 0px;margin-top: 0px;background-image: url('img/head.PNG');background-size: cover;margin-left: 0px;height: 80px" >
-		<div class="container" >
-				<table ><tr><td><a class="navbar-brand js-scroll-trigger" th:href="main.do">首页</a></td>
-				<td> <a class="navbar-brand js-scroll-trigger" href="#page-top">learn
-				Info</a> </td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">热门聊天室</a> </td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">资讯</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">问答</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="writeInfo.do">写资讯</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">下载</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">个人中心</a></td>
-				<td><form action="main"><input type="text" id="search" name="search" style="width: 80px;" placeholder="搜搜"/>   <input  type="submit" value="搜"></input></form></td>
-				<td> <a class="nav-link js-scroll-trigger" th:href="main.do">注销</a></td>
-				</tr>
-				</table>
-		</div> 
-	</nav>
+		 <!-- Navigation -->
+    <nav layout:fragment="navigationInfo" id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top"style="background-image: url('img/head.PNG');background-size: cover;margin-left: 0px;height: 80px;">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">Start Bootstrap</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll" th:href="services">热门聊天室</a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">资讯</a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">问答</a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="writeInfo">写资讯</a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">下载</a>
+                    </li>
+					<li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">个人中心</a>
+                    </li>
+					<li >
+                       <form action="main"><input type="text" id="search" name="search" style="width: 80px;" placeholder="搜搜"/>   <input  type="submit" value="搜"></input></form>
+                    </li>
+					
+                    <li><a class="nav-link js-scroll-trigger" th:href="logout">注销</a></li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
 
 	<div layout:fragment="content"
 		style="width: 96%; margin-left: auto; margin-right: auto;">

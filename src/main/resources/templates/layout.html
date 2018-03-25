@@ -3,89 +3,119 @@
 	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" lang="en">
 
 <head>
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
+    <title>Agency - Start Bootstrap Theme</title>
 
-<title>Agency - Start Bootstrap Theme</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Bootstrap core CSS -->
-<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
-<!-- Custom fonts for this template -->
-<link href="vendor/font-awesome/css/font-awesome.min.css"
-	rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
-	rel="stylesheet" type="text/css">
-<link href='https://fonts.googleapis.com/css?family=Kaushan+Script'
-	rel='stylesheet' type='text/css'>
-<link
-	href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic'
-	rel='stylesheet' type='text/css'>
-<link
-	href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700'
-	rel='stylesheet' type='text/css'>
-<link href="../static/css/sidebar.css" rel="stylesheet" type="text/css" />
-<!-- Custom styles for this template -->
-<link href="css/agency.min.css" rel="stylesheet">
+    <!-- Theme CSS -->
+    <link href="css/agency.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
 </head>
 
 <body id="page-top">
 
-	<!-- Navigation -->
-	<nav layout:fragment="navigationInfo" class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="width: 100%;padding-left: 0px;padding-right: 0px;padding-bottom: 0px;margin-bottom: 0px;padding-top: 0px;margin-top: 0px;background-image: url('img/head.PNG');background-size: cover;margin-left: 0px;height: 80px" >
-		<div class="container" style="">
-				<table  style="width: 100%;margin-left: 0px"><tr><td><a class="navbar-brand js-scroll-trigger" th:href="main.do">首页</a></td>
-				<td> <a class="navbar-brand js-scroll-trigger" href="#page-top">learn
-				Info</a> </td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">热门聊天室</a> </td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">资讯</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">问答</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">写资讯</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">下载</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">个人中心</a></td>
-				<td><form action="main"><input type="text" id="search" name="search" style="width: 80px;" placeholder="搜搜"/>   <input  type="submit" value="搜"></input></form></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">注册</a></td>
-				<td><a class="nav-link js-scroll-trigger" th:href="main.do">登录</a></td>
-				</tr>
-				</table>
-		</div> 
-	</nav>
+		 <!-- Navigation -->
+    <nav layout:fragment="navigationInfo" id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top"style="background-image: url('img/head.PNG');background-size: cover;margin-left: 0px;height: 80px;">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">Start Bootstrap</a>
+            </div>
 
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll" th:href="services">热门聊天室</a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">资讯</a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">问答</a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="writeInfo">写资讯</a>
+                    </li>
+                    <li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">下载</a>
+                    </li>
+					<li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">个人中心</a>
+                    </li>
+					<li >
+                       <form action="main"><input type="text" id="search" name="search" style="width: 80px;" placeholder="搜搜"/>   <input  type="submit" value="搜"></input></form>
+                    </li>
+					<li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="login">注册</a>
+                    </li >
+					<li>
+                        <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="register">登录</a>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+ <!-- Header -->
+   <!--  <header>
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-lead-in">Welcome To Our Studio!</div>
+                <div class="intro-heading">It's Nice To Meet You</div>
+                <a href="#services" class="page-scroll btn btn-xl">Tell Me More</a>
+            </div>
+        </div>
+    </header> -->
     <div>
     <div>
 		<sidebar layout:fragment="sidebarInfo" class="sidebar">
 		<div
 			style="width: 80px;  position: absolute; left: 0;background-image: url('img/msidebar.PNG'); float: left;margin-top: 0px">
-			<table class="side_local">
-			<tr>
-					<td><a th:href="main">热门资讯</a></td>
-				</tr>
-				<tr>
-					<td><a th:href="main">推荐</a></td>
-				</tr>
-				<tr/>
-				<tr>
-					<td><a th:href="main">人工智能</a></td>
-				</tr>
-				<tr/>
-				<tr>
-					<td><a th:href="main">Java</a></td>
-				</tr>
-				<tr/>
-				<tr>
-					<td><a th:href="main">数据库</a></td>
+			<ul>
+			
+				<li><a class="navbar-header page-scroll" th:href="main">热门资讯</a></li>
+				
+				<li><a th:href="main">推荐</a></td>
+				<li><a th:href="main">人工智能</a></td>
+				<li><a th:href="main">Java</a></td>
+				<li><a th:href="main">数据库</a></td>
 				</tr>
 				<tr/>
 				<tr>
 					<td><a th:href="main">PHP</a></td>
 				</tr>
 				<tr/>
-			</table>
+			<ul>
 		</div>
 		</sidebar>
 		<div layout:fragment="contentInfo" style=" margin-left: 100px;margin-top: 80px">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
@@ -121,7 +151,7 @@
 	</footer>
 	</div>
 	<!-- Services -->
-	<!--  <section id="services">
+	 <section id="services">
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
@@ -254,7 +284,7 @@
         </div>
       </div>
     </section>
-    About
+   <!--  About
     <section id="about">
       <div class="container">
         <div class="row">

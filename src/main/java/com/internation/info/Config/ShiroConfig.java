@@ -125,7 +125,7 @@ public class ShiroConfig {
 		map.put("/register", "anon");
 		map.put("/toregister", "anon");
 		map.put("/user", "authc");
-		map.put("/main", "anon");
+		map.put("/m", "anon");
 		map.put("/loginSure", "anon");;
 		map.put("/static/**", "anon");
 		map.put("/writeInfo", "authc");
@@ -135,7 +135,7 @@ public class ShiroConfig {
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的链接
-        shiroFilterFactoryBean.setSuccessUrl("/index");
+        shiroFilterFactoryBean.setSuccessUrl("/main");
         // 未授权界面;
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 

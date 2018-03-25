@@ -1,0 +1,98 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="info/infoTemplate">
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>文章管理</title>
+<body>
+	<div layout:fragment="contentInfo">
+		<div class="panel-heading">查询条件</div>
+		<div class="panel-body">
+			<form class="form-inline" th:action="searchArticle" th:method="get">
+				<div class="row">
+					<div class="col-sm-4">
+						<label class="control-label">标题：</label> <input id="title"
+							name="title" type="text" class="form-control">
+					</div>
+					<div class="col-sm-4">
+						<label class="control-label">内容：</label> <input id="content"
+							name="content" type="text" class="form-control">
+					</div>
+					<div class="col-sm-4">
+						<label class="control-label">是否发布：</label> <input id="ispublish"
+							name="ispublish" type="radio" value="1" class="form-control"
+							checked="checked">是 <input id="ispublish"
+							name="ispublish" type="radio" value="0" class="form-control">否
+					</div>
+					<div class="col-sm-4">
+						<label class="control-label">类别：</label> <input id="blog_type"
+							name="blog_type" type="text" class="form-control">
+					</div>
+					<div class="col-sm-4">
+						<label class="control-label">是否原创：</label> <input id="original"
+							name="original" th:type="radio" value="1" class="form-control"
+							checked="checked"> 是 <input id="original" name="original"
+							th:type="radio" value="0" class="form-control">否
+					</div>
+				</div>
+
+				<div class="row text-right" style="margin-top: 20px;">
+					<div class="col-sm-12">
+						<input class="btn btn-primary" type="submit" value="查询">
+					</div>
+				</div>
+
+			</form>
+		</div>
+		<div>
+			<table id="artileTable" name="artileTable">
+				<thead>
+					<tr>
+						<th>选择</th>
+						<th>标题</th>
+						<th>原创</th>
+						<th>私密</th>
+						<th>发布</th>
+						<th>发布时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<form>
+						<tr th:each="article:${limitArticleList}">
+							<td><input th:type="checkbox" id="cbox" name="id" value="id" />
+							<td th:utext="${article.title}">文章标题</td>
+							<td th:utext="${article.original}?#{'原创'}:#{'非原创'}">是否原创</td>
+							<td th:utext="${article.isprivate}?#{'私密'}:#{'非私密'}">是否私密</td>
+							<td th:utext="${article.ispublish}?#{'发布'}:#{'非发布'}">是否发布</td>
+							<td th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
+							<td><a th:href="seeOneArticle">查看</a><a
+								th:href="deleteArticle" onclick="return del()">删除</a></td>
+							<td><input th:type="hidden" id="id" name="id" value="${article.id}"></td>
+						</tr>
+					</form>
+				</tbody>
+			</table>
+		</div>
+		<script type="text/javascript">
+			function check() {
+				var r = confirm("确定要删除吗？");
+				if (r == true) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		</script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#artileTable').DataTable({
+					"processing" : true,
+					"paging" : true,
+					"pagingType" : "full_numbers"
+				});
+			});
+		</script>
+	</div>
+</body>
+</html>

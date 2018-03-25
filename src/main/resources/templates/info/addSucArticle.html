@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="info/infoTemplate">
 <head>
 <meta charset="UTF-8">
 <title>发表成功</title>
 </head>
 <body>
-	<h4>发表成功。</h4><a th:href="seeOneArticle">查看</a><a th:href="writeInfo">在写一篇</a>
+
+	<div layout:fragment="contentInfo">
+		<h3>发表成功。</h3>
+		<a th:href="seeOneArticle">查看</a><a th:href="writeInfo">再写一篇</a>
+	</div>
 </body>
 </html>
