@@ -6,7 +6,9 @@
 <title>文章管理</title>
 <body>
 	<div layout:fragment="contentInfo">
-		<div class="panel-heading">查询条件</div>
+	
+	
+	<div class="panel-heading">查询条件</div>
 		<div class="panel-body">
 			<form class="form-inline" th:action="searchArticle" th:method="get">
 				<div class="row">
@@ -44,6 +46,8 @@
 
 			</form>
 		</div>
+
+	
 		<div>
 			<table id="artileTable" name="artileTable">
 				<thead>
@@ -68,8 +72,7 @@
 							<td th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
 							<td><a th:href="seeOneArticle">查看</a><a
 								th:href="deleteArticle" onclick="return del()">删除</a></td>
-							<td><input th:type="hidden" id="id" name="id" value="${article.id}"></td>
-						</tr>
+					</tr>
 					</form>
 				</tbody>
 			</table>
