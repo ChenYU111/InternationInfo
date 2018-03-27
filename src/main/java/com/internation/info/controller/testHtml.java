@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class testHtml {
-	@RequestMapping("/")
+	@RequestMapping("/t")
 	public String test(){
-		return "main";
+		return "test";
 	}
 	@RequestMapping("/m")
 	public String testMain(){

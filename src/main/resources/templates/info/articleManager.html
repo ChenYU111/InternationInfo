@@ -58,6 +58,7 @@
 						<th>私密</th>
 						<th>发布</th>
 						<th>发布时间</th>
+						<th>文章标识</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -70,6 +71,7 @@
 							<td th:utext="${article.isprivate}?#{'私密'}:#{'非私密'}">是否私密</td>
 							<td th:utext="${article.ispublish}?#{'发布'}:#{'非发布'}">是否发布</td>
 							<td th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
+							<td th:text="">文章标识</td>
 							<td><a th:href="seeOneArticle">查看</a><a
 								th:href="deleteArticle" onclick="return del()">删除</a></td>
 					</tr>
