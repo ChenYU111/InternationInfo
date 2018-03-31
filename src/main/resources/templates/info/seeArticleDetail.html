@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="info/infoTemplate">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>查看文章详情</title>
@@ -42,7 +40,6 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-	<div layout:fragment="contentInfo">
 		<center>
 			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
 			<table border="0px" ; style="text-align: center; margin-top: 20px;">
@@ -59,40 +56,22 @@ $(document).ready(function() {
 					<td th:utext="${article.content}">正文</td>
 				</tr>
 			</table>
-			<!-- 富文本 -->
-			<form action="addreview" method="get">
-				<!--style给定宽度可以影响编辑器的最终宽度-->
-				<script type="text/plain" id="myEditor" name="content">
-        		<p>这里我可以写一些输入提示</p>
-       			 </script>
-					<script type="text/javascript">
-						UE.getEditor('myEditor', {
-						//focus时自动清空初始化时的内容
-						autoClearinitialContent : true,
-						//关闭字数统计
-						wordCount : false,
-						//关闭elementPath
-						elementPathEnabled : false,
-						//默认的编辑区域高度
-						initialFrameHeight : 300
-					//更多其他参数，请参考ueditor.config.js中的配置项
-					})
-				</script>
+			<form action="addreview" method="post">
+				<input th:type="textA" id="message" name="message" placeholder="说出你的疑问" required="message">
 				<input th:type="submit" value="发表评论">
 			</form>
+			<h3>相关评论</h3>
 			<table id="reviewTable" class="display" style="width: 100%">
 				<tr th:each="user:${userList}">
-					<td th:text="${user.username}">用户名</td>
+					<td th:text="${user.userName}">用户名</td>
 				</tr>
 				<tr th:each="review:${reviewList}">
-					<td th:text="${review.createTime}">评论时间</td><td th:text="${review.seeCount}">查看次数</td>
+					<td th:text="${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td><td th:text="${review.seecount}">查看次数</td>
 				</tr>
-				<tr th:each="reviews:${reviewList}">
-					<td th:text="${reviews.message}">内容</td>
+				<tr th:each="review:${reviewList}">
+					<td th:text="${review.message}">内容</td>
 				</tr>
 			</table>
 		</center>
-
-	</div>
 </body>
 </html>

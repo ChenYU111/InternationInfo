@@ -35,6 +35,7 @@ import com.internation.info.model.ArticleExample.Criteria;
 import com.internation.info.model.Review;
 import com.internation.info.model.User;
 import com.internation.info.service.InfoService;
+import com.internation.info.service.UserService;
 
 @Controller
 public class InfoController {
@@ -48,7 +49,8 @@ public class InfoController {
 	Article article;
 	@Autowired
 	Review review;
-
+	@Autowired
+	UserService userService;
 	@RequestMapping("/writeInfo")
 	public String addInfo() {
 		return "info/writeInfo";
@@ -95,7 +97,7 @@ public class InfoController {
 		}
 	}
 
-	// 查看文章 和 本文章的资讯
+	// 查看文章 和 本文章的资讯   如果  有  评论   就  展示出来
 	@RequestMapping("/seeOneArticle/{id}")
 	public String seeOneArticle(@PathVariable("id") Integer articleId, HttpServletRequest req, Model model) {
 		Article article = articleMapper.selectByPrimaryKey(articleId);
@@ -114,7 +116,8 @@ public class InfoController {
 		} else {
 			model.addAttribute("review", "暂无评论");
 		}
-
+		HttpSession session = req.getSession();
+		session.setAttribute("articleIdInDetail",articleId);
 		return "info/seeArticleDetail";
 	}
 
@@ -122,13 +125,20 @@ public class InfoController {
 	@RequestMapping("/addreview")
 	public String addReview(Review rev, HttpServletRequest req, Model model) {
 		// 添加评论
+		int articleId = (int) req.getSession().getAttribute("articleIdInDetail");
 		review.setArticle_title(rev.getArticle_title());
 		HttpSession session = req.getSession();
 		review.setObserver_id((Integer) session.getAttribute("userId"));
 		review.setCreateTime(new Date());
-		review.setArticle_id(rev.getArticle_id());
-		int num = infoService.findFloor(review.getArticle_id());
-		review.setFloor_number(num + 1);
+		review.setArticle_id(articleId);
+		review.setMessage(rev.getMessage());
+		int num = 0;
+		num = infoService.findFloor(review.getArticle_id());
+		if(num>0){
+			review.setFloor_number(num+1);
+		}else if(num==0){
+			review.setFloor_number(1);
+		}
 		int seeCount = infoService.findSeeCount(review.getArticle_id());
 		review.setSeecount(seeCount + 1);
 		int insertNum = infoService.insertReview(review);
@@ -139,7 +149,13 @@ public class InfoController {
 				model.addAttribute("reviewList", findReviewList);
 			}
 		}
-
+		List<User> userList = new ArrayList<>();
+		List<Review> findReviewList = infoService.findReviewList(articleId);
+		for (Review review : findReviewList) {
+			User user = infoService.findUserNameList(review.getObserver_id());
+			userList.add(user);
+		}
+		model.addAttribute("userList", userList);
 		return "info/seeArticleDetail";
 	}
 

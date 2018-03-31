@@ -107,14 +107,21 @@ public class InfoService {
 	
 	
 	//根据文章的id来查找评论   找到最后一个评论的楼层
-	public int findFloor(int articleId){
+	public int findFloor(int articleId) {
 		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
 		List<Review> reviewList = reviewMapper.selectByExample(reviewExample);
 		int num = 0;
-		if(reviewList!=null&&reviewList.size()>0){
+		//有评论
+		if (reviewList != null && reviewList.size() > 0) {
 			num = reviewList.size();
 		}
-		return reviewList.get(num).getFloor_number();
+		//有评论   取最后一条评论  的 楼层号 
+		if (num > 0) {
+			return reviewList.get(num - 1).getFloor_number();
+		} else {
+			//如果没有评论  返回1 
+			return 0;
+		}
 	}
 	//查看 评论被  查看了几次
 	public int findSeeCount(int articleId){
@@ -124,7 +131,11 @@ public class InfoService {
 		if(reviewList!=null&&reviewList.size()>0){
 			num = reviewList.size();
 		}
-		return reviewList.get(num).getSeecount();
+		if(num>0){
+		return reviewList.get(num-1).getSeecount();
+		}else{
+			return 0;
+		}
 	}
 	
 	
