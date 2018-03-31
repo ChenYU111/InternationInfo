@@ -2,12 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="info/infoTemplate">
-	<head>
+<head>
 <meta name="content-type" content="text/html; charset=UTF-8">
 <title>文章管理</title>
 </head>
 <body>
 	<div layout:fragment="contentInfo">
+	<!-- <script type="text/javascript" src="../../js/layer.js"></script> -->
+	<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+	<script type="text/javascript" src="../../js/articleLayer.js"></script>
 		<div>
 			<table id="artileTable" name="artileTable">
 				<thead>
@@ -18,7 +21,6 @@
 						<th>私密</th>
 						<th>发布</th>
 						<th>发布时间</th>
-						<th>文章标识</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -31,23 +33,14 @@
 							<td th:utext="${article.isprivate}?#{'私密'}:#{'非私密'}">是否私密</td>
 							<td th:utext="${article.ispublish}?#{'发布'}:#{'非发布'}">是否发布</td>
 							<td th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
-							<td><a th:href="'seeOneArticle?id='+${article.id}">查看</a><a th:href="deleteArticle" onclick="return del()">删除</a></td>
-							
-					</tr>
+							<td><a href="javascript:void(0)" th:onclick="'seeArticle('+${article.id}+')'">查看</a>
+								<a href="javascript:void(0)" th:onclick="'deleteArticle('+${article.id}+')'">删除</a>
+							</td>
+						</tr>
 					</form>
 				</tbody>
 			</table>
 		</div>
-		<script type="text/javascript">
-			function check() {
-				var r = confirm("确定要删除吗？");
-				if (r == true) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		</script>
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('#artileTable').DataTable({

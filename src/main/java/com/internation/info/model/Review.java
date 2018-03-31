@@ -3,6 +3,8 @@ package com.internation.info.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.stereotype.Repository;
+@Repository
 public class Review implements Serializable {
     /**
      *

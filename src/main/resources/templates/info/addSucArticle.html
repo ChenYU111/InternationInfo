@@ -10,7 +10,7 @@
 
 	<div layout:fragment="contentInfo">
 		<h3>发表成功。</h3>
-		<a th:href="seeOneArticle">查看</a><a th:href="writeInfo">再写一篇</a>
+		<a th:href="'seeOneArticle?id='+${article.id}">查看</a><a th:href="writeInfo">再写一篇</a>
 	</div>
 </body>
 </html>

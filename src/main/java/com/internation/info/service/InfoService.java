@@ -1,5 +1,6 @@
 package com.internation.info.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -10,9 +11,15 @@ import org.springframework.ui.Model;
 import com.github.pagehelper.PageHelper;
 import com.internation.info.common.PageBean;
 import com.internation.info.dao.ArticleMapper;
+import com.internation.info.dao.ReviewMapper;
+import com.internation.info.dao.UserMapper;
 import com.internation.info.model.Article;
 import com.internation.info.model.ArticleExample;
 import com.internation.info.model.ArticleExample.Criteria;
+import com.internation.info.model.Review;
+import com.internation.info.model.ReviewExample;
+import com.internation.info.model.User;
+import com.internation.info.model.UserExample;
 @Service
 public class InfoService {
 	@Autowired
@@ -21,6 +28,14 @@ public class InfoService {
 	ArticleExample articleExample;
 	@Autowired
 	PageBean<Article> pageBean;
+	@Autowired
+	ReviewMapper reviewMapper;
+	@Autowired
+	ReviewExample reviewExample;
+	@Autowired
+	UserMapper userMapper;
+	@Autowired
+	UserExample userExample;
 	/*public PageBean<Article> selectArticleLimit(Integer pageNum, Integer pageSize, Article article,Model m){*/
 	public List<Article> selectArticleLimit(Integer pageNum, Integer pageSize, Article article,Model m){
 	
@@ -88,5 +103,53 @@ public class InfoService {
 		 m.addAttribute("limitArticleList",limitArticleList);
 		
 		return limitArticleList;
+	}
+	
+	
+	//根据文章的id来查找评论   找到最后一个评论的楼层
+	public int findFloor(int articleId){
+		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
+		List<Review> reviewList = reviewMapper.selectByExample(reviewExample);
+		int num = 0;
+		if(reviewList!=null&&reviewList.size()>0){
+			num = reviewList.size();
+		}
+		return reviewList.get(num).getFloor_number();
+	}
+	//查看 评论被  查看了几次
+	public int findSeeCount(int articleId){
+		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
+		List<Review> reviewList = reviewMapper.selectByExample(reviewExample);
+		int num = 0;
+		if(reviewList!=null&&reviewList.size()>0){
+			num = reviewList.size();
+		}
+		return reviewList.get(num).getSeecount();
+	}
+	
+	
+	public int insertReview(Review review){
+		int num = reviewMapper.insert(review);
+		return num;
+	}
+	//查出所用评论
+	public List<Review> findReviewList(int articleId){
+		//List<Review> reviewList = ArrayList<Review>();
+		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
+		List<Review>reviewList = reviewMapper.selectByExample(reviewExample);
+		return reviewList;
+		
+	}
+	
+	public User findUserNameList(int uId){
+		userExample.createCriteria().andIdEqualTo(uId);
+		User user = userMapper.selectByPrimaryKey(uId);
+		return user;
+	}
+	
+	
+	public int deleteArticeById(Integer id){
+		int num = articleMapper.deleteByPrimaryKey(id);
+		return num;
 	}
 }

@@ -3,6 +3,8 @@ package com.internation.info.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.stereotype.Repository;
+@Repository
 public class Question implements Serializable {
     /**
      *
@@ -38,7 +40,7 @@ public class Question implements Serializable {
      *
      * @mbggenerated Tue Mar 27 10:23:40 CST 2018
      */
-    private String questioner;
+    private Integer questioner;
 
     /**
      *
@@ -164,7 +166,7 @@ public class Question implements Serializable {
      *
      * @mbggenerated Tue Mar 27 10:23:40 CST 2018
      */
-    public String getQuestioner() {
+    public Integer getQuestioner() {
         return questioner;
     }
 
@@ -176,7 +178,7 @@ public class Question implements Serializable {
      *
      * @mbggenerated Tue Mar 27 10:23:40 CST 2018
      */
-    public void setQuestioner(String questioner) {
+    public void setQuestioner(Integer questioner) {
         this.questioner = questioner;
     }
 

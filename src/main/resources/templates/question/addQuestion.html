@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="info/infoTemplate">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>查看文章详情</title>
-<script type="text/javascript"
-	src="http://www.daimajiayuan.com/download/jquery/jquery-1.10.2.min.js"></script>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>提出问题</title>
 <script type="text/javascript" charset="utf-8"
 	src="../../ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8"
@@ -16,7 +12,8 @@
 </script>
 <script type="text/javascript" charset="utf-8"
 	src="../../ueditor/lang/zh-cn/zh-cn.js"></script>
-
+<script type="text/javascript"
+	src="http://www.daimajiayuan.com/download/jquery/jquery-1.10.2.min.js"></script>
 <script type="text/javascript"
 	src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>
 <link rel="stylesheet" type="text/css"
@@ -33,7 +30,7 @@
 <script src="../../datatables/jquery.dataTables.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#reviewTable').DataTable({
+    $('#questionTable').DataTable({
 		"processing" : true,
 		"paging" : true,
 		"pagingType" : "full_numbers"
@@ -42,26 +39,9 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-	<div layout:fragment="contentInfo">
-		<center>
-			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
-			<table border="0px" ; style="text-align: center; margin-top: 20px;">
-				<tr>
-					<td
-						th:utext='${article.original}?#{<span style="color: green;">原创</span>}:#{""}'></td>
-					<td th:utext="${article.title}">标题</td>
-				</tr>
-				<tr>
-					<td>类别：</td>
-					<td th:text="${article.blog_type}">文章类别</td>
-				</tr>
-				<tr>
-					<td th:utext="${article.content}">正文</td>
-				</tr>
-			</table>
-			<!-- 富文本 -->
-			<form action="addreview" method="get">
-				<!--style给定宽度可以影响编辑器的最终宽度-->
+	<form action="addQuesetion" method="post">
+		<input th:type="text" id="title" name="title" placeholder="说出你的问题">	
+			<!--style给定宽度可以影响编辑器的最终宽度-->
 				<script type="text/plain" id="myEditor" name="content">
         		<p>这里我可以写一些输入提示</p>
        			 </script>
@@ -78,21 +58,26 @@ $(document).ready(function() {
 					//更多其他参数，请参考ueditor.config.js中的配置项
 					})
 				</script>
+				<label for="id_select">寻求专家的帮助：</label> <select id="id_select"
+				class="selectpicker bla bla bli" multiple data-live-search="true" name="blog_type">
+				<option>Java</option>
+				<option>人工智能</option>
+				<option>PHP</option>
+				<option>数据库</option>
+				</select> <br /> 
 				<input th:type="submit" value="发表评论">
-			</form>
-			<table id="reviewTable" class="display" style="width: 100%">
-				<tr th:each="user:${userList}">
-					<td th:text="${user.username}">用户名</td>
-				</tr>
-				<tr th:each="review:${reviewList}">
-					<td th:text="${review.createTime}">评论时间</td><td th:text="${review.seeCount}">查看次数</td>
-				</tr>
-				<tr th:each="reviews:${reviewList}">
-					<td th:text="${reviews.message}">内容</td>
-				</tr>
-			</table>
-		</center>
-
-	</div>
+		
+	</form>
+	<table>
+		<tr>
+			<td>回答者的用户名</td>
+		</tr>
+		<tr>
+			<td>回答的内容</td>
+		</tr>
+		<tr>
+			<td>回答的时间</td>
+		</tr>
+	</table>
 </body>
 </html>
