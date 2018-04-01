@@ -29,6 +29,7 @@ function deleteArticle(id) {
 				type : "post",
 				async : false,
 				success : function(data) {
+					 layer.tips('删除成功！', that);
 					location.href = "/articleManager";
 				}
 			})

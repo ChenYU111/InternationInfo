@@ -1,0 +1,69 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="question/questionTemplate">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>问题详情</title>
+</head>
+<body>
+	<div layout:fragment="contentInfo">
+		<table>
+			<tr>
+				<td>标题：</td><td th:utext="${questionDetail.title}">标题</td>
+				<td>查看次数：</td><td th:text="${questionDetail.seeCount}">查看次数</td>
+			</tr>
+			<tr>	
+				<td>正文：</td><td th:utext="${questionDetail.content}">内容</td>
+			</tr>
+			<tr>
+				<td id="hidden" th:text="${questionDetail.id}" style="display: none;"></td>
+			<tr>
+		</table>
+		<form action="addAnswer" method="post">
+			<!--style给定宽度可以影响编辑器的最终宽度-->
+			<script type="text/plain" id="content" name="content">
+        		<p>问题具体描述</p>
+       			 </script>
+			<script type="text/javascript">
+				UE.getEditor('content', {
+					//focus时自动清空初始化时的内容
+					autoClearinitialContent : true,
+					//关闭字数统计
+					wordCount : false,
+					//关闭elementPath
+					elementPathEnabled : false,
+					//默认的编辑区域高度
+					initialFrameHeight : 300
+				//更多其他参数，请参考ueditor.config.js中的配置项
+				})
+			</script>
+			<input th:type="submit" value="提交答案">
+		</form>
+		<h3>相关评论：</h3>
+		<table id="answertable" class="display" style="width: 100%">
+			<tbody>
+				<tr th:each="answer:${answerList}">
+					<td th:text="${answer.floor}">楼层</td>
+					<td th:utext="${answer.content}">文章标题</td><br/>
+					<td th:text="${#dates.format(answer.answerTime,'yyyy/MM/dd HH:mm')}">时间</td>
+					<td>采纳</td>
+				</tr>
+			</tbody>
+		</table>
+
+
+		<link href="../../datatables/jquery.dataTables.css" rel="stylesheet" />
+		<script src="../../datatables/jquery.dataTables.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#answertable').DataTable({
+					"processing" : true,
+					"paging" : true,
+					"pagingType" : "full_numbers"
+				});
+			});
+		</script>
+	</div>
+</body>
+</html>

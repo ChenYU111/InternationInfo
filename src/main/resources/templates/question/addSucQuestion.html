@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="question/questionTemplate">
+<head>
+<meta charset="UTF-8">
+<title>发表成功</title>
+</head>
+<body>
+
+	<div layout:fragment="contentInfo">
+		<a th:href="'seeOneArticle?id='+${article.id}">查看</a><a th:href="writeInfo">再写一篇</a>
+	</div>
+</body>
+</html>
