@@ -1,5 +1,6 @@
 package com.internation.info.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +64,52 @@ public class QuestionService {
 		return selectByExampleList;
 	}
 	
-	//删除文章
+	//删除问题
 	public int deleteQuestionById(Integer id){
 		int num = questionMapper.deleteByPrimaryKey(id);
 		return num;
+	}
+
+	
+	public Answer findAnswerById(int answerId){
+		Answer answer = anserMapper.selectByPrimaryKey(answerId);
+		return answer;
+	}
+	
+	//更新    answer 表中的  采纳字段  值为  1   修改   问题表中的   采纳内容的  字段
+	public int updateAnswerById(Answer answer){
+		int ansNum = anserMapper.updateByPrimaryKey(answer);
+		int answerId = answer.getId();
+		Answer answer1 = anserMapper.selectByPrimaryKey(answerId);
+		String content = answer1.getContent();
+		int questionId = answer1.getQuestionId();
+		Question question = questionMapper.selectByPrimaryKey(questionId);
+		question.setAdoptTheContent(content);
+		question.setIsresolve(1);
+		int queNum = questionMapper.updateByPrimaryKeySelective(question);
+		return queNum;
+	}
+
+	public int addReturnByFloor(int id,int floorId,String content){
+		Answer answer2 = anserMapper.selectByPrimaryKey(id);
+		answer.setAnswerTime(new Date());
+		answer.setIsAnswer(0);
+		answer.setContent(content);
+		answer.setQuestionId(answer2.getQuestionId());
+		answer.setuId(answer2.getuId());
+		int num = anserMapper.insert(answer);
+		return num;
+	}
+
+
+	public int updateQuestion(Question quest){
+		int result = questionMapper.updateByPrimaryKeySelective(quest);
+		return result;
+	}
+	
+	public List<Question> findQuestionBySeeCount(){
+		questionExample.setOrderByClause("seecount desc");
+		List<Question> questionList = questionMapper.selectByExample(questionExample);
+		return questionList;
 	}
 }

@@ -71,6 +71,15 @@ public class questionController {
 	@RequestMapping("/seeQuestionDetail/{id}")
 	public String seeQuestionDetail(@PathVariable("id") Integer questionId, Model model,HttpServletRequest req) {
 		Question findQuestionDetailById = questionService.findQuestionDetailById(questionId);
+		int seecount = 0;
+		if(findQuestionDetailById.getSeeCount()!=null){
+			seecount=findQuestionDetailById.getSeeCount()+1;
+		}
+		findQuestionDetailById.setSeeCount(seecount+1);
+		int result = questionService.updateQuestion(findQuestionDetailById);
+		if(result>0){
+			findQuestionDetailById = questionService.findQuestionDetailById(questionId);
+		}
 		model.addAttribute("questionDetail", findQuestionDetailById);
 		List<Answer> findQuestionAnswerById = questionService.findQuestionAnswerById(questionId);
 		if (findQuestionAnswerById != null && findQuestionAnswerById.size() > 0) {
@@ -116,4 +125,33 @@ public class questionController {
 	public void deleteQuestionById(@PathVariable("id") Integer questionId){
 		int num = questionService.deleteQuestionById(questionId);
 	}
+	
+	@RequestMapping("/isAdoptAnswer/{id}")
+	public String  isAdoptAnswer(@PathVariable("id") int questionId){
+		Answer answer = questionService.findAnswerById(questionId);
+		answer.setIsAdopt(1);
+		int result = questionService.updateAnswerById(answer);
+		return "question/seeQuestionDetail";
+	}
+	
+	@RequestMapping("/addReturnAnswer")
+	public void  isReturnAnswer(@PathVariable("id") Integer nswerId,Integer floorId , String content){
+		int result = questionService.addReturnByFloor(nswerId, floorId, content);
+	}
+	
+	@RequestMapping("/orderBySeeCount")
+	public String findQuestionBySeeCount(Model model){
+		List<Question> questionBySeeCountList = questionService.findQuestionBySeeCount();
+		if(questionBySeeCountList!=null&&questionBySeeCountList.size()>0){
+			model.addAttribute("questionList", questionBySeeCountList);
+		}
+		return "question/orderBySeeCount";
+	}
+	
+	@RequestMapping("/toOrderByQuestionSeeCount")
+	public String toOrderByQuestionSeeCount(){
+		return "question/orderBySeeCount";
+	}
+	
+	
 }

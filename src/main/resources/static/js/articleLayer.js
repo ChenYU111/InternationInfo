@@ -34,6 +34,8 @@ function deleteArticle(id) {
 				}
 			})
 		}
-
 	});
 }
+
+
+isAdoptAnswer

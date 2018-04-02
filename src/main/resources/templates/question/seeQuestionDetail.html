@@ -44,10 +44,12 @@
 		<table id="answertable" class="display" style="width: 100%">
 			<tbody>
 				<tr th:each="answer:${answerList}">
-					<td th:text="${answer.floor}">楼层</td>
+					<td th:text="${answer.floor}+'楼'">楼层</td>
 					<td th:utext="${answer.content}">文章标题</td><br/>
 					<td th:text="${#dates.format(answer.answerTime,'yyyy/MM/dd HH:mm')}">时间</td>
-					<td>采纳</td>
+					<td><a href="javascript:void(0)" th:onClick="'isAdoptAnswer('+${answer.id}+')'">采纳</a>
+						<a href="javascript:void(0)" th:onClick="'isReturnAnswer('+${answer.id}+')'">回复</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -55,6 +57,51 @@
 
 		<link href="../../datatables/jquery.dataTables.css" rel="stylesheet" />
 		<script src="../../datatables/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+		<!-- <script type="text/javascript" src="../../layerjs/questionLayer.js"></script> -->
+		<script type="text/javascript">
+		//采纳连接    点击询问是否采纳   
+		function isAdoptAnswer(id) {
+			layer.open({
+				content : '确认采纳该答案？',
+				type : 2,
+				btn : [ '确认', '取消' ],
+				closeBtn : 1,
+				yes : function(index) {
+					layer.close(index);
+					$.ajax({
+						url : "/isAdoptAnswer/" + id,
+						type : "post",
+						async : false,
+						success : function(data) {
+							location.href = "/seeQuestionDetail";
+						}
+					})
+				}
+
+			});
+		}
+		</script>
+		<script type="text/javascript">
+		function isReturnAnswer(id) {
+			$.post('/addReturnAnswer/' + id, {
+				"id" : id
+			}, function(str) {
+				layer.open({
+					type :3,
+					title:"回复问题",
+					shadeClose: true,//点击外围   关闭
+			        shade: [0.8, '#393D49'],//遮蔽层
+			        closeBtn: 2,
+			        maxmin: true,
+			        area: ['700px', '600px'],
+					content : str
+				// 注意，如果str是object，那么需要字符拼接。
+				});
+			});
+		}
+		</script>
+
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('#answertable').DataTable({
