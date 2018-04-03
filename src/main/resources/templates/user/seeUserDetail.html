@@ -1,0 +1,17 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="user/userTemplate">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>查看个人信息详情</title>
+</head>
+<body>
+	<div layout:fragment="contentInfo">
+	<table>
+		<tr><td>姓名:</td><td th:text="${user.userName}"></td></tr>
+		<tr><td>电话:</td><td th:text="${user.tel}"></td></tr>
+		<tr><td>性别:</td><td th:text="${user.sex}"></td></tr>
+	</table>
+	</div>
+</body>
+</html>

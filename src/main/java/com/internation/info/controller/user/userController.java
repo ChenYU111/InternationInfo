@@ -2,6 +2,7 @@ package com.internation.info.controller.user;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,14 +26,16 @@ import com.internation.info.model.User;
 import com.internation.info.model.UserExample;
 
 @Controller
-public class userLogin {
-	Logger logger = LoggerFactory.getLogger(userLogin.class);
+public class userController {
+	Logger logger = LoggerFactory.getLogger(userController.class);
 	@Autowired
 	UserMapper userMapper;
 	@Autowired
 	UserExample userExample;
 	@Autowired
 	AddMD5Encode md5Encode;
+	@Autowired
+	User user;
 
 	/*
 	 * @Autowired User user;
@@ -122,5 +125,35 @@ public class userLogin {
 		        }  *///提示用户退出成功。。。
 		    }  
 		return "login";
+	}
+	
+	@RequestMapping("/seeUserDetail")
+	public String seeUserDetail(Model model,HttpServletRequest req){
+		int uId = (int) req.getSession().getAttribute("userId");
+		User userDetail = userMapper.selectByPrimaryKey(uId);
+		model.addAttribute("user", userDetail);
+		return "user/seeUserDetail";
+	}
+	
+	
+	@RequestMapping("/updatePassword")
+	public String updatePassword(User u,HttpServletRequest req,Model model){
+		User user2 = userMapper.selectByPrimaryKey((int)req.getSession().getAttribute("userId"));
+		if(user2!=null){
+			String password = md5Encode.md5Pwd(u.getPassword(), user2.getUserName());
+			user2.setPassword(password);
+			int result = userMapper.updateByPrimaryKeySelective(user2);
+			if(result>0){
+				model.addAttribute("result", "修改成功");
+			}else {
+				model.addAttribute("result", "修改失败");
+			}
+		}
+		return "user/updatePasswordResult";
+	}
+	
+	@RequestMapping("/updatepwd")
+	public String updatepwd(){
+		return "user/updatePassword";
 	}
 }
