@@ -43,48 +43,43 @@
 
 <body id="page-top" class="index">
 
-	<!-- Navigation -->
+	<body id="page-top" class="index">
+ 
+    <!-- Navigation -->
 	<nav id="mainNav" layout:fragment="navigationInfo"  style="background-image: url('img/head.PNG');background-size: cover;margin-left: 0px;height: 80px;" class="navbar navbar-default navbar-custom navbar-fixed-top">
-         <div class="container">
-              <div class="intro-text">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand page-scroll" href="#page-top">Start Bootstrap</a>
-            </div>
-
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="hidden">
-                        <a href="#page-top"></a>
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
+      
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav text-uppercase ml-auto">
+            <li class="nav-item">
+                        <a href="main">首页</a>
                     </li>
-					<li><a class="navbar-header page-scroll" th:href="services">热门聊天室</a>
+					<li class="nav-item"><a class="navbar-header page-scroll" th:href="services">热门聊天室</a>
 					</li>
-					<li><a
+					<li class="nav-item"><a
 						class="navbar-header page-scroll navbar-brand page-scroll"
 						th:href="main.do">资讯</a></li>
-					<li><a
+					<li class="nav-item"><a
 						class="navbar-header page-scroll navbar-brand page-scroll"
 						th:href="main.do">问答</a></li>
-					<li><a
+					<li class="nav-item"><a
 						class="navbar-header page-scroll navbar-brand page-scroll"
 						th:href="writeInfo">写资讯</a></li>
-					<li><a
+					<li class="nav-item"><a
 						class="navbar-header page-scroll navbar-brand page-scroll"
 						th:href="main.do">下载</a></li>
-					<li><a
+					<li class="nav-item"><a
 						class="navbar-header page-scroll navbar-brand page-scroll"
 						th:href="main.do">个人中心</a></li>
-					<li>
+					<li class="nav-item">
 						<form action="main">
 							<input type="text" id="search" name="search" style="width: 80px;"
 								placeholder="搜搜" /> <input type="submit" value="搜"></input>
 						</form>
 					</li>
-					<li><a class="nav-link js-scroll-trigger" th:href="loginsure">登录</a></li>
-					<li><a class="nav-link js-scroll-trigger" th:href="toregister">注册</a></li>
+					<li class="nav-item"><a class="nav-link js-scroll-trigger" th:href="loginsure">登录</a></li>
+					<li class="nav-item"><a class="nav-link js-scroll-trigger" th:href="toregister">注册</a></li>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -94,14 +89,14 @@
 	</div>
 	
 	 <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="intro-text">
-                <div class="intro-lead-in">Welcome To Our Studio!</div>
-                <div class="intro-heading">It's Nice To Meet You</div>
-                <a href="#services" class="page-scroll btn btn-xl">Tell Me More</a>
-            </div>
+    <header class="masthead">
+      <div class="container">
+        <div class="intro-text">
+          <div class="intro-lead-in">Welcome To Our Studio!</div>
+          <div class="intro-heading text-uppercase">It's Nice To Meet You</div>
+          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Tell Me More</a>
         </div>
+      </div>
     </header>
 	<div>
 		<div>

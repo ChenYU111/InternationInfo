@@ -21,32 +21,32 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="hidden">
-                        <a href="#page-top"></a>
+                    <li class="nav-item">
+                        <a href="main">首页</a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a class="navbar-header page-scroll" th:href="services">热门聊天室</a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">资讯</a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="toQuestion">问答</a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="writeInfo">写资讯</a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="main.do">下载</a>
                     </li>
-					<li>
+					<li class="nav-item">
                         <a class="navbar-header page-scroll navbar-brand page-scroll" th:href="seeUserDetail">个人中心</a>
                     </li>
-					<li >
+					<li class="nav-item">
                        <form action="main"><input type="text" id="search" name="search" style="width: 80px;" placeholder="搜搜"/>   <input  type="submit" value="搜"></input></form>
                     </li>
 					
-                    <li><a class="nav-link js-scroll-trigger" th:href="logout">注销</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" th:href="logout">注销</a></li>
 
                 </ul>
             </div>
