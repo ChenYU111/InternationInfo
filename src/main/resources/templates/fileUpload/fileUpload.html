@@ -1,0 +1,14 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>文件上传</title>
+</head>
+<body>
+	<form id="upload" enctype="multipart/form-data" method="post" action="uploadFileAction">  
+    <input type="file" name="uploadFile"/>  
+    <input type="hidden" name="id" value="12"/>  
+    <input type="submit" value="文件上传" />  
+</form>  
+</body>
+</html>
