@@ -163,4 +163,29 @@ public class InfoService {
 		int num = articleMapper.deleteByPrimaryKey(id);
 		return num;
 	}
+	
+	
+	public List<Article> findAllArticle(){
+		articleExample.createCriteria().andIsprivateEqualTo(0);
+		articleExample.createCriteria().andIspublishEqualTo(1);
+		List<Article> allArticleList = articleMapper.selectByExample(articleExample);
+		return allArticleList;
+	}
+	
+	public Article findArticleByPrimaryKey(Integer articleId){
+		Article article = articleMapper.selectByPrimaryKey(articleId);
+		return article;
+	}
+	
+	/*public List<Article> findArticleByType(String str){
+		//articleExample.createCriteria().andBlog_typeBetween(str, );
+		
+		articleMapper.selectByExample(articleExample);
+		return 
+	}*/
+	
+	public int updateArticle(Article article){
+		int num = articleMapper.updateByPrimaryKeySelective(article);
+		return num;
+	}
 }

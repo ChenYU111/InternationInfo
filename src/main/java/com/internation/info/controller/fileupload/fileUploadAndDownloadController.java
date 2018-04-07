@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class fileUploadAndDownloadController {
+	//https://blog.csdn.net/zknxx/article/details/72633444
 	@RequestMapping("/fileUpload")
 	public String fileUpload(){
 		return "fileUpload/fileUpload";
