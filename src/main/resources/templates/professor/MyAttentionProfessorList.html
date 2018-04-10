@@ -18,7 +18,7 @@
 				</thead>
 				<tbody>
 					<form>
-						<tr th:each="user:${professorList}">
+						<tr th:each="user:${userList}">
 							<td><input th:type="checkbox" id="cbox" name="id" value="id" />
 							<td th:utext="${user.userName}">专家姓名</td>
 							<td>

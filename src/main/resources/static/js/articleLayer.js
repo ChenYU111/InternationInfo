@@ -38,4 +38,3 @@ function deleteArticle(id) {
 }
 
 
-isAdoptAnswer

@@ -9,10 +9,8 @@
 <body>
 	<div layout:fragment="contentInfo">
 	<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
-	<script type="text/javascript" src="../../js/articleLayer.js"></script>
-		<a href="javascript:void(0)" th:onclick="'applicationProfessor('+${userId}+')'">我要申请为网站资讯专家</a>
-
-		<script type="text/javascript">
+	<a href="javascript:void(0)" th:onclick="'applicationProfessor('+${userId}+')'">我要申请为网站资讯专家</a>
+	<script >
 			function applicationProfessor(id) {
 				layer.open({
 					content : '确认申请？',
@@ -26,8 +24,10 @@
 							type : "post",
 							async : false,
 							success : function(data) {
-								layer.tips(data, that);
-								location.href = "/application";
+								layer.alert(data,function(){
+							        location.reload();
+							    }); 
+								
 							}
 						})
 					}
