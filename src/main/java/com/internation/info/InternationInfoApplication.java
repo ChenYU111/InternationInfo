@@ -1,8 +1,11 @@
 package com.internation.info;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+
+import javax.servlet.SessionCookieConfig;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -25,6 +28,8 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 @EnableAutoConfiguration
 @MapperScan("com.internation.info.dao")
 public class InternationInfoApplication {
+	
+	
 
 	public static void main(String[] args) {
 		TemplateEngine templateEngine = new TemplateEngine(); 
@@ -33,7 +38,7 @@ public class InternationInfoApplication {
 	}
 	
 	//配置mybatis的分页插件pageHelper
-	     @Bean
+	    /* @Bean
 	      public PageHelper pageHelper(){
 	          PageHelper pageHelper = new PageHelper();
 	          Properties properties = new Properties();
@@ -43,5 +48,10 @@ public class InternationInfoApplication {
 	          properties.setProperty("dialect","mysql");    //配置mysql数据库的方言
 	         pageHelper.setProperties(properties);
 	         return pageHelper;
-	     }
+	     }*/
+	
+	     
+	     
+	   
+	     
 }        

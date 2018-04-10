@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.codec.Base64;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -118,6 +117,7 @@ public class ShiroConfig {
         // 拦截器.
         Map<String, String> map = new LinkedHashMap<String, String>();
         //配置记住我或认证通过可以访问的地址  
+        map.put("/static/*", "anon");
         map.put("/", "user");  
         map.put("/login", "anon");
 		map.put("/logout", "logout");
@@ -126,12 +126,11 @@ public class ShiroConfig {
 		map.put("/toregister", "anon");
 		map.put("/user", "authc");
 		map.put("/m", "anon");
-		map.put("/loginSure", "anon");;
-		map.put("/static/**", "anon");
+		map.put("/loginSure", "anon");
 		map.put("/writeInfo", "authc");
+		map.put("/fileUploadAndDownload", "authc");
 		map.put("/seeOneArticle", "authc");
-        map.put("/**", "authc");
-
+       // map.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的链接
@@ -142,7 +141,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         return shiroFilterFactoryBean;
     }
-	/*@Bean
+	@Bean
 	public SimpleCookie rememberMeCookie() {
 		// System.out.println("ShiroConfiguration.rememberMeCookie()");
 		// 这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
@@ -152,20 +151,19 @@ public class ShiroConfig {
 		return simpleCookie;
 	}
 
-	*//**
+	/**
 	 * cookie管理对象;
 	 * 
 	 * @return
-	 *//*
+	 */
 	@Bean
 	public CookieRememberMeManager rememberMeManager() {
 		// System.out.println("ShiroConfiguration.rememberMeManager()");
 		CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-		//cookieRememberMeManager.setCipherKey(Base64.decode("2AvVhdsgUs0FSA3SDFAdag=="));
 		cookieRememberMeManager.setCookie(rememberMeCookie());
 		return cookieRememberMeManager;
 	}
-*/
+
 	@Bean
 	public HashedCredentialsMatcher hashedCredentialsMatcher() {
 		HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();

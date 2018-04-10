@@ -1,0 +1,45 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="professor/professorTemplate">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>膜拜专家</title>
+</head>
+<body>
+<div layout:fragment="contentInfo">
+	<div>
+			<table id="artileTable" name="artileTable">
+				<thead>
+					<tr>
+						<th>选择</th>
+						<th>用户名</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<form>
+						<tr th:each="user:${professorList}">
+							<td><input th:type="checkbox" id="cbox" name="id" value="id" />
+							<td th:utext="${user.userName}">专家姓名</td>
+							<td>
+							<a href="javascript:void(0)" th:onclick="'seeArticle('+${user.id}+')'">查看</a>
+							<a href="javascript:void(0)" th:onclick="'seeArticle('+${user.id}+')'">关注</a>
+							</td>
+						</tr>
+					</form>
+				</tbody>
+			</table>
+		</div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#artileTable').DataTable({
+					"processing" : true,
+					"paging" : true,
+					"pagingType" : "full_numbers"
+				});
+			});
+		</script>
+	</div>
+	
+</body>
+</html>

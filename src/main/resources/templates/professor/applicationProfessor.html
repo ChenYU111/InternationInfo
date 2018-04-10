@@ -1,0 +1,40 @@
+ <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="professor/professorTemplate">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>申请为资讯专家</title>
+</head>
+<body>
+	<div layout:fragment="contentInfo">
+	<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+	<script type="text/javascript" src="../../js/articleLayer.js"></script>
+		<a href="javascript:void(0)" th:onclick="'applicationProfessor('+${userId}+')'">我要申请为网站资讯专家</a>
+
+		<script type="text/javascript">
+			function applicationProfessor(id) {
+				layer.open({
+					content : '确认申请？',
+					type : 2,
+					btn : [ '确认', '取消' ],
+					closeBtn : 2,
+					yes : function(index) {
+						layer.close(index);
+						$.ajax({
+							url : "/sureApplication/" + id,
+							type : "post",
+							async : false,
+							success : function(data) {
+								layer.tips(data, that);
+								location.href = "/application";
+							}
+						})
+					}
+
+				});
+			}
+		</script>
+	</div>
+</body>
+</html>

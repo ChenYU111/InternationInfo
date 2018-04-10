@@ -69,13 +69,17 @@
 					<li class="nav-item"><a
 						class="navbar-header page-scroll navbar-brand page-scroll"
 						th:href="main.do">下载</a></li>
+						
+					<li class="nav-item"><a
+						class="navbar-header page-scroll navbar-brand page-scroll"
+						th:href="main.do">资讯专家</a></li>
 					<li class="nav-item"><a
 						class="navbar-header page-scroll navbar-brand page-scroll"
 						th:href="main.do">个人中心</a></li>
 					<li class="nav-item">
 						<form action="main">
-							<input type="text" id="search" name="search" style="width: 80px;"
-								placeholder="搜搜" /> <input type="submit" value="搜"></input>
+							<input type="text" id="search" name="search"  class="input-medium search-query" style="width: 80px;"
+								placeholder="搜搜" /> <input type="submit" value="搜"  class="btn"></input>
 						</form>
 					</li>
 					<li class="nav-item"><a class="nav-link js-scroll-trigger" th:href="loginsure">登录</a></li>
