@@ -112,4 +112,11 @@ public class QuestionService {
 		List<Question> questionList = questionMapper.selectByExample(questionExample);
 		return questionList;
 	}
+	
+	public List<Question> findQuestionByQuestioner(Integer uId){
+		questionExample.createCriteria().andQuestionerEqualTo(uId);
+		List<Question> questionList = questionMapper.selectByExample(questionExample);
+		return questionList;
+		
+	}
 }

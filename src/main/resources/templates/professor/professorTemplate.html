@@ -92,7 +92,8 @@ div {
 	width: 80%;
 }
 </style>
-
+<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>咨询中心</title>
 <body>
 	<div layout:fragment="navigationInfo"
@@ -101,19 +102,11 @@ div {
 	</div>
 	<div layout:fragment="sidebarInfo"
 		style="float: left; background-image: url(../../img/infoSidebar.png); width: 100px; height: 400px">
-		<table>
-			<tr style="color: yellow;">专家管理
-			</tr>
-			<br />
-			<tr>
-				<a class="btn btn-small"  th:href="professorList">专家列表</a>
-			</tr>
-			<br />
-			<tr>
-				<a class="btn btn-small"  th:href="myAttentionProfessor">我关注的专家</a>
-			</tr>
-			<br />
-		</table>
+		<span class="label label-default">专家管理</span>
+			<ul class="nav nav-pills nav-stacked">
+			    <li><a class="btn btn-small"  th:href="professorList">专家列表</a></li>
+				<li><a class="btn btn-small"  th:href="myAttentionProfessor">我关注的专家</a></li>
+			</ul>
 	</div>
 	<div layout:fragment="contentInfo" style="float: right;">写资讯中心</div>
 </body>

@@ -92,32 +92,23 @@ div {
 	width: 80%;
 }
 </style>
+<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>问题管理中心</title>
 </head>
 <body>
 	<div layout:fragment="navigationInfo"
 		style="width: 100%; background-image: url(../../img/infoTemplate.png); background-size: cover; height: 80px">
-		<span>创作中心</span> <a href="addQ">提出问题</a>
+		<span class="label label-default">创作中心</span> <a href="addQ">提出问题</a>
 	</div>
 	<div layout:fragment="sidebarInfo"
 		style="float: left; background-image: url(../../img/infoSidebar.png); width: 100px; height: 400px">
-		<table>
-			<tr style="color: yellow;">About
-			</tr>
-			<br />
-			<tr>
-				<a class="btn btn-small"  th:href="toOrderByQuestionSeeCount">热门问题</a>
-			</tr>
-			<br />
-			<tr>
-				<a class="btn btn-small" th:href="myQuestion">我的提问</a>
-			</tr>
-			<br />
-			<tr>
-				<a class="btn btn-small" th:href="main">我的回答</a>
-			</tr>
-			<br />
-		</table>
+			<span class="label label-default">About</span>
+			<ul class="nav nav-pills nav-stacked">
+				<li><a class="btn btn-small"  th:href="toOrderByQuestionSeeCount">热门问题</a></li>
+				<li><a class="btn btn-small" th:href="myQuestion">我的提问</a></li>
+				<li><a class="btn btn-small" th:href="main">我的回答</a></li>
+			</ul>
 	</div>
 	<div layout:fragment="contentInfo" style="float: right;">写资讯中心</div>
 </body>

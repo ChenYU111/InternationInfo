@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -53,6 +54,7 @@ public interface ArticleMapper {
      *
      * @mbggenerated Tue Mar 27 10:23:40 CST 2018
      */
+  
     @Insert({
         "insert into article (id, title, ",
         "original, content, ",
@@ -67,6 +69,10 @@ public interface ArticleMapper {
         "#{createTime,jdbcType=TIMESTAMP}, #{seecount,jdbcType=INTEGER}, ",
         "#{identifyingCode,jdbcType=VARCHAR})"
     })
+    @Options(
+    		useGeneratedKeys = true,
+    		keyProperty="id"
+    	)
     int insert(Article record);
 
     /**

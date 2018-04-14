@@ -54,7 +54,12 @@ public class questionController {
 		} else {
 			model.addAttribute("result", "发表失败");
 		}
-
+		List<Question> questionByQuestioner = questionService.findQuestionByQuestioner((Integer) session.getAttribute("userId"));
+		int size = (questionByQuestioner!=null&&!questionByQuestioner.equals("")&&questionByQuestioner.size()>0)?questionByQuestioner.size()-1:0;
+		if(size>0){
+			int qId = questionByQuestioner.get(size).getId();
+			model.addAttribute("qId", qId);
+		}
 		return "question/addSucQuestion";
 	}
 
@@ -89,6 +94,7 @@ public class questionController {
 		session.setAttribute("seeQuestionId", questionId);
 		return "question/seeQuestionDetail";
 	}
+	
 	@RequestMapping("/seeQuestionDetail/addAnswer")
 	public String addAnswer( Answer an, HttpServletRequest req, Model model) {
 		int questionId = (int) req.getSession().getAttribute("seeQuestionId");

@@ -12,130 +12,72 @@
 
 <title>Agency - Start Bootstrap Theme</title>
 
-<!-- Bootstrap Core CSS -->
-<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Custom Fonts -->
-<link href="../../vendor/font-awesome/css/font-awesome.min.css"
-	rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
-	rel="stylesheet" type="text/css">
-<link href='https://fonts.googleapis.com/css?family=Kaushan+Script'
-	rel='stylesheet' type='text/css'>
-<link
-	href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic'
-	rel='stylesheet' type='text/css'>
-<link
-	href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700'
-	rel='stylesheet' type='text/css'>
-
-<!-- Theme CSS -->
-<link href="../../css/agency.min.css" rel="stylesheet">
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
 </head>
 
 <body id="page-top" class="index">
 
-	<body id="page-top" class="index">
- 
-    <!-- Navigation -->
-	<nav id="mainNav" layout:fragment="navigationInfo"  style="background-image: url('img/head.PNG');background-size: cover;margin-left: 0px;height: 80px;" class="navbar navbar-default navbar-custom navbar-fixed-top">
-      <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
-      
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav text-uppercase ml-auto">
-            <li class="nav-item">
-                        <a href="main">首页</a>
-                    </li>
-					<li class="nav-item"><a class="navbar-header page-scroll" th:href="services">热门聊天室</a>
-					</li>
-					<li class="nav-item"><a
-						class="navbar-header page-scroll navbar-brand page-scroll"
-						th:href="main.do">资讯</a></li>
-					<li class="nav-item"><a
-						class="navbar-header page-scroll navbar-brand page-scroll"
-						th:href="main.do">问答</a></li>
-					<li class="nav-item"><a
-						class="navbar-header page-scroll navbar-brand page-scroll"
-						th:href="writeInfo">写资讯</a></li>
-					<li class="nav-item"><a
-						class="navbar-header page-scroll navbar-brand page-scroll"
-						th:href="main.do">下载</a></li>
-						
-					<li class="nav-item"><a
-						class="navbar-header page-scroll navbar-brand page-scroll"
-						th:href="main.do">资讯专家</a></li>
-					<li class="nav-item"><a
-						class="navbar-header page-scroll navbar-brand page-scroll"
-						th:href="main.do">个人中心</a></li>
-					<li class="nav-item">
-						<form action="main">
-							<input type="text" id="search" name="search"  class="input-medium search-query" style="width: 80px;"
-								placeholder="搜搜" /> <input type="submit" value="搜"  class="btn"></input>
-						</form>
-					</li>
-					<li class="nav-item"><a class="nav-link js-scroll-trigger" th:href="loginsure">登录</a></li>
-					<li class="nav-item"><a class="nav-link js-scroll-trigger" th:href="toregister">注册</a></li>
+	<!-- Navigation -->
+	<nav layout:fragment="navigationInfo" class="navbar navbar-default"
+		style="background-image: url('img/head.PNG'); background-size: cover; margin-left: 0px; height: 80px;">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">资讯网站</a>
+			</div>
+			<div>
+				<ul class="nav nav-pills">
+					<li><a href="#">问答</a></li>
+					<li><a th:href="main">首页</a>
+					<li>
+					<li><a class="navbar-header page-scroll" th:href="services">热门聊天室</a>
+					<li>
+					<li><a th:href="fileUploadAndDownload">下载
+							<li>
+						<li><a th:href="toQuestion">问答</a>
+						<li>
+						<li><a th:href="seeUserDetail">个人中心
+									<li>
+								<li><a th:href="professorList">资讯专家
+											<li>
+										<li><a th:href="writeInfo">写资讯</a></li>
+											<li class="dropdown"><a href="#" class="dropdown-toggle"
+												data-toggle="dropdown"> 资讯 <b class="caret"></b>
+											</a>
+												<ul class="dropdown-menu">
+													<li><a class="btn btn-small" th:href="readInfoAll">见多识广</a></li>
+													<li class="divider"></li><li><a class="btn btn-small" th:href="javaArticleList">Java类</a></li>
+													<li class="divider"></li><li><a class="btn btn-small" th:href="SQLArticleList">数据库类</a></li>
+													<li class="divider"></li>
+													<li><a  class="btn btn-small" th:href="PhPArticleList">PHP</a></li>
+													<li class="divider"></li>
+													<li><a  class="btn btn-small" th:href="AIArticleList">人工智能类</a></li>
+													<li class="divider"></li>
+													<li><a  class="btn btn-small" th:href="AIArticleList">人工智能类</a></li>
+												</ul></li>
+											<form class="navbar-form navbar-left" role="search">
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="搜一搜">
+												</div>
+												<button type="submit" class="btn btn-default">提交</button>
+											</form>
+											<li><a th:href="logout">注销
+													<li>
 				</ul>
 			</div>
-			<!-- /.navbar-collapse -->
-		</div>
-		<!-- /.container-fluid -->
-	</nav>
 	</div>
+	</nav>
 	
-	 <!-- Header -->
-    <header class="masthead">
-      <div class="container">
-        <div class="intro-text">
-          <div class="intro-lead-in">Welcome To Our Studio!</div>
-          <div class="intro-heading text-uppercase">It's Nice To Meet You</div>
-          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Tell Me More</a>
-        </div>
-      </div>
-    </header>
 	<div>
-		<div>
-			<sidebar layout:fragment="sidebarInfo" class="sidebar">
-			<div
-				style="width: 80px; position: absolute; left: 0; background-image: url('img/msidebar.PNG'); float: left; margin-top: 0px">
-				<table class="side_local">
-					<tr>
-						<td><a th:href="main">热门资讯</a></td>
-					</tr>
-					<tr>
-						<td><a th:href="main">推荐</a></td>
-					</tr>
-					<tr />
-					<tr>
-						<td><a th:href="main">人工智能</a></td>
-					</tr>
-					<tr />
-					<tr>
-						<td><a th:href="main">Java</a></td>
-					</tr>
-					<tr />
-					<tr>
-						<td><a th:href="main">数据库</a></td>
-					</tr>
-					<tr />
-					<tr>
-						<td><a th:href="main">PHP</a></td>
-					</tr>
-					<tr />
-				</table>
-			</div>
-			</sidebar>
-			<div layout:fragment="contentInfo"
-				style="margin-left: 100px; margin-top: 80px">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+	<div layout:fragment="contentInfo"
+		style="margin-left: 100px; margin-top: 80px">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
 		</div>
 		<!-- Footer -->
 		<footer layout:fragment="footerInfo">

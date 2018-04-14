@@ -5,16 +5,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class testHtml {
-	@RequestMapping("/t")
-	public String test(){
-		return "test";
-	}
+	
 	@RequestMapping("/m")
-	public String testMain(){
+	public String Main(){
 		return "main";
 	}
-	@RequestMapping("/index")
-	public String testLayout(){
-		return "layout";
+	@RequestMapping("/")
+	public String toMain(){
+		return "main";
 	}
+	
 }

@@ -36,6 +36,7 @@ import com.internation.info.model.Review;
 import com.internation.info.model.User;
 import com.internation.info.service.InfoService;
 import com.internation.info.service.UserService;
+import com.internation.info.vo.reviewVo;
 
 @Controller
 public class InfoController {
@@ -58,7 +59,7 @@ public class InfoController {
 
 	// 提交资讯
 	@RequestMapping("/submitInfo")
-	public String commitInfo(Article article, HttpServletRequest req, String submit) {
+	public String commitInfo(Article article, HttpServletRequest req, String submit,Model model) {
 		HttpSession session = req.getSession();
 		Article ar = new Article();
 		StringBuffer title = new StringBuffer();
@@ -81,6 +82,7 @@ public class InfoController {
 		int uid = (int) session.getAttribute("userId");
 		ar.setUid(uid);
 		int result = articleMapper.insert(ar);
+		System.out.println("主键值为===================="+result);
 		if (result > 0) {
 			System.err.println("插入返回的结果  " + result);
 			articleExample.createCriteria().andTitleEqualTo(ar.getTitle()).andContentEqualTo(ar.getContent())
@@ -89,6 +91,11 @@ public class InfoController {
 			List<Article> articleList = articleMapper.selectByExample(articleExample);
 			if (articleList != null && articleList.size() > 0) {
 				session.setAttribute("article", articleList.get(0));
+			}
+			List<Article> artList =  articleMapper.selectByExample(articleExample);
+			if(null!=artList&&artList.size()>0){
+				int articleId = artList.get(artList.size()-1).getId();
+				model.addAttribute("articleId", articleId);
 			}
 			return "info/addSucArticle";
 		} else {
@@ -106,13 +113,20 @@ public class InfoController {
 		List<User> userList = new ArrayList<>();
 		review.setArticle_id(articleId);
 		List<Review> findReviewList = infoService.findReviewList(review.getArticle_id());
+		
+		List<reviewVo> reviewList = new ArrayList<>();
 		if (findReviewList.size() > 0 && findReviewList != null) {
-			model.addAttribute("reviewList", findReviewList);
 			for (Review review : findReviewList) {
 				User user = infoService.findUserNameList(review.getObserver_id());
-				userList.add(user);
+				reviewVo reviewVo = new reviewVo();
+				reviewVo.setUsername(user.getUserName());
+				reviewVo.setCreateTime(review.getCreateTime());
+				reviewVo.setFloor_number(review.getFloor_number());
+				reviewVo.setMessage(review.getMessage());
+				reviewVo.setSeecount(review.getSeecount());
+				reviewList.add(reviewVo);
 			}
-			model.addAttribute("userList", userList);
+			model.addAttribute("reviewList", reviewList);
 		} else {
 			model.addAttribute("review", "暂无评论");
 		}
@@ -122,7 +136,7 @@ public class InfoController {
 	}
 
 	// 添加评论并且查看评论
-	@RequestMapping("/addreview")
+	@RequestMapping("/seeOneArticle/addreview")
 	public String addReview(Review rev, HttpServletRequest req, Model model) {
 		// 添加评论
 		int articleId = (int) req.getSession().getAttribute("articleIdInDetail");
@@ -139,9 +153,10 @@ public class InfoController {
 		}else if(num==0){
 			review.setFloor_number(1);
 		}
-		int seeCount = infoService.findSeeCount(review.getArticle_id());
-		review.setSeecount(seeCount + 1);
+		review.setSeecount(0);
 		int insertNum = infoService.insertReview(review);
+		//根据文章id查询   文章  
+		Article article2 = infoService.findArticleByPrimaryKey(articleId);
 		// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
 		if (insertNum > 0) {
 			List<Review> findReviewList = infoService.findReviewList(review.getArticle_id());
@@ -149,13 +164,24 @@ public class InfoController {
 				model.addAttribute("reviewList", findReviewList);
 			}
 		}
-		List<User> userList = new ArrayList<>();
+		
 		List<Review> findReviewList = infoService.findReviewList(articleId);
+		List<reviewVo> reviewVoList = new ArrayList<>();
 		for (Review review : findReviewList) {
 			User user = infoService.findUserNameList(review.getObserver_id());
-			userList.add(user);
+			//将相关评论查询出来   放到   文章的   vo中
+			reviewVo reVo = new reviewVo();
+			reVo.setUsername(user.getUserName());
+			reVo.setCreateTime(user.getCreateTime());
+			reVo.setCreaTime(review.getCreateTime());
+			reVo.setFloor_number(review.getFloor_number());
+			reVo.setMessage(review.getMessage());
+			reVo.setSeecount(review.getSeecount());
+			reviewVoList.add(reVo);
+			
 		}
-		model.addAttribute("userList", userList);
+		model.addAttribute("reviewList",reviewVoList);
+		model.addAttribute("article",article2);
 		return "info/seeArticleDetail";
 	}
 

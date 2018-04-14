@@ -188,4 +188,10 @@ public class InfoService {
 		int num = articleMapper.updateByPrimaryKeySelective(article);
 		return num;
 	}
+	
+	public List<Article> findMyArticleById(Integer uId){
+		articleExample.createCriteria().andUidEqualTo(uId);
+		List<Article> myArticleList = articleMapper.selectByExample(articleExample);
+		return myArticleList;
+	}
 }

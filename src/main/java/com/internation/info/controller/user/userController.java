@@ -21,9 +21,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import com.internation.info.Config.AddMD5Encode;
+import com.internation.info.controller.question.questionController;
 import com.internation.info.dao.UserMapper;
+import com.internation.info.model.Article;
+import com.internation.info.model.Question;
 import com.internation.info.model.User;
 import com.internation.info.model.UserExample;
+import com.internation.info.service.InfoService;
+import com.internation.info.service.QuestionService;
+import com.internation.info.service.professorService;
+import com.internation.info.vo.userDetailVo;
 
 @Controller
 public class userController {
@@ -36,7 +43,12 @@ public class userController {
 	AddMD5Encode md5Encode;
 	@Autowired
 	User user;
-
+	@Autowired
+	professorService professorService;
+	@Autowired
+	QuestionService questionService;
+	@Autowired
+	InfoService infoservice;
 	/*
 	 * @Autowired User user;
 	 */
@@ -130,8 +142,28 @@ public class userController {
 	@RequestMapping("/seeUserDetail")
 	public String seeUserDetail(Model model,HttpServletRequest req){
 		int uId = (int) req.getSession().getAttribute("userId");
-		User userDetail = userMapper.selectByPrimaryKey(uId);
-		model.addAttribute("user", userDetail);
+		User user1 = userMapper.selectByPrimaryKey(uId);
+		userDetailVo userDetailVo = new userDetailVo();
+		userDetailVo.setUserName(user1.getUserName());
+		userDetailVo.setCreateTime(user1.getCreateTime());
+		userDetailVo.setSex(user1.getSex());
+		userDetailVo.setTel(user.getTel());
+		if (user1.getIsprofessor() == 3 && null != user1.getProfessorRemark()
+				&& user1.getProfessorRemark().equals("审核通过")) {
+			userDetailVo.setIsprofessor(1);
+		} else {
+			userDetailVo.setIsprofessor(0);
+		}
+		int integrationCount = professorService.findIntegration(uId);
+		List<Question> findMyQuestionList = questionService.findMyQuestion(uId);
+		int questionCount = (findMyQuestionList == null || findMyQuestionList.size() == 0) ? 0
+				: findMyQuestionList.size();
+		List<Article> MyArticleList = infoservice.findMyArticleById(uId);
+		int articleCount = (MyArticleList == null || MyArticleList.size() == 0) ? 0 : MyArticleList.size();
+		userDetailVo.setIntegration(integrationCount);
+		userDetailVo.setQuestionCount(questionCount);
+		userDetailVo.setArticleCount(articleCount);
+		model.addAttribute("userDetailVo", userDetailVo);
 		return "user/seeUserDetail";
 	}
 	
