@@ -6,22 +6,11 @@
 </head>
 <body>
 	<form id="upload" enctype="multipart/form-data" method="post" action="uploadFileAction">  
-    <input type="file" name="uploadFile"/>  
+    <input type="file" name="uploadFile"/>  </br>
     <input type="hidden" name="id" value="12"/>  
-    <input type="button" value="文件上传" onclick="doUpload()"/>  
+          资源名称:<input type="text" name="fileName" placeholder="文件名称" ></br>
+          资源描述:<input type="text" name="fileDescription" placeholder="文件描述"></br>
+    <input type="submit" value="文件上传"/>  
 </form>  
-<input type="button" value="下载文件" onclick="doDownload()"/>  
-<form id="download" method="post" action="downloadFileAction">  
-</form>  
-<script type="text/javascript">  
-    function doUpload() {  
-        var upl = document.getElementById("upload");  
-        upl.submit();  
-    }  
-    function doDownload() {  
-        var upl = document.getElementById("download");  
-        upl.submit();  
-    }  
-</script>  
 </body>
 </html>

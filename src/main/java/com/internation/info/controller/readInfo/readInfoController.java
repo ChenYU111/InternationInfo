@@ -71,7 +71,7 @@ public class readInfoController {
 		List<Article> articleList = infoService.findAllArticle();
 		List<Article> javaArticleList=new ArrayList<>();
 		for (Article article : articleList) {
-			if(article.getBlog_type().contains("java")){
+			if(article.getBlog_type().contains("Java")){
 				javaArticleList.add(article);
 			}
 		}
