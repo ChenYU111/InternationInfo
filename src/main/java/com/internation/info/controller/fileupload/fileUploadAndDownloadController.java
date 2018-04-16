@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.internation.info.model.FileDownload;
 import com.internation.info.model.FileUpload;
 import com.internation.info.model.User;
 import com.internation.info.service.FileUploadService;
@@ -38,6 +40,8 @@ public class fileUploadAndDownloadController {
 	FileUpload fileUpload;
 	@Autowired
 	FileUploadService fileUploadService;
+	@Autowired
+	FileDownload fileDownload;
 	@RequestMapping("/fileUpload")
 	public String fileUpload(){
 		return "fileUpload/fileUpload";
@@ -90,6 +94,31 @@ public class fileUploadAndDownloadController {
 	    return modelAndView;  
 	}
 	
+	@RequestMapping("/fileDetail/{id}")
+	public String seeFileDetail(@PathVariable("id") Integer fileId,Model model,HttpServletRequest req){
+		FileUpload fileUpload2 = fileUploadService.FileDetail(fileId);
+		if(fileUpload2!=null&&!fileUpload2.equals("")){
+			fileUploadVo fileVo = new fileUploadVo();
+			fileVo.setCreateTime(fileUpload2.getCreateTime());
+			fileVo.setFileName(fileUpload2.getFileName());
+			User user = fileUploadService.findUserById(fileUpload2.getuId());
+			if(user!=null&&!user.equals("")){
+				fileVo.setUserName(user.getUserName());
+			}
+			fileVo.setFileDescription(fileUpload2.getFileDescription());
+			fileVo.setSeecount(fileUpload2.getSeecount());
+			fileVo.setDownLoadCount(fileUpload2.getDownLoadCount());
+			fileVo.setId(fileUpload2.getId());
+			fileVo.setFileUrl(fileUpload2.getFileUrl());
+			model.addAttribute("fileUploadVo", fileVo);
+			HttpSession session = req.getSession();
+			session.setAttribute("fileUrl", fileVo.getFileUrl());
+			session.setAttribute("fileId", fileVo.getId());
+	}
+		return "fileUpload/fileDetail";
+	}
+
+	
 	@RequestMapping("/fileDownload")
 	public String fileDownload(){
 		return "fileUpload/downloadFile";
@@ -97,17 +126,23 @@ public class fileUploadAndDownloadController {
 	
 	//下载
 	@RequestMapping("/downloadFileAction")  
-	public void downloadFileAction(HttpServletRequest request, HttpServletResponse response) {  
-	  
+	public void downloadFileAction(HttpServletRequest request, HttpServletResponse response,HttpServletRequest req) {  
+		HttpSession session = req.getSession();
+		String fileUrl = (String) session.getAttribute("fileUrl");
+		int fileId = (int) session.getAttribute("fileId");
 	    response.setCharacterEncoding(request.getCharacterEncoding());  
 	    response.setContentType("application/octet-stream");  
 	    FileInputStream fis = null;  
 	    try {  
-	        File file = new File("D:\\uploadfile\\logo.jpg");  
+	        File file = new File(fileUrl);  
 	        fis = new FileInputStream(file);  
 	        response.setHeader("Content-Disposition", "attachment; filename="+file.getName());  
 	        IOUtils.copy(fis,response.getOutputStream());  
 	        response.flushBuffer();  
+	        fileDownload.setFileId(fileId);
+	        fileDownload.setuId((int)session.getAttribute("userId"));
+	        fileDownload.setDownLoadTime(new Date());
+	        fileUploadService.insertFileDown(fileDownload);
 	    } catch (FileNotFoundException e) {  
 	        e.printStackTrace();  
 	    } catch (IOException e) {  
@@ -147,25 +182,5 @@ public class fileUploadAndDownloadController {
 		return "fileUpload/fileCanDownloadList";
 	}
 
-	@RequestMapping("/fileDetail/{id}")
-	public String seeFileDetail(@PathVariable("id") Integer fileId,Model model){
-		FileUpload fileUpload2 = fileUploadService.FileDetail(fileId);
-		if(fileUpload2!=null&&!fileUpload2.equals("")){
-			fileUploadVo fileVo = new fileUploadVo();
-			fileVo.setCreateTime(fileUpload2.getCreateTime());
-			fileVo.setFileName(fileUpload2.getFileName());
-			User user = fileUploadService.findUserById(fileUpload2.getuId());
-			if(user!=null&&!user.equals("")){
-				fileVo.setUserName(user.getUserName());
-			}
-			fileVo.setFileDescription(fileUpload2.getFileDescription());
-			fileVo.setSeecount(fileUpload2.getSeecount());
-			fileVo.setDownLoadCount(fileUpload2.getDownLoadCount());
-			fileVo.setId(fileUpload2.getId());
-			model.addAttribute("fileUploadVo", fileVo);
-		
-	}
-		return "fileUpload/fileDetail";
-	}
-
+	
 }

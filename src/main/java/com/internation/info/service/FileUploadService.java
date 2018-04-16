@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.internation.info.dao.FileDownloadMapper;
 import com.internation.info.dao.FileUploadMapper;
 import com.internation.info.dao.UserMapper;
+import com.internation.info.model.FileDownload;
+import com.internation.info.model.FileDownloadExample;
 import com.internation.info.model.FileUpload;
 import com.internation.info.model.FileUploadExample;
 import com.internation.info.model.User;
@@ -22,7 +25,12 @@ public class FileUploadService {
 	UserMapper userMapper;
 	@Autowired
 	UserExample userExample;
-	
+	@Autowired
+	FileDownloadMapper fileDownloadMapper;
+	@Autowired
+	FileDownloadExample fileDownloadExample;
+	@Autowired
+	FileDownload fileDownload;
 	public int  insertFileUpload(FileUpload fileuUpload){
 		int insert = fileUploadMapper.insert(fileuUpload);
 		return insert;
@@ -41,5 +49,9 @@ public class FileUploadService {
 	public FileUpload FileDetail(int fileId){
 		FileUpload fileUpload = fileUploadMapper.selectByPrimaryKey(fileId);
 		return fileUpload;
+	}
+	
+	public void insertFileDown(FileDownload fDownload){
+		
 	}
 }

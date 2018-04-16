@@ -53,11 +53,21 @@
 				<tr>
 					<td>下载人数：</td><td th:utext="${fileUploadVo.downLoadCount}">下载人数</td>
 				</tr>
+				<tr>
+					<td>文件地址：</td><td th:utext="${fileUploadVo.fileUrl}" >文件地址</td>
+				</tr>
 			</table>
-			<form action="seeOneArticle/addreview" method="post">
+			
+			<!-- 我要下载 -->
+			<form id="download" method="post" action="/downloadFileAction">  
+				<input type="submit" value="下载文件" onclick="doDownload()"/>  
+			</form>  
+			
+			<!-- <form action="seeOneArticle/addreview" method="post">
 				<input th:type="text" id="message" name="message" placeholder="说出你的疑问" required="message">
 				<input th:type="submit" value="发表评论">
-			</form>
+			</form> -->
+			
 			<h3>相关评论</h3>
 			<table id="reviewTable" class="display" style="width: 100%">
 				<tr th:each="review:${reviewList}">
@@ -77,6 +87,32 @@
 				});
 			});
 		</script>
-		</div>
+		<!-- <script type="text/javascript">
+			function doDownload() {
+				var upl = document.getElementById("download");
+				upl.submit();
+			}
+		</script>
+		
+		 <script type="text/javascript">
+				function doDownload() {
+					$.post('/seeProfessorDetail/' + id, {
+						"id" : id
+					}, function(str) {
+						layer.open({
+							type : 3,
+							title : "文章详情",
+							shadeClose : true,//点击外围   关闭
+							shade : [ 0.8, '#393D49' ],//遮蔽层
+							closeBtn : 2,
+							maxmin : true,
+							area : [ '700px', '600px' ],
+							content : str
+						// 注意，如果str是object，那么需要字符拼接。
+						});
+					});
+				}
+			</script> -->
+	</div>
 </body>
 </html>
