@@ -427,7 +427,7 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andContentLike(String value) {
+        public Criteria string(String value) {
             addCriterion("content like", value, "content");
             return (Criteria) this;
         }

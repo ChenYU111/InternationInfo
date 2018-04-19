@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -142,6 +143,34 @@ public class userController {
 	@RequestMapping("/seeUserDetail")
 	public String seeUserDetail(Model model,HttpServletRequest req){
 		int uId = (int) req.getSession().getAttribute("userId");
+		User user1 = userMapper.selectByPrimaryKey(uId);
+		userDetailVo userDetailVo = new userDetailVo();
+		userDetailVo.setUserName(user1.getUserName());
+		userDetailVo.setCreateTime(user1.getCreateTime());
+		userDetailVo.setSex(user1.getSex());
+		userDetailVo.setTel(user.getTel());
+		if (user1.getIsprofessor() == 3 && null != user1.getProfessorRemark()
+				&& user1.getProfessorRemark().equals("审核通过")) {
+			userDetailVo.setIsprofessor(1);
+		} else {
+			userDetailVo.setIsprofessor(0);
+		}
+		int integrationCount = professorService.findIntegration(uId);
+		List<Question> findMyQuestionList = questionService.findMyQuestion(uId);
+		int questionCount = (findMyQuestionList == null || findMyQuestionList.size() == 0) ? 0
+				: findMyQuestionList.size();
+		List<Article> MyArticleList = infoservice.findMyArticleById(uId);
+		int articleCount = (MyArticleList == null || MyArticleList.size() == 0) ? 0 : MyArticleList.size();
+		userDetailVo.setIntegration(integrationCount);
+		userDetailVo.setQuestionCount(questionCount);
+		userDetailVo.setArticleCount(articleCount);
+		model.addAttribute("userDetailVo", userDetailVo);
+		return "user/seeUserDetail";
+	}
+	
+	@RequestMapping("/searchseeUserDetail/{id}")
+	public String searchSeeUserDetail(@PathVariable("id") Integer uId,Model model,HttpServletRequest req){
+		//int uId = (int) req.getSession().getAttribute("userId");
 		User user1 = userMapper.selectByPrimaryKey(uId);
 		userDetailVo userDetailVo = new userDetailVo();
 		userDetailVo.setUserName(user1.getUserName());

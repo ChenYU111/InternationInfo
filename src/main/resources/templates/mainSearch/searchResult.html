@@ -1,0 +1,39 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>搜索结果</title>
+<link rel="stylesheet"
+	href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	
+		<table class="table table-hover">
+			<thead>
+				<th>
+				<td>啥</td>
+				<td>用户名</td>
+				<td>标题</td>
+				<td>内容</td>
+				<td>操作</td>
+				</th>
+			</thead>
+			<tbody>
+				<tr th:each="searchVo:${searchVoList}">
+					<td th:utext="${searchVo.type}">类别</td>
+					<td th:utext="${searchVo.username}">用户名</td>
+					<td th:utext="${searchVo.title}">标题</td>
+					<td th:utext="${searchVo.content}">标题内容</td>
+					<!-- 查看   就用   后台传  controller 的  requestionMapper 到前台  隐藏不显示 -->
+					<td>
+						<a th:href="${searchVo.seeUrl}+'/'+${searchVo.id}">查看</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+</body>
+</html>

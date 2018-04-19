@@ -105,9 +105,9 @@ div {
 		style="float: left; background-image: url(../../img/infoSidebar.png); width: 100px; height: 400px">
 			<span class="label label-default">About</span>
 			<ul class="nav nav-pills nav-stacked">
-				<li><a class="btn btn-small"  th:href="toOrderByQuestionSeeCount">热门问题</a></li>
-				<li><a class="btn btn-small" th:href="myQuestion">我的提问</a></li>
-				<li><a class="btn btn-small" th:href="main">我的回答</a></li>
+				<li><a class="btn btn-small"  th:href="@{/toOrderByQuestionSeeCount}">热门问题</a></li>
+				<li><a class="btn btn-small" th:href="@{/myQuestion}">我的提问</a></li>
+				<li><a class="btn btn-small" th:href="@{/main}">我的回答</a></li>
 			</ul>
 	</div>
 	<div layout:fragment="contentInfo" style="float: right;">写资讯中心</div>

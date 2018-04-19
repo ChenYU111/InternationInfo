@@ -23,7 +23,7 @@
 							<td><input th:type="checkbox" id="cbox" name="id" value="id" />
 							<td th:utext="${question.title}">问题标题</td>
 							<td th:text="${#dates.format(question.questionTime,'yyyy/MM/dd HH:mm')}">问题发表时间</td>
-							<td th:text="${question.isresolve}?#{'已解决'}:#{'未解决'}">是否解决了</td>
+							<td th:text="${question.isresolve} ? '已解决' : '未解决'">是否解决了</td>
 							<td><a href="javascript:void(0)" th:href="@{'/seeQuestionDetail/'+${question.id}}">查看</a>
 								<a href="javascript:void(0)" th:onclick="'deleteQuestion('+${question.id}+')'"> 删除</a></td>
 					</tr>

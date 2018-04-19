@@ -119,4 +119,11 @@ public class QuestionService {
 		return questionList;
 		
 	}
+
+	public List<Question> findQuestionByQuestioner(String str) {
+		String string = "%"+str+"%";
+		questionExample.createCriteria().andContentLike(string);
+		List<Question> questionList = questionMapper.selectByExample(questionExample);
+		return questionList;
+	}
 }

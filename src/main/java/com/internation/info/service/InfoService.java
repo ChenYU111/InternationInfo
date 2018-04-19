@@ -194,4 +194,10 @@ public class InfoService {
 		List<Article> myArticleList = articleMapper.selectByExample(articleExample);
 		return myArticleList;
 	}
+	public List<Article> findArtcleByLikeTitieAndContent(String str) {
+		String string = "%"+str+"%";
+		articleExample.createCriteria().andTitleLike(string);
+		List<Article> list = articleMapper.selectByExample(articleExample);
+		return list;
+	}
 }

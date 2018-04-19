@@ -14,8 +14,7 @@ public class WeatherController extends BaseController {
 
 	@RequestMapping("weather")
 	public String weather() {
-//		return "web/weather/weather";
-		return "user/successMain";
+		return "web/weather/weather";
 		
 	}
 
