@@ -33,10 +33,13 @@
 
 </head>
 <body>
-			<div layout:fragment="contentInfo">
-		<center>
+		<div layout:fragment="contentInfo">
+		<div class="well well-lg" style="padding-left: 50px;margin-left: 200px;margin-top: 100px">
 			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
-			<table border="0px" ; style="text-align: center; margin-top: 20px;">
+			<div class="panel-body">
+       		资讯详情
+    		</div>
+			<table border="0px" ; style="text-align: center; margin-top: 20px;" class="table table-hover">
 				<tr>
 					<td>标题：</td><td th:utext="${fileUploadVo.fileName}">标题</td>
 				</tr>
@@ -53,14 +56,13 @@
 				<tr>
 					<td>下载人数：</td><td th:utext="${fileUploadVo.downLoadCount}">下载人数</td>
 				</tr>
-				<tr>
-					<td>文件地址：</td><td th:utext="${fileUploadVo.fileUrl}" >文件地址</td>
-				</tr>
 			</table>
-			
+			<div class="panel-body">
+       		点击按钮下载
+    		</div>
 			<!-- 我要下载 -->
 			<form id="download" method="post" action="/downloadFileAction">  
-				<input type="submit" value="下载文件" onclick="doDownload()"/>  
+				<input type="submit" value="下载文件" onclick="doDownload()" class="btn btn-primary"/>  
 			</form>  
 			
 			<!-- <form action="seeOneArticle/addreview" method="post">
@@ -77,7 +79,7 @@
 					<td th:text="'评论内容：'+${review.message}">内容</td>
 				</tr>
 			</table>
-		</center>
+		</div>
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('#artileTable').DataTable({

@@ -16,44 +16,44 @@
 			</div>
 			<div>
 				<ul class="nav nav-pills">
-					<li><a th:href="main">首页</a>
+					<li><a th:href="@{main}">首页</a>
 					</li>
-					<li><a class="navbar-header page-scroll" th:href="services">热门聊天室</a>
+					<li><a class="navbar-header page-scroll" th:href="@{services}">热门聊天室</a>
 					</li>
-					<li><a th:href="fileUploadAndDownload">下载
+					<li><a th:href="@{fileList}">下载
 							</a></li>
-						<li><a th:href="toQuestion">问答</a>
+						<li><a th:href="@{orderBySeeCount}">问答</a>
 						</li>
-						<li><a th:href="seeUserDetail">个人中心</a>
+						<li><a th:href="@{seeUserDetail}">个人中心</a>
 									</li>
-								<li><a th:href="professorList">资讯专家</a>
+								<li><a th:href="@{professorList}">资讯专家</a>
 											</li>
-										<li><a th:href="writeInfo">写资讯</a></li>
+										<li><a th:href="@{writeInfo}">写资讯</a></li>
 											<li class="dropdown"><a href="#" class="dropdown-toggle"
 												data-toggle="dropdown"> 资讯 <b class="caret"></b>
 											</a>
 												<ul class="dropdown-menu">
-													<li><a class="btn btn-small" th:href="readInfoAll">见多识广</a></li>
-													<li class="divider"></li><li><a class="btn btn-small" th:href="javaArticleList">Java类</a></li>
-													<li class="divider"></li><li><a class="btn btn-small" th:href="SQLArticleList">数据库类</a></li>
+													<li><a class="btn btn-small" th:href="@{readInfoAll}">见多识广</a></li>
+													<li class="divider"></li><li><a class="btn btn-small" th:href="@{javaArticleList}">Java类</a></li>
+													<li class="divider"></li><li><a class="btn btn-small" th:href="@{SQLArticleList}">数据库类</a></li>
 													<li class="divider"></li>
-													<li><a  class="btn btn-small" th:href="PhPArticleList">PHP</a></li>
+													<li><a  class="btn btn-small" th:href="@{PhPArticleList}">PHP</a></li>
 													<li class="divider"></li>
-													<li><a  class="btn btn-small" th:href="AIArticleList">人工智能类</a></li>
+													<li><a  class="btn btn-small" th:href="@{AIArticleList}">人工智能类</a></li>
 													<li class="divider"></li>
-													<li><a  class="btn btn-small" th:href="AIArticleList">人工智能类</a></li>
+													<li><a  class="btn btn-small" th:href="@{AIArticleList}">人工智能类</a></li>
 												</ul></li>
-											<form class="navbar-form navbar-left" role="search" action="mainSearch">
+											<form class="navbar-form navbar-left" role="search" action="@{/mainSearch}">
 												<div class="form-group">
 													<input type="text" class="form-control" placeholder="搜一搜" name="content">
 												</div>
-												<button type="submit" class="btn btn-default">提交</button>
+												<button type="submit" class="@{btn btn-default}">提交</button>
 											</form>
-											<li><a th:href="logout">注销
+											<li><a th:href="@{logout}">注销
 													</a></li>
-													<li><a th:href="view">网站留言墙
+													<li><a th:href="@{view}">网站留言墙
 							</a></li>
-							<li><a th:href="aboutUs">关于我们
+							<li><a th:href="@{aboutUs}">关于我们
 							</a></li>
 				</ul>
 			</div>
@@ -96,8 +96,7 @@
 
 			<div style="float: right; width: 80px; height: 80px">
 				<div>
-					<img src="../../img/sun.jpg" style="width: 80px; height: 80px" />
-					
+					<img src="../../img/sun.jpg" style="width: 80px; height: 80px"  class="img-circle"/>
 					<a th:href="weather">今日天气</a>
 				</div>
 				<br/>

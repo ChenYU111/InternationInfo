@@ -126,8 +126,6 @@ public class professorController {
 			model.addAttribute("result", result);
 			return "professor/attentionProfessorResult";
 		}
-		
-		
 	}
 
 	//查看我的关注专家

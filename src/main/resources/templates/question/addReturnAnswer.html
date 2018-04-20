@@ -30,7 +30,7 @@
 </script>
 </head>
 <body>
-	<form action="addReturnAnswer" method="post">
+	<form th:action="@{/addReturnAnswer}" method="post">
 			<input th:type="text" id="content" name="content">
 			<input th:type="submit" value="提交答案">
 	</form>

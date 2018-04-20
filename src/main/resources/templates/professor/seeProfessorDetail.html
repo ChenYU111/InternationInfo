@@ -1,11 +1,12 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="professor/professorTemplate">
 <head>
 <meta name="content-type" content="text/html; charset=UTF-8">
 <title>查看专家详情</title>
 </head>
 <body>
-
+<div layout:fragment="contentInfo" style="float: right;">
 	<table>
 		<tr>
 			<td>用户名:</td>
@@ -20,6 +21,19 @@
 			<td th:text="${professDetailVo.articleCount}"></td>
 		</tr>
 	</table>
-
+	<div class="panel panel-default">
+    <div class="panel-body">
+      	他的文章
+    </div>
+    </div>
+    
+    <div class="panel panel-default">
+    <div class="panel-body">
+                  他提出的问题
+    </div>
+    
+</div>
+</div>
+	</div>
 </body>
 </html>

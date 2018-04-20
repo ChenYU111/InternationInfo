@@ -96,6 +96,11 @@ public class fileUploadAndDownloadController {
 	
 	@RequestMapping("/fileDetail/{id}")
 	public String seeFileDetail(@PathVariable("id") Integer fileId,Model model,HttpServletRequest req){
+		//查看数量+1
+		FileUpload fUpload = fileUploadService.findFileUpload(fileId);
+	    int seeCount = fUpload.getSeecount()==null?0:fUpload.getSeecount();
+	    fUpload.setSeecount(seeCount+1);
+	    fileUploadService.updateFileUpload(fUpload);
 		FileUpload fileUpload2 = fileUploadService.FileDetail(fileId);
 		if(fileUpload2!=null&&!fileUpload2.equals("")){
 			fileUploadVo fileVo = new fileUploadVo();
@@ -119,11 +124,6 @@ public class fileUploadAndDownloadController {
 	}
 
 	
-	@RequestMapping("/fileDownload")
-	public String fileDownload(){
-		return "fileUpload/downloadFile";
-	}
-	
 	//下载
 	@RequestMapping("/downloadFileAction")  
 	public void downloadFileAction(HttpServletRequest request, HttpServletResponse response,HttpServletRequest req) {  
@@ -143,6 +143,10 @@ public class fileUploadAndDownloadController {
 	        fileDownload.setuId((int)session.getAttribute("userId"));
 	        fileDownload.setDownLoadTime(new Date());
 	        fileUploadService.insertFileDown(fileDownload);
+	        FileUpload fUpload = fileUploadService.findFileUpload(fileId);
+	        int downLoadCount = fUpload.getDownLoadCount()==null?0:fUpload.getDownLoadCount();
+	        fUpload.setDownLoadCount(downLoadCount+1);
+	        fileUploadService.updateFileUpload(fUpload);
 	    } catch (FileNotFoundException e) {  
 	        e.printStackTrace();  
 	    } catch (IOException e) {  
@@ -181,6 +185,50 @@ public class fileUploadAndDownloadController {
 		model.addAttribute("findAllFileVoList", findAllFileVoList);
 		return "fileUpload/fileCanDownloadList";
 	}
-
 	
+	@RequestMapping("/myUploadList")
+	public String findMyFileUploadList(HttpServletRequest req,Model model){
+		List<FileUpload> fileUpLoadList = fileUploadService.findMyFileUpLoadList((int)req.getSession().getAttribute("userId"));
+		List<fileUploadVo> findAllFileVoList = new ArrayList<>();
+		if(fileUpLoadList!=null&&!fileUpLoadList.equals("")){
+			for (FileUpload fileUp : fileUpLoadList) {
+				if(fileUp!=null&&!fileUp.equals("")){
+					fileUploadVo fileVo = new fileUploadVo();
+					fileVo.setCreateTime(fileUp.getCreateTime());
+					fileVo.setFileName(fileUp.getFileName());
+					User user = fileUploadService.findUserById(fileUp.getuId());
+					if(user!=null&&!user.equals("")){
+						fileVo.setUserName(user.getUserName());
+					}
+					fileVo.setId(fileUp.getId());
+					findAllFileVoList.add(fileVo);
+				}
+			}
+		}
+		model.addAttribute("findAllFileVoList", findAllFileVoList);
+		return "fileUpload/fileMyUploadList";
+	}
+	
+	@RequestMapping("/myDownList")
+	public String myDownLoadFileList(HttpServletRequest req,Model model){
+		List<FileDownload> downLoadList = fileUploadService.findMyFileDownLoadList((int)req.getSession().getAttribute("userId"));
+		List<fileUploadVo> findAllFileVoList = new ArrayList<>();
+		if(downLoadList!=null&&!downLoadList.equals("")){
+			for (FileDownload fileDownload : downLoadList) {
+				Integer fileId = fileDownload.getFileId();
+				FileUpload fileUp = fileUploadService.findFileUpload(fileId);
+				fileUploadVo fileVo = new fileUploadVo();
+				fileVo.setCreateTime(fileUp.getCreateTime());
+				fileVo.setFileName(fileUp.getFileName());
+				User user = fileUploadService.findUserById(fileUp.getuId());
+				if(user!=null&&!user.equals("")){
+					fileVo.setUserName(user.getUserName());
+				}
+				fileVo.setId(fileUp.getId());
+				findAllFileVoList.add(fileVo);
+			}
+		}
+		model.addAttribute("findAllFileVoList", findAllFileVoList);
+		return "fileUpload/fileMyDownloadList";
+	}
 }

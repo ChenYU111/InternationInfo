@@ -4,7 +4,7 @@
 	layout:decorator="fileUpload/fileTemplate">
 <head>
 <meta name="content-type" content="text/html; charset=UTF-8">
-<title>可下载资源列表</title>
+<title>我的上传资源</title>
 </head>
 <body>
 	<div layout:fragment="contentInfo">
@@ -28,9 +28,12 @@
 							<td th:text="${#dates.format(fileUploadVo.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
 							<td th:text="${fileUploadVo.userName}">发布人</td>
 							<td>
-							<ul class="nav nav-pills">
+								<ul class="nav nav-pills">
 								<li>
 								<a th:href="@{fileDetail+'/'+${fileUploadVo.id}}">查看</a>
+								</li>
+								<li>
+								<a href="javascript:void(0)" th:onclick="'deleteArticle('+${fileUploadVo.id}+')'">删除</a>
 								</li>
 								</ul>
 							</td>

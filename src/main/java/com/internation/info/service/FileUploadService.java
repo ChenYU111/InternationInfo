@@ -52,6 +52,28 @@ public class FileUploadService {
 	}
 	
 	public void insertFileDown(FileDownload fDownload){
-		
+		fileDownloadMapper.insert(fDownload);
+	}
+	
+	public List<FileUpload> findMyFileUpLoadList(int uId){
+		fileUploadExample.createCriteria().andUIdEqualTo(uId);
+		List<FileUpload> list = fileUploadMapper.selectByExample(fileUploadExample);
+		return list;
+	}
+	
+	public List<FileDownload> findMyFileDownLoadList(int uId){
+		fileDownloadExample.createCriteria().andUIdEqualTo(uId);
+		List<FileDownload> list = fileDownloadMapper.selectByExample(fileDownloadExample);
+		return list;
+	}
+	
+	public FileUpload findFileUpload(int fileId){
+		FileUpload fileUpload = fileUploadMapper.selectByPrimaryKey(fileId);
+		return fileUpload;
+	}
+	
+	public int updateFileUpload(FileUpload fUpload){
+		int result = fileUploadMapper.updateByPrimaryKey(fUpload);
+		return result;
 	}
 }

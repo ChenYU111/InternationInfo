@@ -96,18 +96,20 @@ div {
 	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>咨询中心</title>
 <body>
-	<div layout:fragment="navigationInfo"
-		style="width: 100%; background-image: url(../../img/infoTemplate.png); background-size: cover; height: 80px">
-		<span>创作中心</span> <a th:href="application">申请为资讯专家</a>
+	<nav class="navbar navbar-inverse" role="navigation">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">资讯专家</a>
+			<div>
+				<ul class="nav nav-pills">
+				<li><a th:href="@{application}">申请为资讯专家</a></li>
+				<li><a th:href="@{professorList}">专家列表</a></li>
+				<li><a th:href="@{myAttentionProfessor}">我关注的专家</a></li>
+				<li><a th:href="@{myAttentionProfessor}">我的粉丝</a></li>
+				<li><a th:href="@{main}">返回首页</a></li>
+		</ul>
+		</div>
 	</div>
-	<div layout:fragment="sidebarInfo"
-		style="float: left; background-image: url(../../img/infoSidebar.png); width: 100px; height: 400px">
-		<span class="label label-default">专家管理</span>
-			<ul class="nav nav-pills nav-stacked">
-			    <li><a class="btn btn-small"  th:href="professorList">专家列表</a></li>
-				<li><a class="btn btn-small"  th:href="myAttentionProfessor">我关注的专家</a></li>
-			</ul>
-	</div>
-	<div layout:fragment="contentInfo" style="float: right;">写资讯中心</div>
+	</nav>
+	<div layout:fragment="contentInfo" style="float: right;">资讯专家</div>
 </body>
 </html>

@@ -95,7 +95,7 @@ public class questionController {
 		return "question/seeQuestionDetail";
 	}
 	
-	@RequestMapping("/seeQuestionDetail/addAnswer")
+	@RequestMapping("/addAnswer")
 	public String addAnswer( Answer an, HttpServletRequest req, Model model) {
 		int questionId = (int) req.getSession().getAttribute("seeQuestionId");
 		answer.setuId((int) req.getSession().getAttribute("userId"));

@@ -37,14 +37,9 @@
 		<script type="text/javascript"
 			src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>
 		<form action="addQuestion" method="post">
-			<input th:type="text" id="title" name="title" placeholder="问题标题"><br />
+			<label class="col-sm-2 control-label">问题标题：</label><input th:type="text" id="title" name="title" placeholder="问题标题"  class="form-control" style="width: 400px;"><br />
 			
-			<!-- 下拉搜索框：https://blog.csdn.net/xb12369/article/details/50999265 -->
-			 <label for="bs3Select" class="col-lg-2 control-label">文章所属类别</label> 
-				<select id="bs3Select" class="selectpicker show-tick form-control" multiple data-live-search="true">  
-                        <option>cow</option>  
-                        <option>bull</option>  
-                </select>  <br/>
+			<label class="col-sm-2 control-label">问题描述：</label>
 			<!--style给定宽度可以影响编辑器的最终宽度-->
 			<script type="text/plain" id="content" name="content">
         		<p>问题具体描述</p>
@@ -62,7 +57,7 @@
 				//更多其他参数，请参考ueditor.config.js中的配置项
 				})
 			</script>
-			<input th:type="submit" value="确认提问">
+			<input th:type="submit" value="确认提问" class="btn btn-default"style="margin-top: 30px;margin-left: 200px">
 		</form>
 	</div>
 </body>

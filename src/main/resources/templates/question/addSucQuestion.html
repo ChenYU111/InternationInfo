@@ -10,10 +10,8 @@
 
 	<div layout:fragment="contentInfo">
 	<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
-		<!-- <a th:href="@{'/seeQuestionDetail/'+${qId}}">查看</a> -->
-	<!-- 	<a href="javascript:void(0)" th:onclick="'attentionProfessor('+${user.id}+')'">关注</a> -->
-		<a href="javascript:void(0)" th:onclick="'seeQuestionDetail('+${qId}+')'">查看</a>
-		<a th:href="addQ">再写个问题</a>
+		<a th:href="@{seeQuestionDetail+'/'+${qId}}">查看</a> 
+		<a th:href="@{addQ}">再写个问题</a>
 		
 		<script type="text/javascript">
 		function seeQuestionDetail(id) {

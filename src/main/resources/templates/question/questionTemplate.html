@@ -97,19 +97,20 @@ div {
 <title>问题管理中心</title>
 </head>
 <body>
-	<div layout:fragment="navigationInfo"
-		style="width: 100%; background-image: url(../../img/infoTemplate.png); background-size: cover; height: 80px">
-		<span class="label label-default">创作中心</span> <a href="addQ">提出问题</a>
-	</div>
-	<div layout:fragment="sidebarInfo"
-		style="float: left; background-image: url(../../img/infoSidebar.png); width: 100px; height: 400px">
-			<span class="label label-default">About</span>
-			<ul class="nav nav-pills nav-stacked">
-				<li><a class="btn btn-small"  th:href="@{/toOrderByQuestionSeeCount}">热门问题</a></li>
-				<li><a class="btn btn-small" th:href="@{/myQuestion}">我的提问</a></li>
-				<li><a class="btn btn-small" th:href="@{/main}">我的回答</a></li>
-			</ul>
-	</div>
-	<div layout:fragment="contentInfo" style="float: right;">写资讯中心</div>
+	<nav class="navbar navbar-inverse" role="navigation">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">提问中心</a>
+			<div>
+				<ul class="nav nav-pills">
+					<li><a th:href="@{/addQ}">提出问题</a></li>
+					<li><a th:href="@{/orderBySeeCount}">热门问题</a></li>
+					<li><a th:href="@{/myQuestion}">我的提问</a></li>
+					<li><a th:href="@{/main}">我的回答</a></li>
+					<li><a th:href="@{/main}">返回首页</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div layout:fragment="contentInfo" style="float: right;"></div>
 </body>
 </html>

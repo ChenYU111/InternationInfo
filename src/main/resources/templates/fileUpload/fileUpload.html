@@ -1,16 +1,24 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="fileUpload/fileTemplate">
 <head>
 <meta name="content-type" content="text/html; charset=UTF-8">
 <title>文件上传</title>
 </head>
-<body>
-	<form id="upload" enctype="multipart/form-data" method="post" action="uploadFileAction">  
-    <input type="file" name="uploadFile"/>  </br>
-    <input type="hidden" name="id" value="12"/>  
-          资源名称:<input type="text" name="fileName" placeholder="文件名称" ></br>
-          资源描述:<input type="text" name="fileDescription" placeholder="文件描述"></br>
-    <input type="submit" value="文件上传"/>  
-</form>  
+<body >
+
+	<div layout:fragment="contentInfo">
+	<div class="well well-lg" style="padding-left: 50px;margin-left: 200px;margin-top: 100px">
+		<form id="upload" enctype="multipart/form-data" method="post"
+			action="uploadFileAction" >
+			<input type="file" name="uploadFile" /> </br> <input type="hidden"
+				name="id" value="12" /> <label for="name">资源名称:</label><input type="text" name="fileName"
+				placeholder="文件名称" class="form-control"></br> <label for="name">资源描述:</label><textarea name="fileDescription" placeholder="文件描述" class="form-control" rows="3"></textarea></br> <input
+				type="submit" value="文件上传"  class="btn btn-default"/>
+				
+		</form>
+		</div>
+	</div>
 </body>
 </html>
