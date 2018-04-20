@@ -11,15 +11,19 @@ import org.springframework.ui.Model;
 import com.github.pagehelper.PageHelper;
 import com.internation.info.common.PageBean;
 import com.internation.info.dao.ArticleMapper;
+import com.internation.info.dao.MyCollectionMapper;
 import com.internation.info.dao.ReviewMapper;
 import com.internation.info.dao.UserMapper;
 import com.internation.info.model.Article;
 import com.internation.info.model.ArticleExample;
+import com.internation.info.model.MyCollection;
+import com.internation.info.model.MyCollectionExample;
 import com.internation.info.model.ArticleExample.Criteria;
 import com.internation.info.model.Review;
 import com.internation.info.model.ReviewExample;
 import com.internation.info.model.User;
 import com.internation.info.model.UserExample;
+
 @Service
 public class InfoService {
 	@Autowired
@@ -36,21 +40,31 @@ public class InfoService {
 	UserMapper userMapper;
 	@Autowired
 	UserExample userExample;
-	/*public PageBean<Article> selectArticleLimit(Integer pageNum, Integer pageSize, Article article,Model m){*/
-	public List<Article> selectArticleLimit(Integer pageNum, Integer pageSize, Article article,Model m){
-	
-			
+	@Autowired
+	MyCollectionMapper myCollectionMapper;
+	@Autowired
+	MyCollectionExample myCollectionExample;
+	@Autowired
+	MyCollection myCollection;
+
+	/*
+	 * public PageBean<Article> selectArticleLimit(Integer pageNum, Integer
+	 * pageSize, Article article,Model m){
+	 */
+	public List<Article> selectArticleLimit(Integer pageNum, Integer pageSize, Article article, Model m) {
+
 		Criteria criteria = articleExample.createCriteria();
-		if (article.getTitle()!= null && article.getTitle().trim().length() > 0) {
+		if (article.getTitle() != null && article.getTitle().trim().length() > 0) {
 			criteria.andTitleLike("%" + article.getTitle() + "%");
 		}
-		/*if (content != null && content.trim().length() > 0) {
-			criteria.andContentLike("%" + content + "%");
-		}*/
-		if (article.getBlog_type()!= null && article.getBlog_type().trim().length() > 0) {
+		/*
+		 * if (content != null && content.trim().length() > 0) {
+		 * criteria.andContentLike("%" + content + "%"); }
+		 */
+		if (article.getBlog_type() != null && article.getBlog_type().trim().length() > 0) {
 			criteria.andBlog_typeLike("%" + article.getBlog_type() + "%");
 		}
-		if(article.getOriginal()==null){
+		if (article.getOriginal() == null) {
 			article.setOriginal(1);
 		}
 		criteria.andOriginalEqualTo(article.getOriginal()).andIspublishEqualTo(article.getIspublish());
@@ -60,144 +74,217 @@ public class InfoService {
 		if (pageNum == null) {
 			pageNum = 1;
 		}
-		
+
 		RowBounds rowBounds = new RowBounds(pageNum, pageSize);
-		 List<Article> limitArticleList = articleMapper.selectByExample(articleExample);
-		 m.addAttribute("limitArticleList",limitArticleList);
-		
-		 pageBean.setItems(limitArticleList);
-		 
-		 //return pageBean;
-		 return limitArticleList;
+		List<Article> limitArticleList = articleMapper.selectByExample(articleExample);
+		m.addAttribute("limitArticleList", limitArticleList);
+
+		pageBean.setItems(limitArticleList);
+
+		// return pageBean;
+		return limitArticleList;
 	}
-	public List<Article> selectArticle(Article article,Model m){
+
+	public List<Article> selectArticle(Article article, Model m) {
 		Criteria criteria = articleExample.createCriteria();
-		if (article.getTitle()!= null && article.getTitle().trim().length() > 0) {
+		if (article.getTitle() != null && article.getTitle().trim().length() > 0) {
 			criteria.andTitleLike("%" + article.getTitle() + "%");
 		}
-		/*if (content != null && content.trim().length() > 0) {
-			criteria.andContentLike("%" + content + "%");
-		}*/
-		if (article.getBlog_type()!= null && article.getBlog_type().trim().length() > 0) {
+		/*
+		 * if (content != null && content.trim().length() > 0) {
+		 * criteria.andContentLike("%" + content + "%"); }
+		 */
+		if (article.getBlog_type() != null && article.getBlog_type().trim().length() > 0) {
 			criteria.andBlog_typeLike("%" + article.getBlog_type() + "%");
 		}
-		if(article.getOriginal()==null){
+		if (article.getOriginal() == null) {
 			article.setOriginal(1);
 		}
 		criteria.andOriginalEqualTo(article.getOriginal()).andIspublishEqualTo(article.getIspublish());
-//		if (pageSize == null) {
-//			pageSize = 5;
-//		}
-//		if (pageNum == null) {
-//			pageNum = 1;
-//		}
-		
-		//RowBounds rowBounds = new RowBounds(pageNum, pageSize);
-		//PageHelper.startPage(pageNum, pageSize);
-		 List<Article> limitArticleList = articleMapper.selectByExample(articleExample);
-		//json.put("total", limitArticleList.size());
-		//json.put("rows", limitArticleList);
-		//model.addAttribute("json", json);
-		 //当时知道数据类型时，可以进行强转。String s=JSON.toJSONString(json);JSONObject json=JSONObject.parentObject(String s)
-		// String jsonStr= json.toJSONString(limitArticleList); 
-		 m.addAttribute("limitArticleList",limitArticleList);
-		
+		// if (pageSize == null) {
+		// pageSize = 5;
+		// }
+		// if (pageNum == null) {
+		// pageNum = 1;
+		// }
+
+		// RowBounds rowBounds = new RowBounds(pageNum, pageSize);
+		// PageHelper.startPage(pageNum, pageSize);
+		List<Article> limitArticleList = articleMapper.selectByExample(articleExample);
+		// json.put("total", limitArticleList.size());
+		// json.put("rows", limitArticleList);
+		// model.addAttribute("json", json);
+		// 当时知道数据类型时，可以进行强转。String s=JSON.toJSONString(json);JSONObject
+		// json=JSONObject.parentObject(String s)
+		// String jsonStr= json.toJSONString(limitArticleList);
+		m.addAttribute("limitArticleList", limitArticleList);
+
 		return limitArticleList;
 	}
-	
-	
-	//根据文章的id来查找评论   找到最后一个评论的楼层
+
+	// 根据文章的id来查找评论 找到最后一个评论的楼层
 	public int findFloor(int articleId) {
 		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
 		List<Review> reviewList = reviewMapper.selectByExample(reviewExample);
 		int num = 0;
-		//有评论
+		// 有评论
 		if (reviewList != null && reviewList.size() > 0) {
 			num = reviewList.size();
 		}
-		//有评论   取最后一条评论  的 楼层号 
+		// 有评论 取最后一条评论 的 楼层号
 		if (num > 0) {
 			return reviewList.get(num - 1).getFloor_number();
 		} else {
-			//如果没有评论  返回1 
+			// 如果没有评论 返回1
 			return 0;
 		}
 	}
-	//查看 评论被  查看了几次
-	public int findSeeCount(int articleId){
+
+	// 查看 评论被 查看了几次
+	public int findSeeCount(int articleId) {
 		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
 		List<Review> reviewList = reviewMapper.selectByExample(reviewExample);
 		int num = 0;
-		if(reviewList!=null&&reviewList.size()>0){
+		if (reviewList != null && reviewList.size() > 0) {
 			num = reviewList.size();
 		}
-		if(num>0){
-		return reviewList.get(num-1).getSeecount();
-		}else{
+		if (num > 0) {
+			return reviewList.get(num - 1).getSeecount();
+		} else {
 			return 0;
 		}
 	}
-	
-	
-	public int insertReview(Review review){
+
+	public int insertReview(Review review) {
 		int num = reviewMapper.insert(review);
 		return num;
 	}
-	//查出所用评论
-	public List<Review> findReviewList(int articleId){
-		//List<Review> reviewList = ArrayList<Review>();
+
+	// 查出所用评论
+	public List<Review> findReviewList(int articleId) {
+		// List<Review> reviewList = ArrayList<Review>();
 		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
-		List<Review>reviewList = reviewMapper.selectByExample(reviewExample);
+		List<Review> reviewList = reviewMapper.selectByExample(reviewExample);
 		return reviewList;
-		
+
 	}
-	
-	public User findUserNameList(int uId){
+
+	public User findUserNameList(int uId) {
 		userExample.createCriteria().andIdEqualTo(uId);
 		User user = userMapper.selectByPrimaryKey(uId);
 		return user;
 	}
-	
-	
-	public int deleteArticeById(Integer id){
+
+	public int deleteArticeById(Integer id) {
 		int num = articleMapper.deleteByPrimaryKey(id);
 		return num;
 	}
-	
-	
-	public List<Article> findAllArticle(){
+
+	// 查看所有发布的文章
+	public List<Article> findAllArticle() {
 		articleExample.createCriteria().andIsprivateEqualTo(0);
 		articleExample.createCriteria().andIspublishEqualTo(1);
 		List<Article> allArticleList = articleMapper.selectByExample(articleExample);
 		return allArticleList;
 	}
-	
-	public Article findArticleByPrimaryKey(Integer articleId){
+
+	public Article findArticleByPrimaryKey(Integer articleId) {
 		Article article = articleMapper.selectByPrimaryKey(articleId);
 		return article;
 	}
-	
-	/*public List<Article> findArticleByType(String str){
-		//articleExample.createCriteria().andBlog_typeBetween(str, );
-		
-		articleMapper.selectByExample(articleExample);
-		return 
-	}*/
-	
-	public int updateArticle(Article article){
+
+	/*
+	 * public List<Article> findArticleByType(String str){
+	 * //articleExample.createCriteria().andBlog_typeBetween(str, );
+	 * 
+	 * articleMapper.selectByExample(articleExample); return }
+	 */
+
+	public int updateArticle(Article article) {
 		int num = articleMapper.updateByPrimaryKeySelective(article);
 		return num;
 	}
-	
-	public List<Article> findMyArticleById(Integer uId){
+
+	public List<Article> findMyArticleById(Integer uId) {
 		articleExample.createCriteria().andUidEqualTo(uId);
 		List<Article> myArticleList = articleMapper.selectByExample(articleExample);
 		return myArticleList;
 	}
+
 	public List<Article> findArtcleByLikeTitieAndContent(String str) {
-		String string = "%"+str+"%";
+		String string = "%" + str + "%";
 		articleExample.createCriteria().andTitleLike(string);
 		List<Article> list = articleMapper.selectByExample(articleExample);
+		return list;
+	}
+
+	// 查看我的 放在草稿箱的 资讯
+	public List<Article> findMyDrafts(int userId) {
+		articleExample.createCriteria().andIspublishEqualTo(0).andUidEqualTo(userId);
+		List<Article> allArticleList = articleMapper.selectByExample(articleExample);
+		return allArticleList;
+	}
+
+	public int updateMyCollectionArticle(MyCollection myCollection2) {
+		int result = myCollectionMapper.updateByPrimaryKeySelective(myCollection2);
+		return result;
+	}
+
+	//
+	public MyCollection findCollectionArticle(int articleId, int userId) {
+		myCollectionExample.createCriteria().andMyCollectionOnArticleIdEqualTo(articleId);
+		List<MyCollection> selectByExample = myCollectionMapper.selectByExample(myCollectionExample);
+		MyCollection myCollection2 = new MyCollection();
+		if (null != selectByExample && selectByExample.size() > 0) {
+			myCollection2 = selectByExample.get(0);
+		} else {
+			myCollection2 = null;
+		}
+		return myCollection2;
+	}
+
+	// 当 表中么有 这个记录的时候 插入一条 关注专家
+	public int insertArticle(int articleId, int uId) {
+		MyCollection myCollection2 = findCollectionArticle(articleId, uId);
+
+		int result = 0;
+		// 当值为
+		if (myCollection2 == null || myCollection2.equals("")) {
+			myCollection.setIsArticle(1);
+			// 关注的专家Id
+			myCollection.setMyCollectionOnArticleId(articleId);
+			myCollection.setuId(uId);
+			result = myCollectionMapper.insert(myCollection);
+		}
+		return result;
+	}
+
+	// 当表中 有这条记录 更新 isuser 为 1
+	public int updateArticleToAttention(int articleId, int uId) {
+		MyCollection myCollection2 = findCollectionArticle(articleId, uId);
+		int num = 0;
+		if (myCollection2 != null && !myCollection2.equals("") && myCollection2.getIsArticle() == 0) {
+			myCollection2.setIsArticle(1);
+			num = updateMyCollectionArticle(myCollection2);
+		}
+		return num;
+	}
+
+	// 取消关注
+	public int updateArticleToNOAttention(int articleId, int uId) {
+		MyCollection myCollection2 = findCollectionArticle(articleId, uId);
+		int num = 0;
+		if (myCollection2 != null && !myCollection2.equals("") && myCollection2.getIsArticle() == 1) {
+			myCollection2.setIsArticle(0);
+			num = updateMyCollectionArticle(myCollection2);
+		}
+		return num;
+	}
+
+	//我收藏的文章
+	public List<MyCollection> findMyattentionArticle(int userId){
+		myCollectionExample.createCriteria().andUIdEqualTo(userId).andIsArticleEqualTo(1);
+		List<MyCollection> list = myCollectionMapper.selectByExample(myCollectionExample);
 		return list;
 	}
 }

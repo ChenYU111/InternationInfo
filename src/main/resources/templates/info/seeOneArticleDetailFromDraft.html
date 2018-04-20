@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="info/infoTemplate">
 <head>
 <meta charset="UTF-8">
 <title>查看文章详情</title>
@@ -8,7 +9,7 @@
 <center>
     <!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
 	<table border="0px"; style="text-align: center; margin-top: 20px;">
-		<tr><td th:utext='${article.original}?#{<span style="color: green;">原创</span>}:#{""}'></td><td th:utext="${article.title}">标题</td></tr>
+		<tr><td th:utext='${article.original}?<span style="color: green;">原创</span>:""'></td><td th:utext="${article.title}">标题</td></tr>
 		<tr><td>类别：</td><td th:text="${article.blog_type}">文章类别</td></tr>
 	    <tr><td th:utext="${article.content}" >正文</td></tr>
 	</table>

@@ -1,39 +1,106 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="professor/professorTemplate">
 <head>
 <meta name="content-type" content="text/html; charset=UTF-8">
 <title>查看专家详情</title>
 </head>
 <body>
-<div layout:fragment="contentInfo" style="float: right;">
-	<table>
-		<tr>
-			<td>用户名:</td>
-			<td th:text="${professDetailVo.userName}"></td>
-		</tr>
-		<tr>
-			<td>积分:</td>
-			<td th:text="${professDetailVo.integration}"></td>
-		</tr>
-		<tr>
-			<td>发表的文章数:</td>
-			<td th:text="${professDetailVo.articleCount}"></td>
-		</tr>
-	</table>
-	<div class="panel panel-default">
-    <div class="panel-body">
-      	他的文章
-    </div>
-    </div>
-    
-    <div class="panel panel-default">
-    <div class="panel-body">
-                  他提出的问题
-    </div>
-    
-</div>
-</div>
+	<div layout:fragment="contentInfo" style="float: right;">
+		<table>
+			<tr>
+				<td>用户名:</td>
+				<td th:text="${professDetailVo.userName}"></td>
+			</tr>
+			<tr>
+				<td>积分:</td>
+				<td th:text="${professDetailVo.integration}"></td>
+			</tr>
+			<tr>
+				<td>发表的文章数:</td>
+				<td th:text="${professDetailVo.articleCount}"></td>
+			</tr>
+		</table>
+		</br>
+		<div class="panel panel-default">
+			<div class="panel-body">他的文章</div>
+		</div>
+		
+		<div>
+			<table id="artileTable2" name="artileTable2">
+				<thead>
+					<tr>
+						<th>标题</th>
+						<th>原创</th>
+						<th>私密</th>
+						<th>发布</th>
+						<th>发布时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<form>
+						<tr th:each="article:${articleList}">
+							<td th:utext="${article.title}">文章标题</td>
+							<td th:utext="${article.original}?'原创':'非原创'">是否原创</td>
+							<td th:utext="${article.isprivate}?'私密':'非私密'">是否私密</td>
+							<td th:utext="${article.ispublish}?'发布':'非发布'">是否发布</td>
+							<td th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
+							<td>
+								<a th:href="@{'/seeOneArticle/'+${article.id}}">查看</a>
+							</td>
+						</tr>
+					</form>
+				</tbody>
+			</table>
+		
+		<div class="panel panel-default">
+			<div class="panel-body">他提出的问题</div>
+		</div>
+		
+		<table id="MyQuestionTable2" class="table table-hover" style="width: 100%">
+				<thead>
+					<tr>
+						<th>标题</th>
+						<th>发表时间</th>
+						<th>是否已经解决</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<form>
+						<tr th:each="question:${myQuestionList}">
+							<td th:utext="${question.title}">问题标题</td>
+							<td th:text="${#dates.format(question.questionTime,'yyyy/MM/dd HH:mm')}">问题发表时间</td>
+							<td th:text="${question.isresolve} ? '已解决' : '未解决'">是否解决了</td>
+							<td><a href="javascript:void(0)" th:href="@{'/seeQuestionDetail/'+${question.id}}">查看</a>
+					</tr>
+					</form>
+				</tbody>
+			</table>
 	</div>
+	<link href="../../datatables/jquery.dataTables.css" rel="stylesheet" />
+<script src="../../datatables/jquery.dataTables.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#MyQuestionTable2').DataTable({
+		"processing" : true,
+		"paging" : true,
+		"pagingType" : "full_numbers"
+	});
+});
+</script>
+<script type="text/javascript">
+			$(document).ready(function() {
+				$('#artileTable2').DataTable({
+					"processing" : true,
+					"paging" : true,
+					"pagingType" : "full_numbers"
+				});
+			});
+		</script>
+	</div>
+	
 </body>
 </html>

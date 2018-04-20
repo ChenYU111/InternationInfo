@@ -25,7 +25,7 @@
 				</thead>
 				<tbody>
 					<form>
-						<tr th:each="article:${limitArticleList}">
+						<tr th:each="article:${articleList}">
 							<td th:utext="${article.title}">文章标题</td>
 							<td th:utext="${article.original}?'原创':'非原创'">是否原创</td>
 							<td th:utext="${article.isprivate}?'私密':'非私密'">是否私密</td>
@@ -33,7 +33,6 @@
 							<td th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
 							<td><!-- <a href="javascript:void(0)" th:onclick="'seeArticle('+${article.id}+')'">查看</a> -->
 								<a th:href="@{'/seeOneArticle/'+${article.id}}">查看</a>
-								<a href="javascript:void(0)" th:onclick="'deleteArticle('+${article.id}+')'">删除</a>
 							</td>
 						</tr>
 					</form>

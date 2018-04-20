@@ -15,6 +15,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,12 +32,14 @@ import com.internation.info.common.PageBean;
 import com.internation.info.dao.ArticleMapper;
 import com.internation.info.model.Article;
 import com.internation.info.model.ArticleExample;
+import com.internation.info.model.MyCollection;
 import com.internation.info.model.ArticleExample.Criteria;
 import com.internation.info.model.Review;
 import com.internation.info.model.User;
 import com.internation.info.service.InfoService;
 import com.internation.info.service.UserService;
 import com.internation.info.vo.reviewVo;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 @Controller
 public class InfoController {
@@ -131,7 +134,7 @@ public class InfoController {
 			model.addAttribute("review", "暂无评论");
 		}
 		HttpSession session = req.getSession();
-		session.setAttribute("articleIdInDetail",articleId);
+		session.setAttribute("articleId",articleId);
 		return "info/seeArticleDetail";
 	}
 
@@ -139,7 +142,7 @@ public class InfoController {
 	@RequestMapping("/seeOneArticle/addreview")
 	public String addReview(Review rev, HttpServletRequest req, Model model) {
 		// 添加评论
-		int articleId = (int) req.getSession().getAttribute("articleIdInDetail");
+		int articleId = (int) req.getSession().getAttribute("articleId");
 		review.setArticle_title(rev.getArticle_title());
 		HttpSession session = req.getSession();
 		review.setObserver_id((Integer) session.getAttribute("userId"));
@@ -245,7 +248,9 @@ public class InfoController {
 		// PageBean<Article> pageBean = infoService.selectArticleLimit(pageNum,
 		// pageSize,article,m);
 		List<Article> articleList = infoService.selectArticle(article, m);
-		m.addAttribute("articles", articleList);
+		if(articleList!=null&&!articleList.equals("")&&articleList.size()>0){
+			m.addAttribute("articles", articleList);
+		}
 		return "info/articleManager";
 		// pageData.getItems().
 		// return pageData.getItems();
@@ -254,5 +259,76 @@ public class InfoController {
 	@ResponseBody
 	public void deleteById(@PathVariable("id") Integer id){
 		int result = infoService.deleteArticeById(id);
+	}
+	
+	@RequestMapping("/myDrafts")
+	public String myDrafts(HttpServletRequest req,Model model){
+		int uId = (int) req.getSession().getAttribute("userId");
+		List<Article> articleList = infoService.findMyDrafts(uId);
+		if(articleList!=null&&!articleList.equals("")&&articleList.size()>0){
+			model.addAttribute("articleList", articleList);
+		}
+		return "info/myDrafts";
+	}
+	
+	
+	//收藏/取消收藏文章
+	@RequestMapping("/attentionArticle")
+	public String attentionProfessor( HttpServletRequest req, Model model) {
+		int articleId = (int) req.getSession().getAttribute("articleId");
+		int uId = (int) req.getSession().getAttribute("userId");
+		MyCollection myCollection = infoService.findCollectionArticle(articleId,uId);
+		String result = "";
+		/**
+		 * 当表中没有这个专家的记录时 == 关注 当表中有这条记录(不为null),并且 记录中 isUser 的值为
+		 * 0（已经取消），再点击一次应该只关注
+		 **/
+		// 当表中没有这个记录 insert
+		if (StringUtils.isEmpty(myCollection)) {
+			int num = infoService.insertArticle(articleId, uId);
+			if (num > 0) {
+				result = "收藏成功！";
+			} else {
+				result = "收藏失败！";
+			}
+			model.addAttribute("result", result);
+			return "info/attentionArticleResult";
+		}
+		// 当表中有这个记录， 且 isUser 的值为 0（已经取消） ---- update 1
+		if (myCollection!=null && !myCollection.equals("") && myCollection.getIsArticle()!=null&&!myCollection.getIsArticle().equals("")&&myCollection.getIsArticle() == 0) {
+			int num1 = infoService.updateArticleToAttention(articleId, uId);
+			if (num1 > 0) {
+				result = "收藏成功！";
+			} else {
+				result = "收藏失败！";
+			}
+			model.addAttribute("result", result);
+			return "info/attentionArticleResult";
+		} else {
+			// 当表中有这个记录， 且 isUser 的值为 1（已关注 ） ---- update 0
+			int num2 = infoService.updateArticleToNOAttention(articleId, uId);
+			if (num2> 0) {
+				result = "取消收藏成功！";
+			} else {
+				result = "取消收藏失败！";
+			}
+			model.addAttribute("result", result);
+			return "info/attentionArticleResult";
+		}
+	}
+	
+	@RequestMapping("/myattentionArticle")
+	public String myAttentionArticle(HttpServletRequest req,Model model){
+		List<MyCollection> list = infoService.findMyattentionArticle((int)req.getSession().getAttribute("userId"));
+		List<Article> articleList = new ArrayList<>();
+		if (!StringUtils.isEmpty(list)) {
+			for (MyCollection myCollection : list) {
+				int articleId = myCollection.getMyCollectionOnArticleId();
+				Article aticle2 = articleMapper.selectByPrimaryKey(articleId);
+				articleList.add(aticle2);
+			}
+		}
+		model.addAttribute("articleList", articleList);
+		return "info/myAttentionArticle";
 	}
 }

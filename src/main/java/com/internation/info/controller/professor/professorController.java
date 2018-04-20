@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.internation.info.controller.user.userController;
 import com.internation.info.model.Article;
 import com.internation.info.model.MyCollection;
+import com.internation.info.model.Question;
 import com.internation.info.model.User;
+import com.internation.info.service.InfoService;
+import com.internation.info.service.QuestionService;
 import com.internation.info.service.UserCollectionService;
 import com.internation.info.service.professorService;
 import com.internation.info.vo.professDetailVo;
@@ -27,6 +30,10 @@ public class professorController {
 	professorService professorService;
 	@Autowired
 	UserCollectionService userControllerService;
+	@Autowired
+	InfoService infoservice;
+	@Autowired
+	QuestionService questionService;
 	@RequestMapping("/professorList")
 	public String findAllProfessorList(Model model){
 		List<User> professorList = professorService.findProfessorList();
@@ -82,6 +89,17 @@ public class professorController {
 		professDetailVo.setIntegration(integrationCount);
 		professDetailVo.setArticleCount(articleCount);
 		model.addAttribute("professDetailVo", professDetailVo);
+		List<Article> myArticleById = infoservice.findMyArticleById(userId);
+		if(myArticleById!=null&&!myArticleById.equals("")){
+			model.addAttribute("articleList", articleList);
+		} else {
+			model.addAttribute("articleList", "您还没有写过文章，点击上面的 写资讯 来写一篇吧！");
+		}
+		
+		List<Question> findMyQuestion = questionService.findMyQuestion(userId);
+		if (findMyQuestion != null && findMyQuestion.size() > 0) {
+			model.addAttribute("myQuestionList", findMyQuestion);
+		}
 		return "professor/seeProfessorDetail";
 	}
 	

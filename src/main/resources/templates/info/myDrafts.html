@@ -11,8 +11,11 @@
 	<!-- <script type="text/javascript" src="../../js/layer.js"></script> -->
 	<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
 	<script type="text/javascript" src="../../js/articleLayer.js"></script>
+		<div class="panel panel-default">
+			<div class="panel-body">我的草稿箱</div>
+		</div>
 		<div>
-			<table id="artileTable" name="artileTable">
+			<table id="artileTable4" name="artileTable4">
 				<thead>
 					<tr>
 						<th>标题</th>
@@ -25,11 +28,11 @@
 				</thead>
 				<tbody>
 					<form>
-						<tr th:each="article:${limitArticleList}">
+						<tr th:each="article:${articleList}">
 							<td th:utext="${article.title}">文章标题</td>
 							<td th:utext="${article.original}?'原创':'非原创'">是否原创</td>
 							<td th:utext="${article.isprivate}?'私密':'非私密'">是否私密</td>
-							<td th:utext="${article.ispublish}?'发布':'未发布'">是否发布</td>
+							<td th:utext="${article.ispublish}?'发布':'非发布'">是否发布</td>
 							<td th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
 							<td><!-- <a href="javascript:void(0)" th:onclick="'seeArticle('+${article.id}+')'">查看</a> -->
 								<a th:href="@{'/seeOneArticle/'+${article.id}}">查看</a>
@@ -42,7 +45,7 @@
 		</div>
 		<script type="text/javascript">
 			$(document).ready(function() {
-				$('#artileTable').DataTable({
+				$('#artileTable4').DataTable({
 					"processing" : true,
 					"paging" : true,
 					"pagingType" : "full_numbers"
