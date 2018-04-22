@@ -1,13 +1,75 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	mlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <meta name="content-type" content="text/html; charset=UTF-8">
 <title>关于我们</title>
 </head>
 <body>
-	<h1>本网站为了大家方便学习交流所用</h1>
-	<h1>感谢使用我们的网站，如有任何不建议请至网站留言墙上留言</h1>
-	<h1>作者：18岁的小仙女</h1>
-	<h1>联系方式：小秘密</h1>
+<!-- Navigation -->
+	<nav layout:fragment="navigationInfo" class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">资讯网站</a>
+			</div>
+			<div>
+				<ul class="nav nav-pills">
+					<li><a th:href="@{main}">首页</a>
+					</li>
+					<li><a class="navbar-header page-scroll" th:href="@{services}">热门聊天室</a>
+					</li>
+					<li><a th:href="@{fileList}">下载
+							</a></li>
+						<li><a th:href="@{orderBySeeCount}">问答</a>
+						</li>
+						<li><a th:href="@{seeUserDetail}">个人中心</a>
+									</li>
+								<li><a th:href="@{professorList}">资讯专家</a>
+											</li>
+										<li><a th:href="@{writeInfo}">写资讯</a></li>
+											<li class="dropdown"><a href="#" class="dropdown-toggle"
+												data-toggle="dropdown"> 资讯 <b class="caret"></b>
+											</a>
+												<ul class="dropdown-menu">
+													<li><a class="btn btn-small" th:href="@{/readInfoAll}">见多识广</a></li>
+													<li class="divider"></li><li><a class="btn btn-small" th:href="@{/javaArticleList}">Java类</a></li>
+													<li class="divider"></li><li><a class="btn btn-small" th:href="@{/SQLArticleList}">数据库类</a></li>
+													<li class="divider"></li>
+													<li><a  class="btn btn-small" th:href="@{/PhPArticleList}">PHP</a></li>
+													<li class="divider"></li>
+													<li><a  class="btn btn-small" th:href="@{/AIArticleList}">人工智能类</a></li>
+													<li class="divider"></li>
+													<li><a  class="btn btn-small" th:href="@{/AIArticleList}">人工智能类</a></li>
+												</ul></li>
+											<form class="navbar-form navbar-left" role="search" th:action="@{/mainSearch}">
+												<div class="form-group">
+													<input type="text" class="form-control" placeholder="搜一搜" name="content">
+												</div>
+												<button type="submit" class="btn btn-default">提交</button>
+											</form>
+													<li><a th:href="@{view}">网站留言墙
+							</a></li>
+							<li><a th:href="@{aboutUs}">关于我们
+							</a></li>
+											<li><a th:href="@{logout}">注销
+													</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div layout:fragment="contentInfo">
+		<div class="panel panel-info" style="width: 1100px">
+			<div class="panel-heading">
+				<h3 class="panel-title">关于我们</h3>
+			</div>
+			<div class="panel-body">
+				<h1>感谢使用我们的网站，如有任何不建议请至网站留言墙上留言</h1>
+				<h1>本网站为了大家方便学习交流所用</h1>
+				<h1>作者：18岁的小仙女</h1>
+				<h1>联系方式：小秘密</h1>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
