@@ -111,30 +111,29 @@ public class InfoController {
 	@RequestMapping("/seeOneArticle/{id}")
 	public String seeOneArticle(@PathVariable("id") Integer articleId, HttpServletRequest req, Model model) {
 		Article article = articleMapper.selectByPrimaryKey(articleId);
-		model.addAttribute("article", article);
-		// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
-		List<User> userList = new ArrayList<>();
-		review.setArticle_id(articleId);
-		List<Review> findReviewList = infoService.findReviewList(review.getArticle_id());
-		
-		List<reviewVo> reviewList = new ArrayList<>();
-		if (findReviewList.size() > 0 && findReviewList != null) {
-			for (Review review : findReviewList) {
-				User user = infoService.findUserNameList(review.getObserver_id());
-				reviewVo reviewVo = new reviewVo();
-				reviewVo.setUsername(user.getUserName());
-				reviewVo.setCreateTime(review.getCreateTime());
-				reviewVo.setFloor_number(review.getFloor_number());
-				reviewVo.setMessage(review.getMessage());
-				reviewVo.setSeecount(review.getSeecount());
-				reviewList.add(reviewVo);
+		if (!StringUtils.isEmpty(article)) {
+			model.addAttribute("article", article);
+			// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
+			List<Review> findReviewList = infoService.findReviewList(articleId);
+			List<reviewVo> reviewList = new ArrayList<>();
+			if (findReviewList != null && findReviewList.size() > 0) {
+				for (Review review : findReviewList) {
+					User user = infoService.findUserNameList(review.getObserver_id());
+					reviewVo reviewVo = new reviewVo();
+					reviewVo.setUsername(user.getUserName());
+					reviewVo.setCreateTime(review.getCreateTime());
+					reviewVo.setFloor_number(review.getFloor_number());
+					reviewVo.setMessage(review.getMessage());
+					reviewVo.setSeecount(review.getSeecount());
+					reviewList.add(reviewVo);
+				}
+				model.addAttribute("reviewList", reviewList);
+			} else {
+				model.addAttribute("review", "暂无评论");
 			}
-			model.addAttribute("reviewList", reviewList);
-		} else {
-			model.addAttribute("review", "暂无评论");
 		}
 		HttpSession session = req.getSession();
-		session.setAttribute("articleId",articleId);
+		session.setAttribute("articleId", articleId);
 		return "info/seeArticleDetail";
 	}
 
@@ -167,7 +166,6 @@ public class InfoController {
 				model.addAttribute("reviewList", findReviewList);
 			}
 		}
-		
 		List<Review> findReviewList = infoService.findReviewList(articleId);
 		List<reviewVo> reviewVoList = new ArrayList<>();
 		for (Review review : findReviewList) {
@@ -181,7 +179,6 @@ public class InfoController {
 			reVo.setMessage(review.getMessage());
 			reVo.setSeecount(review.getSeecount());
 			reviewVoList.add(reVo);
-			
 		}
 		model.addAttribute("reviewList",reviewVoList);
 		model.addAttribute("article",article2);
@@ -233,7 +230,7 @@ public class InfoController {
 	}
 
 	@RequestMapping(value = "/searchArticle", method = RequestMethod.POST)
-	public String SearchArtocle(Article art, Model m) {
+	public String SearchArticle(Article art, Model m) {
 		article.setTitle(art.getTitle());
 		if (art.getIspublish() == null) {
 			art.setIspublish(1);

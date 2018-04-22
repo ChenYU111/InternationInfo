@@ -1,5 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" mlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <meta name="content-type" content="text/html; charset=UTF-8">
 <title>搜索结果</title>
@@ -30,7 +31,7 @@
 					<td th:utext="${searchVo.content}">标题内容</td>
 					<!-- 查看   就用   后台传  controller 的  requestionMapper 到前台  隐藏不显示 -->
 					<td>
-						<a th:href="${searchVo.seeUrl}+'/'+${searchVo.id}">查看</a>
+						<a th:href="@{'/'+${searchVo.seeUrl}+'/'+${searchVo.id}}">查看</a>
 					</td>
 				</tr>
 			</tbody>

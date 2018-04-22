@@ -32,4 +32,6 @@ public class UserService {
 		User user = userMapper.selectByPrimaryKey(uId);
 		return user;
 	}
+
+	
 }

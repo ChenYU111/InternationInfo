@@ -64,6 +64,7 @@
 					<td th:text="${review.username}+'说：'">用户名</td>
 					<td th:text="'评论时间：'+${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td><td th:text="'查看次数：'+${review.seecount}">查看次数</td>
 					<td th:text="'评论内容：'+${review.message}">内容</td>
+					<td><a th:href="@{main}">回复</a></td>
 				</tr>
 			</table>
 		</center>

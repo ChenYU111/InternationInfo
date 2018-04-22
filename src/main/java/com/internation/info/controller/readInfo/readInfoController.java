@@ -1,6 +1,7 @@
 package com.internation.info.controller.readInfo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,6 +18,7 @@ import com.internation.info.model.Article;
 import com.internation.info.model.Review;
 import com.internation.info.model.User;
 import com.internation.info.service.InfoService;
+import com.internation.info.vo.reviewVo;
 
 @Controller
 public class readInfoController {
@@ -40,29 +43,30 @@ public class readInfoController {
 	@RequestMapping("/readOneInfo/{id}")
 	public String readOneInfo(@PathVariable("id")Integer articleId,HttpServletRequest req,Model model){
 		Article article = infoService.findArticleByPrimaryKey(articleId);
-		model.addAttribute("article", article);
-		Integer num = article.getSeecount();
-		if(num==null){
-			num=0;
-		}
-		article.setSeecount(num+1);
-		infoService.updateArticle(article);
-		// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
-		List<User> userList = new ArrayList<>();
-		review.setArticle_id(articleId);
-		List<Review> findReviewList = infoService.findReviewList(review.getArticle_id());
-		if (findReviewList.size() > 0 && findReviewList != null) {
-			model.addAttribute("reviewList", findReviewList);
-			for (Review review : findReviewList) {
-				User user = infoService.findUserNameList(review.getObserver_id());
-				userList.add(user);
+		if (!StringUtils.isEmpty(article)) {
+			model.addAttribute("article", article);
+			// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
+			List<Review> findReviewList = infoService.findReviewList(articleId);
+			List<reviewVo> reviewList = new ArrayList<>();
+			if (findReviewList != null && findReviewList.size() > 0) {
+				for (Review review : findReviewList) {
+					User user = infoService.findUserNameList(review.getObserver_id());
+					reviewVo reviewVo = new reviewVo();
+					reviewVo.setUsername(user.getUserName());
+					reviewVo.setCreateTime(review.getCreateTime());
+					reviewVo.setFloor_number(review.getFloor_number());
+					reviewVo.setMessage(review.getMessage());
+					int seecount = review.getSeecount()==null?0:review.getSeecount();
+					reviewVo.setSeecount(seecount);
+					reviewList.add(reviewVo);
+				}
+				model.addAttribute("reviewList", reviewList);
+			} else {
+				model.addAttribute("review", "暂无评论");
 			}
-			model.addAttribute("userList", userList);
-		} else {
-			model.addAttribute("review", "暂无评论");
 		}
 		HttpSession session = req.getSession();
-		session.setAttribute("articleIdInDetail",articleId);
+		session.setAttribute("articleId", articleId);
 		return "readInfo/readInfoDetail";
 	}
 	
@@ -119,5 +123,56 @@ public class readInfoController {
 		}
 		model.addAttribute("allArticleList", javaArticleList);
 		return "readInfo/readInfoList";
+	}
+	
+	
+	
+	@RequestMapping("/addreview")
+	public String addReview(Review rev, HttpServletRequest req, Model model) {
+		// 添加评论
+		int articleId = (int) req.getSession().getAttribute("articleId");
+		review.setArticle_title(rev.getArticle_title());
+		HttpSession session = req.getSession();
+		review.setObserver_id((Integer) session.getAttribute("userId"));
+		review.setCreateTime(new Date());
+		review.setArticle_id(articleId);
+		review.setMessage(rev.getMessage());
+		int num = 0;
+		num = infoService.findFloor(review.getArticle_id());
+		if(num>0){
+			review.setFloor_number(num+1);
+		}else if(num==0){
+			review.setFloor_number(1);
+		}
+		review.setSeecount(0);
+		int insertNum = infoService.insertReview(review);
+		//根据文章id查询   文章  
+		Article article2 = infoService.findArticleByPrimaryKey(articleId);
+		// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
+		if (insertNum > 0) {
+			List<Review> findReviewList = infoService.findReviewList(review.getArticle_id());
+			if (findReviewList.size() > 0 && findReviewList != null) {
+				model.addAttribute("reviewList", findReviewList);
+			}
+		}
+		List<Review> findReviewList = infoService.findReviewList(articleId);
+		List<reviewVo> reviewVoList = new ArrayList<>();
+		for (Review review : findReviewList) {
+			User user = infoService.findUserNameList(review.getObserver_id());
+			//将相关评论查询出来   放到   文章的   vo中
+			reviewVo reVo = new reviewVo();
+			reVo.setUsername(user.getUserName());
+			reVo.setCreateTime(user.getCreateTime());
+			reVo.setCreaTime(review.getCreateTime());
+			reVo.setFloor_number(review.getFloor_number());
+			reVo.setMessage(review.getMessage());
+			int seecount = review.getSeecount()==null?0:review.getSeecount();
+			reVo.setSeecount(seecount);
+			reviewVoList.add(reVo);
+			
+		}
+		model.addAttribute("reviewList",reviewVoList);
+		model.addAttribute("article",article2);
+		return "readInfo/readInfoDetail";
 	}
 }

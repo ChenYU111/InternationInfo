@@ -126,7 +126,6 @@ public class ShiroConfig {
 		map.put("/toregister", "anon");
 		map.put("/user", "authc");
 		map.put("/m", "anon");
-		map.put("/loginSure", "anon");
 		map.put("/writeInfo", "authc");
 		map.put("/fileUploadAndDownload", "authc");
 		map.put("/seeOneArticle", "authc");

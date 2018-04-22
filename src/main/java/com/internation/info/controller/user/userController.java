@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import com.internation.info.model.User;
 import com.internation.info.model.UserExample;
 import com.internation.info.service.InfoService;
 import com.internation.info.service.QuestionService;
+import com.internation.info.service.UserService;
 import com.internation.info.service.professorService;
 import com.internation.info.vo.userDetailVo;
 
@@ -50,6 +52,8 @@ public class userController {
 	QuestionService questionService;
 	@Autowired
 	InfoService infoservice;
+	@Autowired
+	UserService userService;
 	/*
 	 * @Autowired User user;
 	 */
@@ -79,13 +83,13 @@ public class userController {
 				}
 				logger.info("用户" + username + "登录认证通过");
 				req.setAttribute("user", ulist.get(0));
-				return "user/successMain";
+				return "main";
 			} catch (AuthenticationException e) {
 				System.out.println("登录失败");
 			}
-		}/*else{
+		}else{
 			return "main";
-		}*/
+		}
 		return "login";
 	}
 
@@ -216,5 +220,11 @@ public class userController {
 	@RequestMapping("/updatepwd")
 	public String updatepwd(){
 		return "user/updatePassword";
+	}
+	
+	@RequestMapping("/findUserByUserNameLike")
+	public List<User> findUserByUserNameLike(String str,Model model){
+		List<User> list = userService.findUserByLikeUsername(str);
+		return list;
 	}
 }

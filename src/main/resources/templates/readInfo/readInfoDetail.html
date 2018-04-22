@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="readInfo/readInfoTemplate">
 <head>
 <meta charset="UTF-8">
 <title>查看文章详情</title>
@@ -30,22 +32,21 @@
 <link href="../../datatables/jquery.dataTables.css" rel="stylesheet" />
 <script src="../../datatables/jquery.dataTables.js"></script>
 <script type="text/javascript">
-$(document).ready(function() {
-    $('#reviewTable').DataTable({
-		"processing" : true,
-		"paging" : true,
-		"pagingType" : "full_numbers"
+	$(document).ready(function() {
+		$('#reviewTable').DataTable({
+			"processing" : true,
+			"paging" : true,
+			"pagingType" : "full_numbers"
+		});
 	});
-});
 </script>
 </head>
 <body>
-		<center>
+	<div layout:fragment="contentInfo">
 			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
 			<table border="0px" ; style="text-align: center; margin-top: 20px;">
 				<tr>
-					<td
-						th:utext='${article.original}?#{<span style="color: green;">原创</span>}:#{""}'></td>
+					<td th:utext=${article.original}?'原创文章':''></td>
 					<td th:utext="${article.title}">标题</td>
 				</tr>
 				<tr>
@@ -56,22 +57,23 @@ $(document).ready(function() {
 					<td th:utext="${article.content}">正文</td>
 				</tr>
 			</table>
-			<form action="addreview" method="post">
-				<input th:type="text" id="message" name="message" placeholder="说出你的疑问" required="message">
-				<input th:type="submit" value="发表评论">
+			<form th:action="@{/addreview}" method="post">
+				<textarea class="form-control" rows="3" id="message" name="message"
+					placeholder="说出你的疑问" required="message" style="width: 500px"></textarea>
+					</br>
+				<input th:type="submit" class="btn btn-primary" value="发表评论">
 			</form>
 			<h3>相关评论</h3>
 			<table id="reviewTable" class="display" style="width: 100%">
-				<tr th:each="user:${userList}">
-					<td th:text="${user.userName}">用户名</td>
-				</tr>
-				<tr th:each="review:${reviewList}">
-					<td th:text="${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td><td th:text="${review.seecount}">查看次数</td>
-				</tr>
-				<tr th:each="review:${reviewList}">
-					<td th:text="${review.message}">内容</td>
+				<tr th:each="reviewVo:${reviewList}">
+					<td th:text="${reviewVo.floor_number}+'楼：'">楼层</td>
+					<td th:text="${reviewVo.username}+'说：'">用户名</td>
+					<td th:text="'评论时间：'+${#dates.format(reviewVo.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+					<td th:text="'评论内容：'+${reviewVo.message}">内容</td>
+					<td><a th:href="@{main}">回复</a></td>
 				</tr>
 			</table>
-		</center>
+	</div>
+
 </body>
 </html>
