@@ -55,6 +55,7 @@ public class InfoController {
 	Review review;
 	@Autowired
 	UserService userService;
+
 	@RequestMapping("/writeInfo")
 	public String addInfo() {
 		return "info/writeInfo";
@@ -62,7 +63,7 @@ public class InfoController {
 
 	// 提交资讯
 	@RequestMapping("/submitInfo")
-	public String commitInfo(Article article, HttpServletRequest req, String submit,Model model) {
+	public String commitInfo(Article article, HttpServletRequest req, String submit, Model model) {
 		HttpSession session = req.getSession();
 		Article ar = new Article();
 		StringBuffer title = new StringBuffer();
@@ -85,7 +86,7 @@ public class InfoController {
 		int uid = (int) session.getAttribute("userId");
 		ar.setUid(uid);
 		int result = articleMapper.insert(ar);
-		System.out.println("主键值为===================="+result);
+		System.out.println("主键值为====================" + result);
 		if (result > 0) {
 			System.err.println("插入返回的结果  " + result);
 			articleExample.createCriteria().andTitleEqualTo(ar.getTitle()).andContentEqualTo(ar.getContent())
@@ -95,9 +96,9 @@ public class InfoController {
 			if (articleList != null && articleList.size() > 0) {
 				session.setAttribute("article", articleList.get(0));
 			}
-			List<Article> artList =  articleMapper.selectByExample(articleExample);
-			if(null!=artList&&artList.size()>0){
-				int articleId = artList.get(artList.size()-1).getId();
+			List<Article> artList = articleMapper.selectByExample(articleExample);
+			if (null != artList && artList.size() > 0) {
+				int articleId = artList.get(artList.size() - 1).getId();
 				model.addAttribute("articleId", articleId);
 			}
 			return "info/addSucArticle";
@@ -107,7 +108,7 @@ public class InfoController {
 		}
 	}
 
-	// 查看文章 和 本文章的资讯   如果  有  评论   就  展示出来
+	// 查看文章 和 本文章的资讯 如果 有 评论 就 展示出来
 	@RequestMapping("/seeOneArticle/{id}")
 	public String seeOneArticle(@PathVariable("id") Integer articleId, HttpServletRequest req, Model model) {
 		Article article = articleMapper.selectByPrimaryKey(articleId);
@@ -125,6 +126,14 @@ public class InfoController {
 					reviewVo.setFloor_number(review.getFloor_number());
 					reviewVo.setMessage(review.getMessage());
 					reviewVo.setSeecount(review.getSeecount());
+					if (null != review.getIsRevert() && !review.getIsRevert().equals("") && review.getIsRevert() == 1) {
+						reviewVo.setRevert(review.getRevert());
+						reviewVo.setRevertfloor(review.getFloor_number());
+						reviewVo.setRevertUid(review.getRevertUid());
+						reviewVo.setRevertCreateTime(review.getRevertCreateTime());
+						User user2 = infoService.findUserNameList(review.getObserver_id());
+						reviewVo.setRevertUserName(user2.getUserName());
+					}
 					reviewList.add(reviewVo);
 				}
 				model.addAttribute("reviewList", reviewList);
@@ -150,14 +159,14 @@ public class InfoController {
 		review.setMessage(rev.getMessage());
 		int num = 0;
 		num = infoService.findFloor(review.getArticle_id());
-		if(num>0){
-			review.setFloor_number(num+1);
-		}else if(num==0){
+		if (num > 0) {
+			review.setFloor_number(num + 1);
+		} else if (num == 0) {
 			review.setFloor_number(1);
 		}
 		review.setSeecount(0);
 		int insertNum = infoService.insertReview(review);
-		//根据文章id查询   文章  
+		// 根据文章id查询 文章
 		Article article2 = infoService.findArticleByPrimaryKey(articleId);
 		// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
 		if (insertNum > 0) {
@@ -170,7 +179,7 @@ public class InfoController {
 		List<reviewVo> reviewVoList = new ArrayList<>();
 		for (Review review : findReviewList) {
 			User user = infoService.findUserNameList(review.getObserver_id());
-			//将相关评论查询出来   放到   文章的   vo中
+			// 将相关评论查询出来 放到 文章的 vo中
 			reviewVo reVo = new reviewVo();
 			reVo.setUsername(user.getUserName());
 			reVo.setCreateTime(user.getCreateTime());
@@ -178,10 +187,18 @@ public class InfoController {
 			reVo.setFloor_number(review.getFloor_number());
 			reVo.setMessage(review.getMessage());
 			reVo.setSeecount(review.getSeecount());
+			if (null != review.getIsRevert() && !review.getIsRevert().equals("") && review.getIsRevert() == 1) {
+				reVo.setRevert(review.getRevert());
+				reVo.setRevertfloor(review.getFloor_number());
+				reVo.setRevertUid(review.getRevertUid());
+				reVo.setRevertCreateTime(review.getRevertCreateTime());
+				User user2 = infoService.findUserNameList(review.getObserver_id());
+				reVo.setRevertUserName(user2.getUserName());
+			}
 			reviewVoList.add(reVo);
 		}
-		model.addAttribute("reviewList",reviewVoList);
-		model.addAttribute("article",article2);
+		model.addAttribute("reviewList", reviewVoList);
+		model.addAttribute("article", article2);
 		return "info/seeArticleDetail";
 	}
 
@@ -245,36 +262,36 @@ public class InfoController {
 		// PageBean<Article> pageBean = infoService.selectArticleLimit(pageNum,
 		// pageSize,article,m);
 		List<Article> articleList = infoService.selectArticle(article, m);
-		if(articleList!=null&&!articleList.equals("")&&articleList.size()>0){
+		if (articleList != null && !articleList.equals("") && articleList.size() > 0) {
 			m.addAttribute("articles", articleList);
 		}
 		return "info/articleManager";
 		// pageData.getItems().
 		// return pageData.getItems();
 	}
+
 	@PostMapping("/deleteArticleById/{id}")
 	@ResponseBody
-	public void deleteById(@PathVariable("id") Integer id){
+	public void deleteById(@PathVariable("id") Integer id) {
 		int result = infoService.deleteArticeById(id);
 	}
-	
+
 	@RequestMapping("/myDrafts")
-	public String myDrafts(HttpServletRequest req,Model model){
+	public String myDrafts(HttpServletRequest req, Model model) {
 		int uId = (int) req.getSession().getAttribute("userId");
 		List<Article> articleList = infoService.findMyDrafts(uId);
-		if(articleList!=null&&!articleList.equals("")&&articleList.size()>0){
+		if (articleList != null && !articleList.equals("") && articleList.size() > 0) {
 			model.addAttribute("articleList", articleList);
 		}
 		return "info/myDrafts";
 	}
-	
-	
-	//收藏/取消收藏文章
+
+	// 收藏/取消收藏文章
 	@RequestMapping("/attentionArticle")
-	public String attentionProfessor( HttpServletRequest req, Model model) {
+	public String attentionProfessor(HttpServletRequest req, Model model) {
 		int articleId = (int) req.getSession().getAttribute("articleId");
 		int uId = (int) req.getSession().getAttribute("userId");
-		MyCollection myCollection = infoService.findCollectionArticle(articleId,uId);
+		MyCollection myCollection = infoService.findCollectionArticle(articleId, uId);
 		String result = "";
 		/**
 		 * 当表中没有这个专家的记录时 == 关注 当表中有这条记录(不为null),并且 记录中 isUser 的值为
@@ -292,7 +309,8 @@ public class InfoController {
 			return "info/attentionArticleResult";
 		}
 		// 当表中有这个记录， 且 isUser 的值为 0（已经取消） ---- update 1
-		if (myCollection!=null && !myCollection.equals("") && myCollection.getIsArticle()!=null&&!myCollection.getIsArticle().equals("")&&myCollection.getIsArticle() == 0) {
+		if (myCollection != null && !myCollection.equals("") && myCollection.getIsArticle() != null
+				&& !myCollection.getIsArticle().equals("") && myCollection.getIsArticle() == 0) {
 			int num1 = infoService.updateArticleToAttention(articleId, uId);
 			if (num1 > 0) {
 				result = "收藏成功！";
@@ -304,7 +322,7 @@ public class InfoController {
 		} else {
 			// 当表中有这个记录， 且 isUser 的值为 1（已关注 ） ---- update 0
 			int num2 = infoService.updateArticleToNOAttention(articleId, uId);
-			if (num2> 0) {
+			if (num2 > 0) {
 				result = "取消收藏成功！";
 			} else {
 				result = "取消收藏失败！";
@@ -313,10 +331,10 @@ public class InfoController {
 			return "info/attentionArticleResult";
 		}
 	}
-	
+
 	@RequestMapping("/myattentionArticle")
-	public String myAttentionArticle(HttpServletRequest req,Model model){
-		List<MyCollection> list = infoService.findMyattentionArticle((int)req.getSession().getAttribute("userId"));
+	public String myAttentionArticle(HttpServletRequest req, Model model) {
+		List<MyCollection> list = infoService.findMyattentionArticle((int) req.getSession().getAttribute("userId"));
 		List<Article> articleList = new ArrayList<>();
 		if (!StringUtils.isEmpty(list)) {
 			for (MyCollection myCollection : list) {
@@ -327,5 +345,63 @@ public class InfoController {
 		}
 		model.addAttribute("articleList", articleList);
 		return "info/myAttentionArticle";
+	}
+
+	// 给评论回复,文章id 从session中取，文章的楼层号从前台传过来
+	@RequestMapping("/addRevert")
+	public String addRevert(int floor, HttpServletRequest req, Model model, String revert) {
+		int articleId = (int) req.getSession().getAttribute("articleId");
+		Article article2 = infoService.findArticleByPrimaryKey(articleId);
+		List<Review> reviewList = infoService.findReviewByFloorAndArticleId(floor, articleId);
+		int insertNum = 0;
+		if (!StringUtils.isEmpty(reviewList)) {
+			if (!StringUtils.isEmpty(article2)) {
+				HttpSession session = req.getSession();
+				Review r=reviewList.get(0);
+				review.setFloor_number(r.getFloor_number());
+				review.setObserver_id(r.getObserver_id());
+				review.setMessage(r.getMessage());
+				review.setIsRevert(1);
+				review.setRevertUid((Integer) session.getAttribute("userId"));
+				review.setCreateTime(new Date());
+				review.setArticle_id(articleId);
+				review.setRevert(revert);
+				review.setRevertfloor(floor);
+				review.setSeecount(0);
+				insertNum = infoService.insertReview(review);
+			}
+			if (insertNum > 0) {
+				List<Review> findReviewList = infoService.findReviewList(review.getArticle_id());
+				if (findReviewList.size() > 0 && findReviewList != null) {
+					model.addAttribute("reviewList", findReviewList);
+				}
+			}
+
+			List<Review> findReviewList = infoService.findReviewList(articleId);
+			List<reviewVo> reviewVoList = new ArrayList<>();
+			for (Review review : findReviewList) {
+				User user = infoService.findUserNameList(review.getObserver_id());
+				// 将相关评论查询出来 放到 文章的 vo中
+				reviewVo reVo = new reviewVo();
+				reVo.setUsername(user.getUserName());
+				reVo.setCreateTime(user.getCreateTime());
+				reVo.setCreaTime(review.getCreateTime());
+				reVo.setFloor_number(review.getFloor_number());
+				reVo.setMessage(review.getMessage());
+				reVo.setSeecount(review.getSeecount());
+				if (null != review.getIsRevert() && !review.getIsRevert().equals("") && review.getIsRevert() == 1) {
+					reVo.setRevert(review.getRevert());
+					reVo.setRevertfloor(review.getFloor_number());
+					reVo.setRevertUid(review.getRevertUid());
+					reVo.setRevertCreateTime(new Date());
+					User user2 = infoService.findUserNameList(review.getObserver_id());
+					reVo.setRevertUserName(user2.getUserName());
+				}
+				reviewVoList.add(reVo);
+			}
+			model.addAttribute("reviewList", reviewVoList);
+			model.addAttribute("article", article2);
+		}
+		return "info/seeArticleDetail";
 	}
 }

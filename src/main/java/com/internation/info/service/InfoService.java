@@ -50,6 +50,9 @@ public class InfoService {
 	MyCollection myCollection;
 	@Autowired
 	SqlSession sqlSession;
+	@Autowired
+	Review review;
+	
 	/*
 	 * public PageBean<Article> selectArticleLimit(Integer pageNum, Integer
 	 * pageSize, Article article,Model m){
@@ -290,4 +293,12 @@ public class InfoService {
 		List<MyCollection> list = myCollectionMapper.selectByExample(myCollectionExample);
 		return list;
 	}
+
+	public List<Review> findReviewByFloorAndArticleId(int floor, int articleId) {
+		// TODO Auto-generated method stub
+		reviewExample.createCriteria().andArticle_idEqualTo(articleId).andFloor_numberEqualTo(floor);
+		List<Review> list = reviewMapper.selectByExample(reviewExample);
+		return list;
+	}
+	
 }

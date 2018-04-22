@@ -15,4 +15,9 @@ public class testHtml {
 		return "main";
 	}
 	
+	@RequestMapping("/d")
+	public String dialog(){
+		return "info/dialog";
+	}
+	
 }

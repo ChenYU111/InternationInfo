@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="info/infoTemplate">
 <head>
 <meta charset="UTF-8">
@@ -33,8 +34,13 @@
 
 </head>
 <body>
-			<div layout:fragment="contentInfo">
-		<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+	<div layout:fragment="contentInfo">
+		<script type="text/javascript"
+			src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+		<link rel="stylesheet"
+			href="../../jquery-ui-1.10.4.custom/css/base/jquery-ui-1.10.4.custom.min.css">
+		<script src="../../jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+		<link rel="stylesheet" href="jqueryui/style.css">
 		<center>
 			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
 			<table border="0px" ; style="text-align: center; margin-top: 20px;">
@@ -45,28 +51,49 @@
 					<td>类别：</td>
 					<td th:text="${article.blog_type}">文章类别</td>
 				</tr>
-				<tr><td>正文：</td>
+				<tr>
+					<td>正文：</td>
 					<td th:utext="${article.content}">正文</td>
 				</tr>
-				<tr><td>是否发布：</td>
+				<tr>
+					<td>是否发布：</td>
 					<td th:utext="${article.ispublish}?'发布':'未发布'">是否发布</td>
 				</tr>
 			</table>
 			<a href="javascript:void(0)" th:onclick="'attentionArticle()'">收藏文章</a>
 			<form th:action="@{'/seeOneArticle/addreview'}" method="post">
-				<input th:type="text" id="message" name="message" placeholder="说出你的疑问" required="message">
-				<input th:type="submit" value="发表评论">
+				<input th:type="text" id="message" name="message"
+					placeholder="说出你的疑问" required="message"> <input
+					th:type="submit" value="发表评论">
 			</form>
+			<div id="dialog" title="回复评论">
+				<form th:action="@{/addRevert}" method="post">
+					<input type="text" id="floor" name="floor" placeholder="回复哪一层">
+					<textarea rows="4" id="revert" name="revert" placeholder="回复内容"></textarea>
+					<input type="submit" value="回复">
+				</form>
+			</div>
 			<h3>相关评论</h3>
 			<table id="reviewTable" class="display" style="width: 100%">
 				<tr th:each="review:${reviewList}">
 					<td th:text="${review.floor_number}+'楼：'">楼层</td>
 					<td th:text="${review.username}+'说：'">用户名</td>
-					<td th:text="'评论时间：'+${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td><td th:text="'查看次数：'+${review.seecount}">查看次数</td>
+					<td
+						th:text="'评论时间：'+${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+					<td th:text="'查看次数：'+${review.seecount}">查看次数</td>
 					<td th:text="'评论内容：'+${review.message}">内容</td>
-					<td><a th:href="@{main}">回复</a></td>
+					<td><button class="opener">回复</button></td>
+					<table>
+						<tr>
+							<td th:utext="${review.revertUserName}+'说：'">用户名</td>
+							<td th:utext="'评论时间：'+${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+							<td th:utext="'评论内容：'+${review.revert}">内容</td>
+						</tr>
+					</table>
 				</tr>
 			</table>
+
+			<!-- <button id="opener">打开对话框</button> -->
 		</center>
 		<script type="text/javascript">
 			$(document).ready(function() {
@@ -81,19 +108,43 @@
 			function attentionArticle() {
 				$.post('/attentionArticle', function(str) {
 					layer.open({
-						type :3,
-						title:"收藏文章",
-						shadeClose: true,//点击外围   关闭
-				        shade: [0.8, '#393D49'],//遮蔽层
-				        closeBtn: 2,
-				        maxmin: true,
-				        area: ['700px', '600px'],
+						type : 3,
+						title : "收藏文章",
+						shadeClose : true,//点击外围   关闭
+						shade : [ 0.8, '#393D49' ],//遮蔽层
+						closeBtn : 2,
+						maxmin : true,
+						area : [ '700px', '600px' ],
 						content : str
 					// 注意，如果str是object，那么需要字符拼接。
 					});
 				});
 			}
 		</script>
-		</div>
+		<!-- 弹出对话框 -->
+		<script>
+			$(function() {
+				$("#dialog").dialog({
+					autoOpen : false,
+					 resizable: false,
+					 modal: true,
+					height:200,
+					width:200,
+					show : {
+						effect : "blind",
+						duration : 1000
+					},
+					hide : {
+						effect : "explode",
+						duration : 1000
+					}
+				});
+
+				$(".opener").click(function() {
+					$("#dialog").dialog("open");
+				});
+			});
+		</script>
+	</div>
 </body>
 </html>

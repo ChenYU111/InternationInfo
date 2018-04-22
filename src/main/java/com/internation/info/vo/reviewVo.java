@@ -27,6 +27,13 @@ public class reviewVo extends Review implements Serializable{
 	public void setCreaTime(Date creaTime) {
 		this.creaTime = creaTime;
 	}
+	public String getRevertUserName() {
+		return revertUserName;
+	}
+	public void setRevertUserName(String revertUserName) {
+		this.revertUserName = revertUserName;
+	}
+	private String revertUserName;
 	
 	
 }
