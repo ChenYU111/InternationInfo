@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.internation.info.common.SensitiveWord;
 import com.internation.info.dao.QuestionMapper;
 import com.internation.info.model.Answer;
 import com.internation.info.model.Question;
@@ -41,6 +42,11 @@ public class questionController {
 	// 添加问题
 	@RequestMapping("/addQuestion")
 	public String addQuestion(Question que, HttpServletRequest req, Model model) {
+		// 加载敏感词库
+		SensitiveWord sw = new SensitiveWord("CensorWords.txt");
+		sw.InitializationWork();
+		que.setTitle(sw.filterInfo(que.getTitle()));
+		que.setContent(sw.filterInfo(que.getContent()));
 		question.setTitle(que.getTitle());
 		question.setContent(que.getContent());
 		question.setIsresolve(0);
@@ -55,9 +61,11 @@ public class questionController {
 		} else {
 			model.addAttribute("result", "发表失败");
 		}
-		List<Question> questionByQuestioner = questionService.findQuestionByQuestioner((Integer) session.getAttribute("userId"));
-		int size = (questionByQuestioner!=null&&!questionByQuestioner.equals("")&&questionByQuestioner.size()>0)?questionByQuestioner.size()-1:0;
-		if(size>0){
+		List<Question> questionByQuestioner = questionService
+				.findQuestionByQuestioner((Integer) session.getAttribute("userId"));
+		int size = (questionByQuestioner != null && !questionByQuestioner.equals("") && questionByQuestioner.size() > 0)
+				? questionByQuestioner.size() - 1 : 0;
+		if (size > 0) {
 			int qId = questionByQuestioner.get(size).getId();
 			model.addAttribute("qId", qId);
 		}
@@ -75,15 +83,15 @@ public class questionController {
 	}
 
 	@RequestMapping("/seeQuestionDetail/{id}")
-	public String seeQuestionDetail(@PathVariable("id") Integer questionId, Model model,HttpServletRequest req) {
+	public String seeQuestionDetail(@PathVariable("id") Integer questionId, Model model, HttpServletRequest req) {
 		Question findQuestionDetailById = questionService.findQuestionDetailById(questionId);
 		int seecount = 0;
-		if(findQuestionDetailById.getSeeCount()!=null){
-			seecount=findQuestionDetailById.getSeeCount()+1;
+		if (findQuestionDetailById.getSeeCount() != null) {
+			seecount = findQuestionDetailById.getSeeCount() + 1;
 		}
-		findQuestionDetailById.setSeeCount(seecount+1);
+		findQuestionDetailById.setSeeCount(seecount + 1);
 		int result = questionService.updateQuestion(findQuestionDetailById);
-		if(result>0){
+		if (result > 0) {
 			findQuestionDetailById = questionService.findQuestionDetailById(questionId);
 		}
 		model.addAttribute("questionDetail", findQuestionDetailById);
@@ -95,9 +103,13 @@ public class questionController {
 		session.setAttribute("seeQuestionId", questionId);
 		return "question/seeQuestionDetail";
 	}
-	
+
 	@RequestMapping("/addAnswer")
-	public String addAnswer( Answer an, HttpServletRequest req, Model model) {
+	public String addAnswer(Answer an, HttpServletRequest req, Model model) {
+		// 加载敏感词库
+		SensitiveWord sw = new SensitiveWord("CensorWords.txt");
+		sw.InitializationWork();
+		an.setContent(sw.filterInfo(an.getContent()));
 		int questionId = (int) req.getSession().getAttribute("seeQuestionId");
 		answer.setuId((int) req.getSession().getAttribute("userId"));
 		List<Answer> findAnswerByQuestionId = questionService.findAnswerByQuestionId(questionId);
@@ -128,48 +140,48 @@ public class questionController {
 			return "question/addAnswerF";
 		}
 	}
+
 	@RequestMapping("/deleteQuestion/{id}")
-	public void deleteQuestionById(@PathVariable("id") Integer questionId){
+	public void deleteQuestionById(@PathVariable("id") Integer questionId) {
 		int num = questionService.deleteQuestionById(questionId);
 	}
-	
+
 	@RequestMapping("/isAdoptAnswer/{id}")
 	@ResponseBody
-	public String  isAdoptAnswer(@PathVariable("id") int questionId){
+	public String isAdoptAnswer(@PathVariable("id") int questionId) {
 		Answer answer = questionService.findAnswerById(questionId);
 		String resultStr = "";
-		if(null!=answer.getIsAdopt()&&!answer.getIsAdopt().equals("")&&answer.getIsAdopt()!=1){
+		if (null != answer.getIsAdopt() && !answer.getIsAdopt().equals("") && answer.getIsAdopt() != 1) {
 			answer.setIsAdopt(1);
 			int result = questionService.updateAnswerById(answer);
-			if(result==1){
-				resultStr="采纳成功！";
-			}else{
-				resultStr="采纳失败！";
+			if (result == 1) {
+				resultStr = "采纳成功！";
+			} else {
+				resultStr = "采纳失败！";
 			}
-		}else{
-			resultStr="你已经采纳过此条答案！";
+		} else {
+			resultStr = "你已经采纳过此条答案！";
 		}
 		return resultStr;
 	}
-	
+
 	@RequestMapping("/addReturnAnswer")
-	public void  isReturnAnswer(@PathVariable("id") Integer nswerId,Integer floorId , String content){
+	public void isReturnAnswer(@PathVariable("id") Integer nswerId, Integer floorId, String content) {
 		int result = questionService.addReturnByFloor(nswerId, floorId, content);
 	}
-	
+
 	@RequestMapping("/orderBySeeCount")
-	public String findQuestionBySeeCount(Model model){
+	public String findQuestionBySeeCount(Model model) {
 		List<Question> questionBySeeCountList = questionService.findQuestionBySeeCount();
-		if(questionBySeeCountList!=null&&questionBySeeCountList.size()>0){
+		if (questionBySeeCountList != null && questionBySeeCountList.size() > 0) {
 			model.addAttribute("questionList", questionBySeeCountList);
 		}
 		return "question/orderBySeeCount";
 	}
-	
+
 	@RequestMapping("/toOrderByQuestionSeeCount")
-	public String toOrderByQuestionSeeCount(){
+	public String toOrderByQuestionSeeCount() {
 		return "question/orderBySeeCount";
 	}
-	
-	
+
 }
