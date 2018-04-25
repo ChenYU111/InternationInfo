@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.internation.info.dao.QuestionMapper;
 import com.internation.info.model.Answer;
@@ -133,11 +134,22 @@ public class questionController {
 	}
 	
 	@RequestMapping("/isAdoptAnswer/{id}")
+	@ResponseBody
 	public String  isAdoptAnswer(@PathVariable("id") int questionId){
 		Answer answer = questionService.findAnswerById(questionId);
-		answer.setIsAdopt(1);
-		int result = questionService.updateAnswerById(answer);
-		return "question/seeQuestionDetail";
+		String resultStr = "";
+		if(null!=answer.getIsAdopt()&&!answer.getIsAdopt().equals("")&&answer.getIsAdopt()!=1){
+			answer.setIsAdopt(1);
+			int result = questionService.updateAnswerById(answer);
+			if(result==1){
+				resultStr="采纳成功！";
+			}else{
+				resultStr="采纳失败！";
+			}
+		}else{
+			resultStr="你已经采纳过此条答案！";
+		}
+		return resultStr;
 	}
 	
 	@RequestMapping("/addReturnAnswer")

@@ -13,8 +13,8 @@
 		<form id="upload" enctype="multipart/form-data" method="post"
 			action="uploadFileAction" >
 			<input type="file" name="uploadFile" /> </br> <input type="hidden"
-				name="id" value="12" /> <label for="name">资源名称:</label><input type="text" name="fileName"
-				placeholder="文件名称" class="form-control"></br> <label for="name">资源描述:</label><textarea name="fileDescription" placeholder="文件描述" class="form-control" rows="3"></textarea></br> <input
+				name="id" value="12" required="required"/> <label for="name">资源名称:</label><input type="text" name="fileName"
+				placeholder="文件名称" class="form-control" required="required"></br> <label for="name">资源描述:</label><textarea name="fileDescription" placeholder="文件描述" class="form-control" rows="3" required="required"></textarea></br> <input
 				type="submit" value="文件上传"  class="btn btn-default"/>
 				
 		</form>

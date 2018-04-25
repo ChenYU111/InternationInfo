@@ -68,25 +68,21 @@
 			src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
 		<!-- <script type="text/javascript" src="../../layerjs/questionLayer.js"></script> -->
 		<script type="text/javascript">
-			//采纳连接    点击询问是否采纳   
 			function isAdoptAnswer(id) {
-				layer.open({
-					content : '确认采纳该答案？',
-					type : 2,
-					btn : [ '确认', '取消' ],
-					closeBtn : 1,
-					yes : function(index) {
-						layer.close(index);
-						$.ajax({
-							url : "/isAdoptAnswer/" + id,
-							type : "post",
-							async : false,
-							success : function(data) {
-								location.href = "/seeQuestionDetail";
-							}
-						})
-					}
-
+				$.post("/isAdoptAnswer/" + id, {
+					"id" : id
+				}, function(str) {
+					layer.open({
+						type : 3,
+						title : "采纳答案结果",
+						shadeClose : true,//点击外围   关闭
+						shade : [ 0.8, '#393D49' ],//遮蔽层
+						closeBtn : 2,
+						maxmin : true,
+						area : [ '700px', '600px' ],
+						content : str
+					// 注意，如果str是object，那么需要字符拼接。
+					});
 				});
 			}
 		</script>

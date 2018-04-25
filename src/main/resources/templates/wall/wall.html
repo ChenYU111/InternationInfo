@@ -411,11 +411,11 @@
 </div>
 <div class="main" style="padding-top: 50px;background-color: olive;" >
     <tr th:each="msg ,index: ${messageList}">
-       <div th:with="component=${'../../images/wall/a'+index.count % 2 == 0 ? 1 : 5}">
+      <!--  <div th:with="component=${'../../images/wall/a'+index.count % 2 == 0 ? 1 : 5}"> -->
         <div name="note" class="note">
-            <div class="nhead" style="background-image: url(${component}+'_1.gif');"><span th:text="${#dates.format(msg.createTime,'yyyy-MM-dd HH:mm:ss')}"></span></div>
-            <div class="nbody" style="background-image: url(${component}+'_2.gif');" th:text="${msg.content}">${msg.content}</div>
-            <div class="nfoot" style="background-image: url(${component}+'_3.gif');">
+            <div class="nhead" style="background-image: url(../../img/wall/a1_1.gif);"><span th:text="${#dates.format(msg.createTime,'yyyy-MM-dd HH:mm:ss')}"></span></div>
+            <div class="nbody" style="background-image: url(../../img/wall/a1_2.gif);" th:text="${msg.content}">${msg.content}</div>
+            <div class="nfoot" style="background-image: url(../../img/wall/a1_3.gif);">
                 <div class="username" th:text="${msg.userName}">${msg.userName}</div>
             </div>
             </div>

@@ -1,7 +1,9 @@
 package com.internation.info.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.internation.info.model.Review;
 
@@ -9,7 +11,6 @@ public class reviewVo extends Review implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	private String username;
 	/**
 	 * 创建时间
@@ -18,7 +19,7 @@ public class reviewVo extends Review implements Serializable{
 	public String getUsername() {
 		return username;
 	}
-	public void setUsername(String username) {
+	public   void setUsername(String username) {
 		this.username = username;
 	}
 	public Date getCreaTime() {
@@ -33,7 +34,14 @@ public class reviewVo extends Review implements Serializable{
 	public void setRevertUserName(String revertUserName) {
 		this.revertUserName = revertUserName;
 	}
+	public List<revertVo> getRevertList() {
+		return revertList;
+	}
+	public static  void setRevertList(List<revertVo> revertList) {
+		revertList = revertList;
+	}
 	private String revertUserName;
 	
+	private List<revertVo> revertList = new ArrayList<>();
 	
 }

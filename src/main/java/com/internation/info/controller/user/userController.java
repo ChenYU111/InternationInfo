@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.internation.info.Config.AddMD5Encode;
 import com.internation.info.controller.question.questionController;
@@ -202,17 +203,27 @@ public class userController {
 	
 	
 	@RequestMapping("/updatePassword")
-	public String updatePassword(User u,HttpServletRequest req,Model model){
+	public String updatePassword(String userName,String password,HttpServletRequest req,Model model){
+		String str ="";
 		User user2 = userMapper.selectByPrimaryKey((int)req.getSession().getAttribute("userId"));
 		if(user2!=null){
-			String password = md5Encode.md5Pwd(u.getPassword(), user2.getUserName());
+			String pwd = md5Encode.md5Pwd(password, user2.getUserName());
+			if(user2.getPassword().equals(pwd)) {
+				str="你输入的密码跟原密码一样，不能修改！";
+				model.addAttribute("result", str);
+			}
 			user2.setPassword(password);
 			int result = userMapper.updateByPrimaryKeySelective(user2);
 			if(result>0){
-				model.addAttribute("result", "修改成功");
+				str="修改成功!";
+				model.addAttribute("result", str);
 			}else {
-				model.addAttribute("result", "修改失败");
+			   str="修改失败！";
+			   model.addAttribute("result", str);
 			}
+		}else{
+			str="你不是本系统用户，请注册！";
+			model.addAttribute("result", str);
 		}
 		return "user/updatePasswordResult";
 	}

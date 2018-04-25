@@ -41,11 +41,11 @@ div {
 			<!--  <input th:type="text" placeholder="文章标题" id="title" name="title" /> -->
 			<div class="form-group">
 				<label for="name">文章标题:</label> <input type="text" class="form-control"
-					 placeholder="文章标题" id="title" name="title">
+					 placeholder="文章标题" id="title" name="title" required="required">
 			</div>
 			<!--style给定宽度可以影响编辑器的最终宽度-->
 			<label for="name">文章描述:</label>
-			<script type="text/plain" id="myEditor" name="content">
+			<script type="text/plain" id="myEditor" name="content" required="required">
         <p>这里我可以写一些输入提示</p>
         </script>
 			<script type="text/javascript">
@@ -72,7 +72,7 @@ div {
 			</select> <br />  -->
 			<div class="form-group">
 		<label for="name">文章所属类别</label>
-		<select class="form-control"  data-live-search="true" name="blog_type">
+		<select class="form-control"  data-live-search="true" name="blog_type" required="required">
 			<option>Java</option>
 			<option>人工智能</option>
 			<option>PHP</option>

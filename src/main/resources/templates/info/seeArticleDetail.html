@@ -63,31 +63,31 @@
 			<a href="javascript:void(0)" th:onclick="'attentionArticle()'">收藏文章</a>
 			<form th:action="@{'/seeOneArticle/addreview'}" method="post">
 				<input th:type="text" id="message" name="message"
-					placeholder="说出你的疑问" required="message"> <input
+					placeholder="说出你的疑问" required="required"> <input
 					th:type="submit" value="发表评论">
 			</form>
 			<div id="dialog" title="回复评论">
 				<form th:action="@{/addRevert}" method="post">
-					<input type="text" id="floor" name="floor" placeholder="回复哪一层">
-					<textarea rows="4" id="revert" name="revert" placeholder="回复内容"></textarea>
+					<input type="text" id="floor" name="floor" placeholder="回复哪一层" required="required">
+					<textarea rows="4" id="revert" name="revert" placeholder="回复内容" required="required"></textarea>
 					<input type="submit" value="回复">
 				</form>
 			</div>
 			<h3>相关评论</h3>
-			<table id="reviewTable" class="display" style="width: 100%">
+			<table id="reviewTable" class="table" style="width: 100%">
 				<tr th:each="review:${reviewList}">
 					<td th:text="${review.floor_number}+'楼：'">楼层</td>
 					<td th:text="${review.username}+'说：'">用户名</td>
-					<td
-						th:text="'评论时间：'+${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+					<td th:text="'评论时间：'+${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
 					<td th:text="'查看次数：'+${review.seecount}">查看次数</td>
 					<td th:text="'评论内容：'+${review.message}">内容</td>
 					<td><button class="opener">回复</button></td>
-					<table>
-						<tr>
-							<td th:utext="${review.revertUserName}+'说：'">用户名</td>
-							<td th:utext="'评论时间：'+${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
-							<td th:utext="'评论内容：'+${review.revert}">内容</td>
+					<td th:text="${review.isRevert}"></td></br>
+					<table th:if="${review.isRevert==1}" class="table">
+						<tr th:each=revertVo:${review.revertList}>
+							<td th:utext="${revertVo.username}+'说：'">用户名</td>
+							<td th:utext="'回复时间：'+${#dates.format(revertVo.revertCreateTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+							<td th:utext="'回复内容：'+${revertVo.revert}">内容</td>
 						</tr>
 					</table>
 				</tr>

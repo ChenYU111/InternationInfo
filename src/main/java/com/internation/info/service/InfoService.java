@@ -301,4 +301,9 @@ public class InfoService {
 		return list;
 	}
 	
+	
+	public int updateReview(Review revi){
+		int result = reviewMapper.updateByPrimaryKey(revi);
+		return result;
+	}
 }
