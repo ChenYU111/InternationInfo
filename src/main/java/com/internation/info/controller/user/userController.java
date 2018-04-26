@@ -1,5 +1,7 @@
 package com.internation.info.controller.user;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import com.internation.info.Config.AddMD5Encode;
 import com.internation.info.controller.question.questionController;
 import com.internation.info.dao.UserMapper;
 import com.internation.info.model.Article;
+import com.internation.info.model.Integration;
 import com.internation.info.model.Question;
 import com.internation.info.model.User;
 import com.internation.info.model.UserExample;
@@ -34,6 +37,7 @@ import com.internation.info.service.InfoService;
 import com.internation.info.service.QuestionService;
 import com.internation.info.service.UserService;
 import com.internation.info.service.professorService;
+import com.internation.info.vo.articleVo;
 import com.internation.info.vo.userDetailVo;
 
 @Controller
@@ -55,6 +59,8 @@ public class userController {
 	InfoService infoservice;
 	@Autowired
 	UserService userService;
+	@Autowired
+	InfoService infoService;
 	/*
 	 * @Autowired User user;
 	 */
@@ -64,7 +70,7 @@ public class userController {
 	}
 
 	@RequestMapping(value = "/loginSure", method = { RequestMethod.POST })
-	public String login(String username, String password,HttpServletRequest req) {
+	public String login(String username, String password,HttpServletRequest req,Model model) {
 		System.out.println("当前用户名：" + username);
 		Subject currentUser = SecurityUtils.getSubject();
 		logger.info("检测用户" + username + "进行登录认证。。。。。");
@@ -84,6 +90,59 @@ public class userController {
 				}
 				logger.info("用户" + username + "登录认证通过");
 				req.setAttribute("user", ulist.get(0));
+				
+				List<User> professorList = professorService.findProfessor();
+				List<Integration> integrationList = new ArrayList<>();
+				if(professorList!=null&&professorList.size()>0){
+					for (User user : professorList) {
+						Integration integration = professorService.findIntegrationByUId(user.getId());
+						//比较积分大小，得到积分前五的显示
+						integrationList.add(integration);
+					}
+					Collections.sort(integrationList); 
+				}
+				List<userDetailVo> list = new ArrayList<>();
+				if(integrationList.size()>5){
+					int index = 0;
+					for (Integration integration : integrationList) {
+						if(index<5){
+							User user = professorService.findUserByUserId(integration.getUserId());
+							userDetailVo vo  = new userDetailVo();
+							vo.setUserName(user.getUserName());
+							vo.setId(user.getId());
+							list.add(vo);
+						}
+						
+					}
+				}else{
+					for (Integration integration : integrationList) {
+							User user = professorService.findUserByUserId(integration.getUserId());
+							userDetailVo vo  = new userDetailVo();
+							vo.setUserName(user.getUserName());
+							vo.setId(user.getId());
+							list.add(vo);
+				}
+			}
+				model.addAttribute("professVoList", list);
+				//top10 文章
+				List<Article> articlelist = infoService.findArticleBySeeCount();
+				if(articlelist!=null&&articlelist.size()>0){
+					int index=0;
+					List<articleVo> articleVoList = new ArrayList<>();
+					for (Article ar : articlelist) {
+						if(index<10){
+							index++;
+							articleVo articleVo= new articleVo();
+							articleVo.setTitle(ar.getTitle());
+							articleVo.setSeecount(ar.getSeecount());
+							User user = userService.findUserByPKId(ar.getUid());
+							articleVo.setUsername(user.getUserName());
+							articleVo.setId(ar.getId());
+							articleVoList.add(articleVo);
+						}
+					}
+					model.addAttribute("articleList",articleVoList);
+				}
 				return "main";
 			} catch (AuthenticationException e) {
 				System.out.println("登录失败");

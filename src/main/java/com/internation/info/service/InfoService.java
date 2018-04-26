@@ -306,4 +306,10 @@ public class InfoService {
 		int result = reviewMapper.updateByPrimaryKey(revi);
 		return result;
 	}
+
+	public List<Article> findArticleBySeeCount() {
+		articleExample.setOrderByClause("seecount desc");
+		List<Article> articleList = articleMapper.selectByExample(articleExample);
+		return articleList;
+	}
 }

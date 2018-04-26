@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.internation.info.dao.ArticleMapper;
 import com.internation.info.dao.IntegrationMapper;
@@ -50,8 +51,9 @@ public class professorService {
 	
 	//根据用户Id查积分
 	public int findIntegration(int id){
-		integrationExample.createCriteria().andUserIdEqualTo(id);
-		List<Integration> userIntegrationlist = integrationMapper.selectByExample(integrationExample);
+		IntegrationExample intExample = new IntegrationExample();
+		intExample.createCriteria().andUserIdEqualTo(id);
+		List<Integration> userIntegrationlist = integrationMapper.selectByExample(intExample);
 		int count = 0;
 		if(null!=userIntegrationlist&&userIntegrationlist.size()>0){
 			count = userIntegrationlist.get(0).getIntegration_number();
@@ -67,7 +69,50 @@ public class professorService {
 		List<Article> articlelist = articleMapper.selectByExample(articleExample);
 		return articlelist;
 	}
+
+	public List<User> findProfessor() {
+		// TODO Auto-generated method stub
+		userExample.createCriteria().andIsprofessorEqualTo(1);
+		List<User> list = userMapper.selectByExample(userExample);
+		return list;
+	}
 	
+	//根据用户id查找积分
+	public Integration findIntegrationByUId(Integer uId){
+		
+		integrationExample.createCriteria().andUserIdEqualTo(uId);
+		List<Integration> list = integrationMapper.selectByExample(integrationExample);
+		Integration integration=new Integration();
+		if(list!=null&&list.size()>0){
+			integration =  list.get(0);
+		}
+		return integration;
+	}
 	
+	//查找  一个人发布了原创文章多少个
+	public List<Article> findArticleByUid(Integer uId){
+		articleExample.createCriteria().andUidEqualTo(uId).andIspublishEqualTo(1).andOriginalEqualTo(1);
+		List<Article> list = articleMapper.selectByExample(articleExample);
+		return list;
+	}
+	
+	/**
+	 * 自动审核是否能成为专家
+	 * 积分超过 3000  发表 的文章超过  20篇
+	 */
+	public boolean auditProfessor(Integer uId){
+		Integration integration = findIntegrationByUId(uId);
+		if(!StringUtils.isEmpty(integration)){
+			List<Article> list=findArticleByUid(uId);
+			int articleNum = list!=null&&list.size()>0?list.size():0;
+			if(integration.getIntegration_number()>=3000&&articleNum>=20){
+				return true;
+			}else {
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
 	
 }

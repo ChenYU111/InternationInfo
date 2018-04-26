@@ -7,6 +7,7 @@ public class professDetailVo {
 	 */
 	private Integer integration;
 	private Integer articleCount;
+	private String professorType;
 	public String getUserName() {
 		return userName;
 	}
@@ -24,6 +25,12 @@ public class professDetailVo {
 	}
 	public void setArticleCount(Integer articleCount) {
 		this.articleCount = articleCount;
+	}
+	public String getProfessorType() {
+		return professorType;
+	}
+	public void setProfessorType(String professorType) {
+		this.professorType = professorType;
 	}
 	
 }

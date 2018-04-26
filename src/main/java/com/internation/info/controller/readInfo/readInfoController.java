@@ -18,6 +18,8 @@ import com.internation.info.model.Article;
 import com.internation.info.model.Review;
 import com.internation.info.model.User;
 import com.internation.info.service.InfoService;
+import com.internation.info.service.UserService;
+import com.internation.info.vo.articleVo;
 import com.internation.info.vo.reviewVo;
 
 @Controller
@@ -26,6 +28,8 @@ public class readInfoController {
 	InfoService infoService;
 	@Autowired
 	Review review;
+	@Autowired
+	UserService userService;
 	@RequestMapping("/infoList")
 	public String Info(Model model){
 		return "readInfo/readInfoTemplate";
@@ -174,5 +178,28 @@ public class readInfoController {
 		model.addAttribute("reviewList",reviewVoList);
 		model.addAttribute("article",article2);
 		return "readInfo/readInfoDetail";
+	}
+	
+	@RequestMapping("/articleTop")
+	public String findTop10Article(Model model){
+		List<Article> list = infoService.findArticleBySeeCount();
+		if(list!=null&&list.size()>0){
+			int index=0;
+			List<articleVo> articleVoList = new ArrayList<>();
+			for (Article ar : list) {
+				if(index<10){
+					index++;
+					articleVo articleVo= new articleVo();
+					articleVo.setTitle(ar.getTitle());
+					articleVo.setSeecount(ar.getSeecount());
+					User user = userService.findUserByPKId(ar.getUid());
+					articleVo.setUsername(user.getUserName());
+					articleVo.setId(ar.getId());
+					articleVoList.add(articleVo);
+				}
+			}
+			model.addAttribute("articleList",articleVoList);
+		}
+		return "user/successMain";
 	}
 }

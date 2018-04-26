@@ -1,6 +1,7 @@
 package com.internation.info.controller.professor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.internation.info.controller.user.userController;
 import com.internation.info.model.Article;
+import com.internation.info.model.Integration;
 import com.internation.info.model.MyCollection;
 import com.internation.info.model.Question;
 import com.internation.info.model.User;
@@ -24,6 +26,7 @@ import com.internation.info.service.UserCollectionService;
 import com.internation.info.service.professorService;
 import com.internation.info.vo.professDetailVo;
 import com.internation.info.vo.professVo;
+import com.internation.info.vo.userDetailVo;
 @Controller
 public class professorController {
 	@Autowired
@@ -61,6 +64,14 @@ public class professorController {
 			int num = professorService.updateUser(user);
 			if (num == 1) {
 				result = "已经申请,等待管理员审核";
+				boolean auditResult = professorService.auditProfessor(user.getId());
+				if(auditResult==true){
+					user.setIsprofessor(1);
+					int auditNum = professorService.updateUser(user);
+					if(auditNum>0){
+						result="恭喜，审核通过！您已经成为网站的资讯专家！";
+					}
+				}
 			} else {
 				result = "申请失败";
 			}
@@ -86,6 +97,26 @@ public class professorController {
 		if(null!=articleList&&articleList.size()>0){
 			articleCount=articleList.size();
 		}
+		List<Integer> typeCount = new ArrayList<>();
+		int javaCount=0;
+		int sqlCount=0;
+		int phpCount=0;
+		for (Article article : articleList) {
+			if(article.getBlog_type().equals("Java")){
+				javaCount++;
+			}
+			if(article.getBlog_type().equals("php")){
+				phpCount++;
+			}
+			if(article.getBlog_type().equals("sql")){
+				sqlCount++;
+			}
+		}
+		//比较大小，
+		typeCount.add(javaCount);
+		typeCount.add(phpCount);
+		typeCount.add(sqlCount);
+		
 		professDetailVo.setIntegration(integrationCount);
 		professDetailVo.setArticleCount(articleCount);
 		model.addAttribute("professDetailVo", professDetailVo);
@@ -163,4 +194,51 @@ public class professorController {
 		model.addAttribute("userList", userList);
 		return "professor/MyAttentionProfessorList";
 	}
+	
+	//得到 top 5 专家   都是专家，根据积分来排序
+	@RequestMapping("/top5Professor")
+	public String getTop5Professor(Model model){
+		List<User> professorList = professorService.findProfessor();
+		List<Integration> integrationList = new ArrayList<>();
+		if(professorList!=null&&professorList.size()>0){
+			for (User user : professorList) {
+				Integration integration = professorService.findIntegrationByUId(user.getId());
+				//比较积分大小，得到积分前五的显示
+				integrationList.add(integration);
+			}
+			Collections.sort(integrationList); 
+		}
+		List<userDetailVo> list = new ArrayList<>();
+		if(integrationList.size()>5){
+			int index = 0;
+			for (Integration integration : integrationList) {
+				if(index<5){
+					User user = professorService.findUserByUserId(integration.getUserId());
+					userDetailVo vo  = new userDetailVo();
+					vo.setUserName(user.getUserName());
+					vo.setId(user.getId());
+					list.add(vo);
+				}
+				
+			}
+		}else{
+			for (Integration integration : integrationList) {
+					User user = professorService.findUserByUserId(integration.getUserId());
+					userDetailVo vo  = new userDetailVo();
+					vo.setUserName(user.getUserName());
+					vo.setId(user.getId());
+					list.add(vo);
+		}
+	}
+	
+		model.addAttribute("professVoList", list);
+		return "user/successMain";
+	}
+	
+	/**
+	 * 自动审核是否能成为专家
+	 * 积分超过 3000  发表 的文章超过  20篇
+	 */
+	
+	
 }
