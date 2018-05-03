@@ -171,6 +171,7 @@ public class fileUploadAndDownloadController {
 			for (FileUpload fileUp : findAllFileList) {
 				if(fileUp!=null&&!fileUp.equals("")){
 					fileUploadVo fileVo = new fileUploadVo();
+					fileVo.setId(fileUp.getId());
 					fileVo.setCreateTime(fileUp.getCreateTime());
 					fileVo.setFileName(fileUp.getFileName());
 					User user = fileUploadService.findUserById(fileUp.getuId());

@@ -12,16 +12,18 @@
 				<thead>
 					<tr>
 						<th>用户名</th>
+						<th>专家长项</th>
 						<th>操作</th>
 					</tr>
 				</thead>
 				<tbody>
 					<form>
-						<tr th:each="user:${professorList}">
-							<td th:utext="${user.userName}">专家姓名</td>
+						<tr th:each="professorListVo:${professorList}">
+							<td th:utext="${professorListVo.userName}">专家姓名</td>
+							<td th:utext="${professorListVo.type}">专家姓名</td>
 							<td>
-							<a th:href="@{seeProfessorDetail+'/'+${user.id}}" >查看</a>
-							<a href="javascript:void(0)" th:onclick="'attentionProfessor('+${user.id}+')'">关注</a>
+							<a th:href="@{seeProfessorDetail+'/'+${professorListVo.id}}" >查看</a>
+							<a href="javascript:void(0)" th:onclick="'attentionProfessor('+${professorListVo.id}+')'">关注</a>
 							</td>
 						</tr>
 					</form>

@@ -2,7 +2,12 @@ package com.internation.info.controller.professor;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +31,7 @@ import com.internation.info.service.UserCollectionService;
 import com.internation.info.service.professorService;
 import com.internation.info.vo.professDetailVo;
 import com.internation.info.vo.professVo;
+import com.internation.info.vo.professorListVo;
 import com.internation.info.vo.userDetailVo;
 @Controller
 public class professorController {
@@ -40,7 +46,87 @@ public class professorController {
 	@RequestMapping("/professorList")
 	public String findAllProfessorList(Model model){
 		List<User> professorList = professorService.findProfessorList();
-		model.addAttribute("professorList", professorList);
+		List<professorListVo> professorVoList = new ArrayList<>();
+		if(professorList!=null&&professorList.size()>0){
+			for (User user : professorList) {
+				professorListVo listVo = new professorListVo();
+				listVo.setUserName(user.getUserName());
+				listVo.setId(user.getId());
+				List<Article> articleList = infoservice.findMyArticleById(user.getId());
+
+				List<String> typeCount = new ArrayList<>();
+				HashMap<String, Integer> typeMap = new HashMap<>();
+				if(null!=articleList&&articleList.size()>0){
+					//统计专家类别
+					for (Article article : articleList) {
+						if(article.getBlog_type().contains("Java")){
+							if (typeMap.get("Java") == null) {
+								typeMap.put("Java", 1);
+							} else {
+								typeMap.put("Java", typeMap.get("Java") + 1);
+							}
+						}
+						if(article.getBlog_type().contains("php")){
+							if (typeMap.get("php") == null) {
+								typeMap.put("php", 1);
+							} else {
+								typeMap.put("php", typeMap.get("php") + 1);
+							}
+						}
+						if(article.getBlog_type().contains("数据库")){
+							if (typeMap.get("数据库") == null) {
+								typeMap.put("数据库", 1);
+							} else {
+								typeMap.put("数据库", typeMap.get("数据库") + 1);
+							}
+						}
+						if(article.getBlog_type().contains("人工智能")){
+							if (typeMap.get("人工智能") == null) {
+								typeMap.put("人工智能", 1);
+							} else {
+								typeMap.put("人工智能", typeMap.get("人工智能") + 1);
+							}
+						}
+					}
+					
+				
+				
+					//Collections.sort(list, c);
+					//https://www.cnblogs.com/liujinhong/p/6113183.html
+					List<Map.Entry<String,Integer>> list = new ArrayList<Map.Entry<String,Integer>>(typeMap.entrySet());
+					Collections.sort(list,new Comparator<Map.Entry<String,Integer>>() {
+						//升序排序
+						public int compare(Entry<String, Integer> o1,
+								Entry<String, Integer> o2) {
+							return o1.getValue().compareTo(o2.getValue());
+						}
+						
+					});
+					StringBuffer type=new StringBuffer();
+					if (list != null && list.size() > 3) {
+						int num = 0;
+						if (num < 3) {
+							for (Entry<String, Integer> entry : list) {
+								System.out.println(entry.getKey() + ":" + entry.getValue());
+								type.append(entry.getKey()).append(",");
+							}
+						}
+						
+					} else if (list != null && list.size() > 0 && list.size() < 3) {
+						for (Entry<String, Integer> entry : list) {
+							System.out.println(entry.getKey() + ":" + entry.getValue());
+							type.append(entry.getKey()).append(",");
+						}
+					}
+					String professerType = type.toString();
+					professerType=professerType.substring(0, professerType.length()-1);
+					System.out.println(professerType);
+					listVo.setType(professerType);
+					professorVoList.add(listVo);
+				}
+			}
+		}
+		model.addAttribute("professorList", professorVoList);
 		return "professor/professorList";
 	}
 	
@@ -95,28 +181,73 @@ public class professorController {
 		integrationNum=integrationCount;
 		List<Article> articleList = professorService.findPublishArticleCount(userId);
 		if(null!=articleList&&articleList.size()>0){
-			articleCount=articleList.size();
+			//统计专家类别
+			List<String> typeCount = new ArrayList<>();
+			HashMap<String, Integer> typeMap = new HashMap<>();
+			for (Article article : articleList) {
+				if(article.getBlog_type().contains("Java")){
+					if (typeMap.get("Java") == null) {
+						typeMap.put("Java", 1);
+					} else {
+						typeMap.put("Java", typeMap.get("Java") + 1);
+					}
+				}
+				if(article.getBlog_type().contains("php")){
+					if (typeMap.get("php") == null) {
+						typeMap.put("php", 1);
+					} else {
+						typeMap.put("php", typeMap.get("php") + 1);
+					}
+				}
+				if(article.getBlog_type().contains("数据库")){
+					if (typeMap.get("数据库") == null) {
+						typeMap.put("数据库", 1);
+					} else {
+						typeMap.put("数据库", typeMap.get("数据库") + 1);
+					}
+				}
+				if(article.getBlog_type().contains("人工智能")){
+					if (typeMap.get("人工智能") == null) {
+						typeMap.put("人工智能", 1);
+					} else {
+						typeMap.put("人工智能", typeMap.get("人工智能") + 1);
+					}
+				}
+				
+				
+			}
+			//Collections.sort(list, c);
+			//https://www.cnblogs.com/liujinhong/p/6113183.html
+			List<Map.Entry<String,Integer>> list = new ArrayList<Map.Entry<String,Integer>>(typeMap.entrySet());
+			Collections.sort(list,new Comparator<Map.Entry<String,Integer>>() {
+				//升序排序
+				public int compare(Entry<String, Integer> o1,
+						Entry<String, Integer> o2) {
+					return o1.getValue().compareTo(o2.getValue());
+				}
+				
+			});
+			StringBuffer type=new StringBuffer();
+			if (list != null && list.size() > 3) {
+				int num = 0;
+				if (num < 3) {
+					for (Entry<String, Integer> entry : list) {
+						System.out.println(entry.getKey() + ":" + entry.getValue());
+						type.append(entry.getKey()).append(",");
+					}
+				}
+				
+			} else if (list != null && list.size() > 0 && list.size() < 3) {
+				for (Entry<String, Integer> entry : list) {
+					System.out.println(entry.getKey() + ":" + entry.getValue());
+					type.append(entry.getKey()).append(",");
+				}
+			}
+			String professerType = type.toString();
+			professerType=professerType.substring(0, professerType.length()-1);
+			System.out.println(professerType);
+			professDetailVo.setProfessorType(professerType);
 		}
-		List<Integer> typeCount = new ArrayList<>();
-		int javaCount=0;
-		int sqlCount=0;
-		int phpCount=0;
-		for (Article article : articleList) {
-			if(article.getBlog_type().equals("Java")){
-				javaCount++;
-			}
-			if(article.getBlog_type().equals("php")){
-				phpCount++;
-			}
-			if(article.getBlog_type().equals("sql")){
-				sqlCount++;
-			}
-		}
-		//比较大小，
-		typeCount.add(javaCount);
-		typeCount.add(phpCount);
-		typeCount.add(sqlCount);
-		
 		professDetailVo.setIntegration(integrationCount);
 		professDetailVo.setArticleCount(articleCount);
 		model.addAttribute("professDetailVo", professDetailVo);
