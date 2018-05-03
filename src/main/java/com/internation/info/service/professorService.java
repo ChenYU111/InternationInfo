@@ -34,8 +34,9 @@ public class professorService {
 	@Autowired
 	ArticleExample articleExample;
 	public List<User> findProfessorList(){
-		userExample.createCriteria().andIsprofessorEqualTo(1);
-		List<User> ProfessorList = userMapper.selectByExample(userExample);
+		UserExample uExample = new UserExample();
+		uExample.createCriteria().andIsprofessorEqualTo(1);
+		List<User> ProfessorList = userMapper.selectByExample(uExample);
 		return ProfessorList;
 	}
 	
@@ -72,16 +73,17 @@ public class professorService {
 
 	public List<User> findProfessor() {
 		// TODO Auto-generated method stub
-		userExample.createCriteria().andIsprofessorEqualTo(1);
-		List<User> list = userMapper.selectByExample(userExample);
+		UserExample uExample = new UserExample();
+		uExample.createCriteria().andIsprofessorEqualTo(1);
+		List<User> list = userMapper.selectByExample(uExample);
 		return list;
 	}
 	
 	//根据用户id查找积分
 	public Integration findIntegrationByUId(Integer uId){
-		
-		integrationExample.createCriteria().andUserIdEqualTo(uId);
-		List<Integration> list = integrationMapper.selectByExample(integrationExample);
+		IntegrationExample integratExample = new IntegrationExample();
+		integratExample.createCriteria().andUserIdEqualTo(uId);
+		List<Integration> list = integrationMapper.selectByExample(integratExample);
 		Integration integration=new Integration();
 		if(list!=null&&list.size()>0){
 			integration =  list.get(0);

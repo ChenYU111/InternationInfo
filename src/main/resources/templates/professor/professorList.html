@@ -22,7 +22,7 @@
 							<td th:utext="${professorListVo.userName}">专家姓名</td>
 							<td th:utext="${professorListVo.type}">专家姓名</td>
 							<td>
-							<a th:href="@{seeProfessorDetail+'/'+${professorListVo.id}}" >查看</a>
+							<a th:href="@{'/seeProfessorDetail/'+${professorListVo.id}}" >查看</a>
 							<a href="javascript:void(0)" th:onclick="'attentionProfessor('+${professorListVo.id}+')'">关注</a>
 							</td>
 						</tr>

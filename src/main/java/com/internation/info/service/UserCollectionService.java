@@ -3,6 +3,7 @@ package com.internation.info.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.assertj.core.util.diff.myers.MyersDiff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +33,15 @@ public class UserCollectionService {
 	
 	
 		//查找   关注表中的   专家  人
-		public MyCollection findCollectionUser(int professorId){
-			myCollectionExample.createCriteria().andMyAttentionUserIdEqualTo(professorId);
-			List<MyCollection> selectByExample = myCollectionMapper.selectByExample(myCollectionExample);
+		public MyCollection findCollectionUser(int professorId,int uId){
+			MyCollectionExample myE = new MyCollectionExample();
+			myE.createCriteria().andMyAttentionUserIdEqualTo(professorId).andIsUserEqualTo(uId);
+			List<MyCollection> selectByExample = myCollectionMapper.selectByExample(myE);
+			MyCollection mColl = new MyCollection();
 			if(null!=selectByExample&&selectByExample.size()>0){
-				myCollection = selectByExample.get(0);
+				mColl = selectByExample.get(0);
 			}
-			return myCollection;
+			return mColl;
 		}
 		
 		public int updateMyCollectionUser(MyCollection myCollection2){
@@ -48,23 +51,20 @@ public class UserCollectionService {
 		
 		//当 表中么有 这个记录的时候   插入一条  关注专家
 		public int insertProfessor(int professorId,int uId){
-			MyCollection myCollection2 = findCollectionUser(professorId);
-			 
+			MyCollection myCollection2 = findCollectionUser(professorId,uId);
 			int result = 0;
 			//当值为 
-			if(myCollection2==null && myCollection2.equals("")&& myCollection2.getIsUser()==0){
 				myCollection.setIsUser(1);
 				//关注的专家Id
 				myCollection.setMyAttentionUserId(professorId);
 				myCollection.setuId(uId);
 				result = myCollectionMapper.insert(myCollection);
-			}
 			
 			return result;
 		}
 		//当表中   有这条记录   更新  isuser 为 1
 		public int updateProfessorToAttention(int professorId,int uId){
-			MyCollection myCollection2 = findCollectionUser(professorId);
+			MyCollection myCollection2 = findCollectionUser(professorId,uId);
 			int num = 0;
 			if(myCollection2!=null&&!myCollection2.equals("")&&myCollection2.getIsUser()==0){
 				myCollection2.setIsUser(1);
@@ -76,7 +76,7 @@ public class UserCollectionService {
 		
 		//取消关注
 		public int updateProfessorToNOAttention(int professorId,int uId){
-			MyCollection myCollection2 = findCollectionUser(professorId);
+			MyCollection myCollection2 = findCollectionUser(professorId,uId);
 			int num = 0;
 			if(myCollection2!=null&&!myCollection2.equals("")&&myCollection2.getIsUser()==1){
 				myCollection2.setIsUser(0);

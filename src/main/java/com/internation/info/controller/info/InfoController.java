@@ -460,13 +460,18 @@ public class InfoController {
 							}
 						}
 						reviewVoList.add(reviewVo);
-						
 				}
 			}
 		}
 		model.addAttribute("reviewList", reviewVoList);
 		model.addAttribute("article", article2);
-
 		return "info/seeArticleDetail";
+	}
+	
+	@RequestMapping("/myarticle")
+	public String findMyArticle(Model model,HttpServletRequest req){
+		List<Article> list = infoService.findMyArticleById((int)req.getSession().getAttribute("userId"));
+		model.addAttribute("articleList", list);
+		return "info/myArticle";
 	}
 }

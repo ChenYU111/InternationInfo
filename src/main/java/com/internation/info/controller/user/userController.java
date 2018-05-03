@@ -61,6 +61,7 @@ public class userController {
 	UserService userService;
 	@Autowired
 	InfoService infoService;
+
 	/*
 	 * @Autowired User user;
 	 */
@@ -70,7 +71,7 @@ public class userController {
 	}
 
 	@RequestMapping(value = "/loginSure", method = { RequestMethod.POST })
-	public String login(String username, String password,HttpServletRequest req,Model model) {
+	public String login(String username, String password, HttpServletRequest req, Model model) {
 		System.out.println("当前用户名：" + username);
 		Subject currentUser = SecurityUtils.getSubject();
 		logger.info("检测用户" + username + "进行登录认证。。。。。");
@@ -79,60 +80,61 @@ public class userController {
 			token.setRememberMe(true);
 			logger.info(username + "认证成功。。。");
 			try {
-				currentUser.login(token);//登录成功把用户的信息放到session中
+				currentUser.login(token);// 登录成功把用户的信息放到session中
 				HttpSession session = req.getSession();
 				userExample.createCriteria().andUserNameEqualTo(username);
 				List<User> ulist = userMapper.selectByExample(userExample);
-				if(ulist!=null&&ulist.size()>0){
-					int userId =ulist.get(0).getId();
+				if (ulist != null && ulist.size() > 0) {
+					int userId = ulist.get(0).getId();
 					session.setAttribute("userId", userId);
 					session.setAttribute("userName", ulist.get(0).getUserName());
 				}
 				logger.info("用户" + username + "登录认证通过");
 				req.setAttribute("user", ulist.get(0));
-				
-				List<User> professorList = professorService.findProfessor();
+
+				List<User> professorList = professorService.findProfessorList();
 				List<Integration> integrationList = new ArrayList<>();
-				if(professorList!=null&&professorList.size()>0){
+				if (professorList != null && professorList.size() > 0) {
 					for (User user : professorList) {
 						Integration integration = professorService.findIntegrationByUId(user.getId());
-						//比较积分大小，得到积分前五的显示
+						// 比较积分大小，得到积分前五的显示
 						integrationList.add(integration);
 					}
-					Collections.sort(integrationList); 
+					Collections.sort(integrationList);
 				}
 				List<userDetailVo> list = new ArrayList<>();
-				if(integrationList.size()>5){
+				if (integrationList.size() > 5) {
 					int index = 0;
 					for (Integration integration : integrationList) {
-						if(index<5){
+						if (index < 5) {
 							User user = professorService.findUserByUserId(integration.getUserId());
-							userDetailVo vo  = new userDetailVo();
+							userDetailVo vo = new userDetailVo();
 							vo.setUserName(user.getUserName());
 							vo.setId(user.getId());
 							list.add(vo);
 						}
-						
+
 					}
-				}else{
+				} else {
 					for (Integration integration : integrationList) {
-							User user = professorService.findUserByUserId(integration.getUserId());
-							userDetailVo vo  = new userDetailVo();
-							vo.setUserName(user.getUserName());
-							vo.setId(user.getId());
-							list.add(vo);
+						User user = professorService.findUserByUserId(integration.getUserId());
+						userDetailVo vo = new userDetailVo();
+						vo.setUserName(user.getUserName());
+						vo.setId(user.getId());
+						list.add(vo);
+					}
 				}
-			}
+
 				model.addAttribute("professVoList", list);
-				//top10 文章
+				// top10 文章
 				List<Article> articlelist = infoService.findArticleBySeeCount();
-				if(articlelist!=null&&articlelist.size()>0){
-					int index=0;
+				if (articlelist != null && articlelist.size() > 0) {
+					int index = 0;
 					List<articleVo> articleVoList = new ArrayList<>();
 					for (Article ar : articlelist) {
-						if(index<10){
+						if (index < 10) {
 							index++;
-							articleVo articleVo= new articleVo();
+							articleVo articleVo = new articleVo();
 							articleVo.setTitle(ar.getTitle());
 							articleVo.setSeecount(ar.getSeecount());
 							User user = userService.findUserByPKId(ar.getUid());
@@ -141,13 +143,13 @@ public class userController {
 							articleVoList.add(articleVo);
 						}
 					}
-					model.addAttribute("articleList",articleVoList);
+					model.addAttribute("articleList", articleVoList);
 				}
 				return "main";
 			} catch (AuthenticationException e) {
 				System.out.println("登录失败");
 			}
-		}else{
+		} else {
 			return "main";
 		}
 		return "login";
@@ -189,23 +191,78 @@ public class userController {
 	}
 
 	@RequestMapping("/main")
-	public String toMain() {
+	public String toMain(Model model) {
+		List<User> professorList = professorService.findProfessorList();
+		List<Integration> integrationList = new ArrayList<>();
+		if (professorList != null && professorList.size() > 0) {
+			for (User user : professorList) {
+				Integration integration = professorService.findIntegrationByUId(user.getId());
+				// 比较积分大小，得到积分前五的显示
+				integrationList.add(integration);
+			}
+			Collections.sort(integrationList);
+		}
+		List<userDetailVo> list = new ArrayList<>();
+		if (integrationList.size() > 5) {
+			int index = 0;
+			for (Integration integration : integrationList) {
+				if (index < 5) {
+					User user = professorService.findUserByUserId(integration.getUserId());
+					userDetailVo vo = new userDetailVo();
+					vo.setUserName(user.getUserName());
+					vo.setId(user.getId());
+					list.add(vo);
+				}
+
+			}
+		} else {
+			for (Integration integration : integrationList) {
+				User user = professorService.findUserByUserId(integration.getUserId());
+				userDetailVo vo = new userDetailVo();
+				vo.setUserName(user.getUserName());
+				vo.setId(user.getId());
+				list.add(vo);
+			}
+		}
+
+		model.addAttribute("professVoList", list);
+		// top10 文章
+		List<Article> articlelist = infoService.findArticleBySeeCount();
+		if (articlelist != null && articlelist.size() > 0) {
+			int index = 0;
+			List<articleVo> articleVoList = new ArrayList<>();
+			for (Article ar : articlelist) {
+				if (index < 10) {
+					index++;
+					articleVo articleVo = new articleVo();
+					articleVo.setTitle(ar.getTitle());
+					articleVo.setSeecount(ar.getSeecount());
+					User user = userService.findUserByPKId(ar.getUid());
+					articleVo.setUsername(user.getUserName());
+					articleVo.setId(ar.getId());
+					articleVoList.add(articleVo);
+				}
+			}
+			model.addAttribute("articleList", articleVoList);
+		}
 		return "main";
 	}
+
 	@RequestMapping("/logout")
-	public String toLogout(){
-		 Subject subject = SecurityUtils.getSubject();  
-		    if (subject.isAuthenticated()) {  
-		        subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存  
-		        /*if (LOG.isDebugEnabled()) {  
-		            LOG.debug("用户" + username + "退出登录");  
-		        }  *///提示用户退出成功。。。
-		    }  
+	public String toLogout() {
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.isAuthenticated()) {
+			subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存
+			/*
+			 * if (LOG.isDebugEnabled()) { LOG.debug("用户" + username + "退出登录");
+			 * }
+			 */// 提示用户退出成功。。。
+		}
 		return "login";
 	}
-	
+
 	@RequestMapping("/seeUserDetail")
-	public String seeUserDetail(Model model,HttpServletRequest req){
+	public String seeUserDetail(Model model, HttpServletRequest req) {
 		int uId = (int) req.getSession().getAttribute("userId");
 		User user1 = userMapper.selectByPrimaryKey(uId);
 		userDetailVo userDetailVo = new userDetailVo();
@@ -213,7 +270,7 @@ public class userController {
 		userDetailVo.setCreateTime(user1.getCreateTime());
 		userDetailVo.setSex(user1.getSex());
 		userDetailVo.setTel(user.getTel());
-		if (user1.getIsprofessor() == 3 && null != user1.getProfessorRemark()
+		if (user1.getIsprofessor() != null && user1.getIsprofessor() == 3 && null != user1.getProfessorRemark()
 				&& user1.getProfessorRemark().equals("审核通过")) {
 			userDetailVo.setIsprofessor(1);
 		} else {
@@ -231,10 +288,10 @@ public class userController {
 		model.addAttribute("userDetailVo", userDetailVo);
 		return "user/seeUserDetail";
 	}
-	
+
 	@RequestMapping("/searchseeUserDetail/{id}")
-	public String searchSeeUserDetail(@PathVariable("id") Integer uId,Model model,HttpServletRequest req){
-		//int uId = (int) req.getSession().getAttribute("userId");
+	public String searchSeeUserDetail(@PathVariable("id") Integer uId, Model model, HttpServletRequest req) {
+		// int uId = (int) req.getSession().getAttribute("userId");
 		User user1 = userMapper.selectByPrimaryKey(uId);
 		userDetailVo userDetailVo = new userDetailVo();
 		userDetailVo.setUserName(user1.getUserName());
@@ -259,41 +316,52 @@ public class userController {
 		model.addAttribute("userDetailVo", userDetailVo);
 		return "user/seeUserDetail";
 	}
-	
-	
+
 	@RequestMapping("/updatePassword")
-	public String updatePassword(String userName,String password,HttpServletRequest req,Model model){
-		String str ="";
-		User user2 = userMapper.selectByPrimaryKey((int)req.getSession().getAttribute("userId"));
-		if(user2!=null){
-			String pwd = md5Encode.md5Pwd(password, user2.getUserName());
-			if(user2.getPassword().equals(pwd)) {
-				str="你输入的密码跟原密码一样，不能修改！";
+	public String updatePassword(String userName, String newpassword, String surepasswore, HttpServletRequest req,
+			Model model) {
+		String str = "";
+		User user2 = userMapper.selectByPrimaryKey((int) req.getSession().getAttribute("userId"));
+
+		if (user2 != null) {
+			if (user2.getUserName().equals(userName)) {
+				String pwd = md5Encode.md5Pwd(newpassword, user2.getUserName());
+				// 如果新设置的密码跟原始密码一样 不可修改
+				if (user2.getPassword().equals(pwd)) {
+					str = "你输入的密码跟原密码一样，不能修改！";
+					model.addAttribute("result", str);
+				}
+				// 如果 新密码跟确认密码一样，可以修改
+				if (newpassword.equals(surepasswore)) {
+					user2.setPassword(md5Encode.md5Pwd(newpassword, user2.getUserName()));
+					int result = userMapper.updateByPrimaryKeySelective(user2);
+					if (result > 0) {
+						str = "修改成功!";
+						model.addAttribute("result", str);
+					} else {
+						str = "修改失败！";
+						model.addAttribute("result", str);
+					}
+				}
+			} else {
+				str = "您输入的用户名有误！";
 				model.addAttribute("result", str);
 			}
-			user2.setPassword(password);
-			int result = userMapper.updateByPrimaryKeySelective(user2);
-			if(result>0){
-				str="修改成功!";
-				model.addAttribute("result", str);
-			}else {
-			   str="修改失败！";
-			   model.addAttribute("result", str);
-			}
-		}else{
-			str="你不是本系统用户，请注册！";
+		} else {
+			str = "你不是本系统用户，请注册！";
 			model.addAttribute("result", str);
 		}
+
 		return "user/updatePasswordResult";
 	}
-	
+
 	@RequestMapping("/updatepwd")
-	public String updatepwd(){
+	public String updatepwd() {
 		return "user/updatePassword";
 	}
-	
+
 	@RequestMapping("/findUserByUserNameLike")
-	public List<User> findUserByUserNameLike(String str,Model model){
+	public List<User> findUserByUserNameLike(String str, Model model) {
 		List<User> list = userService.findUserByLikeUsername(str);
 		return list;
 	}

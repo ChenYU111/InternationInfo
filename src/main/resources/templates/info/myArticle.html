@@ -1,0 +1,54 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="info/infoTemplate">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>文章管理</title>
+</head>
+<body>
+	<div layout:fragment="contentInfo">
+	<!-- <script type="text/javascript" src="../../js/layer.js"></script> -->
+	<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+	<script type="text/javascript" src="../../js/articleLayer.js"></script>
+		<div>
+			<table id="artileTable" name="artileTable">
+				<thead>
+					<tr>
+						<th>标题</th>
+						<th>原创</th>
+						<th>私密</th>
+						<th>发布</th>
+						<th>发布时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<form>
+						<tr th:each="article:${articleList}">
+							<td th:utext="${article.title}">文章标题</td>
+							<td th:utext="${article.original}?'原创':'非原创'">是否原创</td>
+							<td th:utext="${article.isprivate}?'私密':'非私密'">是否私密</td>
+							<td th:utext="${article.ispublish}?'发布':'未发布'">是否发布</td>
+							<td th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
+							<td><!-- <a href="javascript:void(0)" th:onclick="'seeArticle('+${article.id}+')'">查看</a> -->
+								<a th:href="@{'/seeOneArticle/'+${article.id}}">查看</a>
+								<a href="javascript:void(0)" th:onclick="'deleteArticle('+${article.id}+')'">删除</a>
+							</td>
+						</tr>
+					</form>
+				</tbody>
+			</table>
+		</div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#artileTable').DataTable({
+					"processing" : true,
+					"paging" : true,
+					"pagingType" : "full_numbers"
+				});
+			});
+		</script>
+	</div>
+</body>
+</html>
