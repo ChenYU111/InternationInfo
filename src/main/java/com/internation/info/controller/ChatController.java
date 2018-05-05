@@ -40,7 +40,7 @@ public class ChatController {
     /**
      * 获取好友列表/个人信息/群组列表
      */
-   /* @RequestMapping(value = "/friends", method = RequestMethod.GET, produces = "applicat@ModelAttribute(Constants.SESSION_USERID)ion/json;charset=utf-8")
+    @RequestMapping(value = "/friends", method = RequestMethod.GET)
     public Results friend( int userId,  User user) {
         List<Group> groups = groupService.list(new Group(userId));
         //List<Relation> relations = relationService.list(new Relation(userId));
@@ -50,11 +50,11 @@ public class ChatController {
         //data.put("friend", FriendVo.convertToVo(relations));
         return Results.ok(ResultConstant.SUCCESS, data);
     }
-*/
+
     /**
      * 获取指定群的群成员列表
      */
-    @RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/members", method = RequestMethod.GET)
     public Results members( int userId,  User user, @RequestParam int groupId) {
         List<GroupMember> list = groupMemberService.list(groupId);
         JSONObject data = new JSONObject();

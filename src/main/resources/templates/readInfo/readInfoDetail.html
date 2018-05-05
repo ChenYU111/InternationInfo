@@ -63,17 +63,62 @@
 					</br>
 				<input th:type="submit" class="btn btn-primary" value="发表评论">
 			</form>
+			<div id="dialog" title="回复评论">
+				<form th:action="@{/addReadInfoRevert}" method="post">
+					<input type="text" id="floor" name="floor" placeholder="回复哪一层" required="required">
+					<textarea rows="4" id="revert" name="revert" placeholder="回复内容" required="required"></textarea>
+					<input type="submit" value="回复">
+				</form>
+			</div>
 			<h3>相关评论</h3>
-			<table id="reviewTable" class="display" style="width: 100%">
-				<tr th:each="reviewVo:${reviewList}">
+			<table id="reviewTable" class="table" style="width: 100%">
+				<tr th:each="reviewVo:${reviewVoList}">
 					<td th:text="${reviewVo.floor_number}+'楼：'">楼层</td>
 					<td th:text="${reviewVo.username}+'说：'">用户名</td>
 					<td th:text="'评论时间：'+${#dates.format(reviewVo.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+					<td th:text="'查看次数：'+${reviewVo.seecount}">查看次数</td>
 					<td th:text="'评论内容：'+${reviewVo.message}">内容</td>
-					<td><a th:href="@{main}">回复</a></td>
+					<td><button class="opener">回复</button></td>
+					<td th:text="${reviewVo.isRevert}"></td></br>
+					<td th:if="${not #lists.isEmpty(reviewVo.revertList)}">
+					<div>
+					<table >
+						<tr th:each="revertVo:${reviewVo.revertList}">
+							<td th:utext="${revertVo.username}+'说：'">用户名</td>
+							<td th:utext="'回复时间：'+${#dates.format(revertVo.revertCreateTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+							<td th:utext="'回复内容：'+${revertVo.revert}">内容</td>
+						</tr>
+					</table>
+					</div>
+					</td>
+					</tr>
 				</tr>
 			</table>
-	</div>
+			
+			<!-- 弹出对话框 -->
+		<script>
+			$(function() {
+				$("#dialog").dialog({
+					autoOpen : false,
+					resizable : false,
+					modal : true,
+					height : 200,
+					width : 200,
+					show : {
+						effect : "blind",
+						duration : 1000
+					},
+					hide : {
+						effect : "explode",
+						duration : 1000
+					}
+				});
 
+				$(".opener").click(function() {
+					$("#dialog").dialog("open");
+				});
+			});
+		</script>
+	</div>
 </body>
 </html>

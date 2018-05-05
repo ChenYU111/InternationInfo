@@ -130,8 +130,9 @@ public class InfoService {
 
 	// 根据文章的id来查找评论 找到最后一个评论的楼层
 	public int findFloor(int articleId) {
-		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
-		List<Review> reviewList = reviewMapper.selectByExample(reviewExample);
+		ReviewExample revE = new ReviewExample();
+		revE.createCriteria().andArticle_idEqualTo(articleId);
+		List<Review> reviewList = reviewMapper.selectByExample(revE);
 		int num = 0;
 		// 有评论
 		if (reviewList != null && reviewList.size() > 0) {
@@ -168,9 +169,9 @@ public class InfoService {
 
 	// 查出所用评论
 	public List<Review> findReviewList(int articleId) {
-		// List<Review> reviewList = ArrayList<Review>();
-		reviewExample.createCriteria().andArticle_idEqualTo(articleId);
-		List<Review> reviewList = reviewMapper.selectByExample(reviewExample);
+		ReviewExample reE = new ReviewExample();
+		reE.createCriteria().andArticle_idEqualTo(articleId);
+		List<Review> reviewList = reviewMapper.selectByExample(reE);
 		return reviewList;
 
 	}

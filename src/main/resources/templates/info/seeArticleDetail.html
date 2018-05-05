@@ -61,7 +61,7 @@
 				</tr>
 			</table>
 			<a href="javascript:void(0)" th:onclick="'attentionArticle()'">收藏文章</a>
-			<form th:action="@{'/seeOneArticle/addreview'}" method="post">
+			<form th:action="@{'/addArticleReview'}" method="post">
 				<input th:type="text" id="message" name="message"
 					placeholder="说出你的疑问" required="required"> <input
 					th:type="submit" value="发表评论">
@@ -75,24 +75,28 @@
 			</div>
 			<h3>相关评论</h3>
 			<table id="reviewTable" class="table" style="width: 100%">
-				<tr th:each="review:${reviewList}">
-					<td th:text="${review.floor_number}+'楼：'">楼层</td>
-					<td th:text="${review.username}+'说：'">用户名</td>
-					<td th:text="'评论时间：'+${#dates.format(review.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
-					<td th:text="'查看次数：'+${review.seecount}">查看次数</td>
-					<td th:text="'评论内容：'+${review.message}">内容</td>
+				<tr th:each="reviewVo:${reviewVoList}">
+					<td th:text="${reviewVo.floor_number}+'楼：'">楼层</td>
+					<td th:text="${reviewVo.username}+'说：'">用户名</td>
+					<td th:text="'评论时间：'+${#dates.format(reviewVo.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+					<td th:text="'查看次数：'+${reviewVo.seecount}">查看次数</td>
+					<td th:text="'评论内容：'+${reviewVo.message}">内容</td>
 					<td><button class="opener">回复</button></td>
-					<td th:text="${review.isRevert}"></td></br>
-					<table th:if="${review.isRevert==1}" class="table">
-						<tr th:each=revertVo:${review.revertList}>
+					<td th:text="${reviewVo.isRevert}"></td></br>
+					<td th:if="${not #lists.isEmpty(reviewVo.revertList)}">
+					<div>
+					<table >
+						<tr th:each="revertVo:${reviewVo.revertList}">
 							<td th:utext="${revertVo.username}+'说：'">用户名</td>
 							<td th:utext="'回复时间：'+${#dates.format(revertVo.revertCreateTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
 							<td th:utext="'回复内容：'+${revertVo.revert}">内容</td>
 						</tr>
 					</table>
+					</div>
+					</td>
+					</tr>
 				</tr>
 			</table>
-
 			<!-- <button id="opener">打开对话框</button> -->
 		</center>
 		<script type="text/javascript">

@@ -37,8 +37,8 @@ public class reviewVo extends Review implements Serializable{
 	public List<revertVo> getRevertList() {
 		return revertList;
 	}
-	public static  void setRevertList(List<revertVo> revertList) {
-		revertList = revertList;
+	public void setRevertList(List<revertVo> revertList) {
+		this.revertList = revertList;
 	}
 	private String revertUserName;
 	

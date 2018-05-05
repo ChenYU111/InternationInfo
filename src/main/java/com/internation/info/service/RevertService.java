@@ -23,8 +23,9 @@ public class RevertService {
 	
 	//是否有当前评论的回复
 	public List<Revert> findRevertByArticleIdAndFloor(int articleId,int floor){
-		revertExample.createCriteria().andArticleIdEqualTo(articleId).andReviewFloorEqualTo(floor);
-		List<Revert> list = revertwMapper.selectByExample(revertExample);
+		RevertExample revertE = new RevertExample();
+		revertE.createCriteria().andArticleIdEqualTo(articleId).andReviewFloorEqualTo(floor);
+		List<Revert> list = revertwMapper.selectByExample(revertE);
 			return list;
 	}
 	
