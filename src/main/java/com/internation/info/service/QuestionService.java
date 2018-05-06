@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.internation.info.dao.AnswerMapper;
 import com.internation.info.dao.QuestionMapper;
+import com.internation.info.dao.QuestionRevertMapper;
 import com.internation.info.model.Answer;
 import com.internation.info.model.AnswerExample;
 import com.internation.info.model.Question;
 import com.internation.info.model.QuestionExample;
+import com.internation.info.model.QuestionRevert;
+import com.internation.info.model.QuestionRevertExample;
 
 @Service
 public class QuestionService {
@@ -27,7 +30,10 @@ public class QuestionService {
 	AnswerMapper anserMapper;
 	@Autowired
 	AnswerExample answerExample;
-
+	@Autowired
+	QuestionRevertMapper questionRevertMapper;
+	@Autowired
+	QuestionRevertExample questionRevertExample;
 	public int addQuestion(Question ques) {
 		int num = questionMapper.insert(ques);
 		return num;
@@ -126,5 +132,29 @@ public class QuestionService {
 		questionExample.createCriteria().andContentLike(string);
 		List<Question> questionList = questionMapper.selectByExample(questionExample);
 		return questionList;
+	}
+	
+	public int insert(QuestionRevert questionRevert){
+		int result = questionRevertMapper.insert(questionRevert);
+		return result;
+	}
+	
+	//questionId 是  答案id
+	public List<QuestionRevert> findQuestionAnswerRevert(int questionId,int answerFloor){
+		QuestionRevertExample qe = new QuestionRevertExample();
+		qe.createCriteria().andQuestionIdEqualTo(questionId).andQuestionFloorEqualTo(answerFloor);
+		List<QuestionRevert> list = questionRevertMapper.selectByExample(qe);
+		return list;
+	}
+	
+	public QuestionRevert findQuestionAnswerRevertFloor(int questionId,int answerFloor){
+		QuestionRevertExample qe = new QuestionRevertExample();
+		qe.createCriteria().andQuestionIdEqualTo(questionId).andQuestionFloorEqualTo(answerFloor);
+		List<QuestionRevert> list = questionRevertMapper.selectByExample(questionRevertExample);
+		QuestionRevert qr = new QuestionRevert();
+		if(list!=null&&list.size()>0){
+			qr = list.get(list.size()-1);
+		}
+		return qr;
 	}
 }

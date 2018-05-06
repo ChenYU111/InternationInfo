@@ -2,6 +2,7 @@ package com.internation.info.vo;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 import com.internation.info.model.Answer;
 
@@ -13,11 +14,12 @@ public class answerVo extends Answer implements Serializable{
 	private String userName;
 	private Integer uId;
 	private Date createTime;
+	private List<questionRevertVo> questionRevertVoList;
 	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
+	public void AnswerTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
@@ -35,5 +37,13 @@ public class answerVo extends Answer implements Serializable{
 
 	public void setuId(Integer uId) {
 		this.uId = uId;
+	}
+
+	public List<questionRevertVo> getQuestionRevertVoList() {
+		return questionRevertVoList;
+	}
+
+	public void setQuestionRevertVoList(List<questionRevertVo> questionRevertVoList) {
+		this.questionRevertVoList = questionRevertVoList;
 	}
 }

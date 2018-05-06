@@ -1,5 +1,6 @@
 package com.internation.info.controller.question;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,12 @@ import com.internation.info.dao.QuestionMapper;
 import com.internation.info.model.Answer;
 import com.internation.info.model.Question;
 import com.internation.info.model.QuestionExample;
+import com.internation.info.model.QuestionRevert;
+import com.internation.info.model.User;
 import com.internation.info.service.QuestionService;
+import com.internation.info.service.UserService;
+import com.internation.info.vo.answerVo;
+import com.internation.info.vo.questionRevertVo;
 
 @Controller
 public class questionController {
@@ -28,7 +34,8 @@ public class questionController {
 	Question question;
 	@Autowired
 	Answer answer;
-
+	@Autowired
+	UserService userService;
 	@RequestMapping("toQuestion")
 	public String toQuestion() {
 		return "question/questionTemplate";
@@ -96,9 +103,40 @@ public class questionController {
 		}
 		model.addAttribute("questionDetail", findQuestionDetailById);
 		List<Answer> findQuestionAnswerById = questionService.findQuestionAnswerById(questionId);
+		List<answerVo> answerVoList = new ArrayList<>();
 		if (findQuestionAnswerById != null && findQuestionAnswerById.size() > 0) {
-			model.addAttribute("answerList", findQuestionAnswerById);
+			for (Answer answer : findQuestionAnswerById) {
+				answerVo answerVo = new answerVo();
+				answerVo.setId(answer.getId());
+				answerVo.setContent(answer.getContent());
+				answerVo.setAnswerTime(answer.getAnswerTime());
+				answerVo.setFloor(answer.getFloor());
+				answerVo.setIsAdopt(answer.getIsAdopt());
+				answerVo.setQuestionId(answer.getQuestionId());
+				User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
+				answerVo.setUserName(user.getUserName());
+				answerVo.setuId(user.getId());
+				List<QuestionRevert> answerRevertList = questionService.findQuestionAnswerRevert(questionId,answer.getFloor());
+				if (answerRevertList != null && answerRevertList.size() > 0) {
+					List<questionRevertVo> questionRevertVoList = new ArrayList<>();
+					for (QuestionRevert questionRevert2 : answerRevertList) {
+						questionRevertVo qvo = new questionRevertVo();
+						qvo.setId(questionRevert2.getId());
+						qvo.setCreateTime(questionRevert2.getCreateTime());
+						qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
+						qvo.setRevertFloor(questionRevert2.getRevertFloor());
+						qvo.setRevertMessage(questionRevert2.getRevertMessage());
+						User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
+						qvo.setuId(user2.getId());
+						qvo.setUsername(user2.getUserName());
+						questionRevertVoList.add(qvo);
+					}
+					answerVo.setQuestionRevertVoList(questionRevertVoList);
+				}
+				answerVoList.add(answerVo);
+			}
 		}
+		model.addAttribute("answerVoList", answerVoList);
 		HttpSession session = req.getSession();
 		session.setAttribute("seeQuestionId", questionId);
 		return "question/seeQuestionDetail";
@@ -132,9 +170,41 @@ public class questionController {
 			Question findQuestionDetailById = questionService.findQuestionDetailById(questionId);
 			model.addAttribute("questionDetail", findQuestionDetailById);
 			List<Answer> findQuestionAnswerById = questionService.findQuestionAnswerById(questionId);
+			List<answerVo> answerVoList = new ArrayList<>();
 			if (findQuestionAnswerById != null && findQuestionAnswerById.size() > 0) {
-				model.addAttribute("answerList", findQuestionAnswerById);
+				for (Answer answer : findQuestionAnswerById) {
+					answerVo answerVo = new answerVo();
+					answerVo.setId(answer.getId());
+					answerVo.setContent(answer.getContent());
+					answerVo.setAnswerTime(answer.getAnswerTime());
+					answerVo.setFloor(answer.getFloor());
+					answerVo.setIsAdopt(answer.getIsAdopt());
+					answerVo.setQuestionId(answer.getQuestionId());
+					User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
+					answerVo.setUserName(user.getUserName());
+					answerVo.setuId(user.getId());
+					List<QuestionRevert> answerRevertList = questionService.findQuestionAnswerRevert(questionId,answer.getFloor());
+					if (answerRevertList != null && answerRevertList.size() > 0) {
+						List<questionRevertVo> questionRevertVoList = new ArrayList<>();
+						for (QuestionRevert questionRevert2 : answerRevertList) {
+							questionRevertVo qvo = new questionRevertVo();
+							qvo.setId(questionRevert2.getId());
+							qvo.setCreateTime(questionRevert2.getCreateTime());
+							qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
+							qvo.setRevertFloor(questionRevert2.getRevertFloor());
+							qvo.setRevertMessage(questionRevert2.getRevertMessage());
+							User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
+							qvo.setuId(user2.getId());
+							qvo.setUsername(user2.getUserName());
+							questionRevertVoList.add(qvo);
+						}
+						answerVo.setQuestionRevertVoList(questionRevertVoList);
+					}
+					
+					answerVoList.add(answerVo);
+				}
 			}
+			model.addAttribute("answerVoList", answerVoList);
 			return "question/seeQuestionDetail";
 		} else {
 			return "question/addAnswerF";
@@ -183,5 +253,68 @@ public class questionController {
 	public String toOrderByQuestionSeeCount() {
 		return "question/orderBySeeCount";
 	}
-
+	
+	//添加回复并且返回信息
+	@RequestMapping("/addAnswerRevert")
+	public String addQuestionRevert(int answerfloor,String revertMessage,Model model,HttpServletRequest req){
+		int questionId = (int) req.getSession().getAttribute("seeQuestionId");
+		QuestionRevert qv = new QuestionRevert();
+		qv.setCreateTime(new Date());
+		qv.setQuestionId(questionId);
+		qv.setQuestionFloor(answerfloor);
+		qv.setRevertMessage(revertMessage);
+		qv.setuId((int)req.getSession().getAttribute("userId"));
+		QuestionRevert questionRevert = questionService.findQuestionAnswerRevertFloor(questionId, answerfloor);
+		int revertFloor =0;
+		if(questionRevert!=null&&!questionRevert.equals("")){
+			revertFloor=questionRevert.getRevertFloor()==null?0:questionRevert.getRevertFloor();
+		}
+		qv.setRevertFloor(revertFloor+1);
+		int result  = questionService.insert(qv);
+		if (result > 0) {
+			//得道答案的Id  改变  isanswer 
+			// 查询所有 问题，回答，回复
+			Question findQuestionDetailById = questionService.findQuestionDetailById(questionId);
+			model.addAttribute("questionDetail", findQuestionDetailById);
+			List<Answer> findQuestionAnswerById = questionService.findQuestionAnswerById(questionId);
+			List<answerVo> answerVoList = new ArrayList<>();
+			if (findQuestionAnswerById != null && findQuestionAnswerById.size() > 0) {
+				for (Answer answer : findQuestionAnswerById) {
+					answerVo answerVo = new answerVo();
+					answerVo.setId(answer.getId());
+					answerVo.setContent(answer.getContent());
+					answerVo.setAnswerTime(answer.getAnswerTime());
+					answerVo.setFloor(answer.getFloor());
+					answerVo.setIsAdopt(answer.getIsAdopt());
+					answerVo.setQuestionId(answer.getQuestionId());
+					User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
+					answerVo.setUserName(user.getUserName());
+					answerVo.setuId(user.getId());
+					List<QuestionRevert> answerRevertList = questionService.findQuestionAnswerRevert(questionId,answerfloor);
+					if (answerRevertList != null && answerRevertList.size() > 0) {
+						List<questionRevertVo> questionRevertVoList = new ArrayList<>();
+						for (QuestionRevert questionRevert2 : answerRevertList) {
+							questionRevertVo qvo = new questionRevertVo();
+							qvo.setId(questionRevert2.getId());
+							qvo.setCreateTime(questionRevert2.getCreateTime());
+							qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
+							qvo.setRevertFloor(questionRevert2.getRevertFloor());
+							qvo.setRevertMessage(questionRevert2.getRevertMessage());
+							User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
+							qvo.setuId(user2.getId());
+							qvo.setUsername(user2.getUserName());
+							questionRevertVoList.add(qvo);
+						}
+						answerVo.setQuestionRevertVoList(questionRevertVoList);
+					}
+					
+					answerVoList.add(answerVo);
+				}
+			}
+			model.addAttribute("answerVoList", answerVoList);
+			return "question/seeQuestionDetail";
+		} else {
+			return "question/seeQuestionDetail";
+		}
+	}
 }

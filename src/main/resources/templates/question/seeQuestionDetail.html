@@ -44,19 +44,34 @@
 			</script>
 			<input th:type="submit" value="提交答案">
 		</form>
+			<div id="dialog" title="回复评论">
+				<form th:action="@{/addAnswerRevert}" method="post">
+					<input type="text" id="floor" name="answerfloor" placeholder="回复哪一层" required="required">
+					<textarea rows="4" id="revert" name="revertMessage" placeholder="回复内容" required="required"></textarea>
+					<input type="submit" value="回复">
+				</form>
+			</div>
 		<h3>相关评论：</h3>
 		<table id="answertable" class="display" style="width: 100%">
 			<tbody>
-				<tr th:each="answer:${answerList}">
-					<td th:text="${answer.floor}+'楼'">楼层</td>
-					<td th:utext="${answer.content}">文章标题</td>
-					<br />
-					<td
-						th:text="${#dates.format(answer.answerTime,'yyyy/MM/dd HH:mm')}">时间</td>
-					<td><a href="javascript:void(0)"
-						th:onClick="'isAdoptAnswer('+${answer.id}+')'">采纳</a> <a
-						href="javascript:void(0)"
-						th:onClick="'isReturnAnswer('+${answer.id}+')'">回复</a></td>
+				<tr th:each="answerVo:${answerVoList}">
+					<td th:text="${answerVo.floor}+'楼'">楼层</td>
+					<td th:utext="${answerVo.content}">文章标题</td>
+					<td th:text="${#dates.format(answerVo.answerTime,'yyyy/MM/dd HH:mm')}">时间</td>
+					<td><a href="javascript:void(0)" th:onClick="'isAdoptAnswer('+${answerVo.id}+')'">采纳</a> 
+					<td><button class="opener">回复</button></td>
+						<!-- <a href="javascript:void(0)" th:onClick="'isReturnAnswer('+${answer.id}+')'">回复</a></td> -->
+					<td th:if="${not #lists.isEmpty(answerVo. questionRevertVoList)}">
+					<div>
+					<table >
+						<tr th:each="questionRevertVo:${answerVo.questionRevertVoList}">
+							<td th:utext="${questionRevertVo.username}+'说：'">用户名</td>
+							<td th:utext="'回复时间：'+${#dates.format(questionRevertVo.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+							<td th:utext="'回复内容：'+${questionRevertVo.revertMessage}">内容</td>
+						</tr>
+					</table>
+					</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -112,6 +127,31 @@
 					"processing" : true,
 					"paging" : true,
 					"pagingType" : "full_numbers"
+				});
+			});
+		</script>
+		
+		<!-- 弹出对话框 -->
+		<script>
+			$(function() {
+				$("#dialog").dialog({
+					autoOpen : false,
+					 resizable: false,
+					 modal: true,
+					height:200,
+					width:200,
+					show : {
+						effect : "blind",
+						duration : 1000
+					},
+					hide : {
+						effect : "explode",
+						duration : 1000
+					}
+				});
+
+				$(".opener").click(function() {
+					$("#dialog").dialog("open");
 				});
 			});
 		</script>
