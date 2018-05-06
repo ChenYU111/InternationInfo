@@ -10,7 +10,7 @@
 	<div layout:fragment="contentInfo">
 	<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
 	<a href="javascript:void(0)" th:onclick="'applicationProfessor('+${userId}+')'">我要申请为网站资讯专家</a>
-	<script >
+	<!-- <script >
 			function applicationProfessor(id) {
 				layer.open({
 					content : '确认申请？',
@@ -34,6 +34,25 @@
 
 				});
 			}
+		</script> -->
+		 <script type="text/javascript">
+		function applicationProfessor(id) {
+			$.post('/sureApplication/' + id, {
+				"id" : id
+			}, function(str) {
+				layer.open({
+					type :3,
+					title:"申请资讯专家",
+					shadeClose: true,//点击外围   关闭
+			        shade: [0.8, '#393D49'],//遮蔽层
+			        closeBtn: 2,
+			        maxmin: true,
+			        area: ['700px', '600px'],
+					content : str
+				// 注意，如果str是object，那么需要字符拼接。
+				});
+			});
+		}
 		</script>
 	</div>
 </body>

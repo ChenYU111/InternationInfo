@@ -1,0 +1,16 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>Thymeleaf</title>
+</head>
+<body>
+	<table>
+				<tr th:utext="${otherInfo.title}">标题</tr>
+				<tr th:utext="${otherInfo.username}">用户名</tr>
+				<tr th:utext="${otherInfo.seecount}">查看次数</tr>
+				<tr th:utext="${otherInfo.content}">正文</tr>
+		</tbody>
+	</table>
+</body>
+</html>

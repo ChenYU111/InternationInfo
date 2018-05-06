@@ -149,26 +149,36 @@ public class professorController {
 		User user = professorService.findUserByUserId(userId);
 		String result = "";
 		// 更改 提交审核 为 2 状态
-		if (user.getIsprofessor() != 1) {
-			user.setIsprofessor(2);
-			int num = professorService.updateUser(user);
-			if (num == 1) {
-				result = "已经申请,等待管理员审核";
-				boolean auditResult = professorService.auditProfessor(user.getId());
-				if (auditResult == true) {
-					user.setIsprofessor(1);
-					int auditNum = professorService.updateUser(user);
-					if (auditNum > 0) {
-						result = "恭喜，审核通过！您已经成为网站的资讯专家！";
+		if (user != null && !user.equals("")) {
+			if (null == user.getIsprofessor() || user.getIsprofessor().equals("") || user.getIsprofessor() != 1) {
+				user.setIsprofessor(2);
+				int num = professorService.updateUser(user);
+				if (num > 0) {
+					// 立即审核
+					boolean auditResult = professorService.auditProfessor(user.getId());
+					if (auditResult == true) {
+						user.setIsprofessor(1);
+						int auditNum = professorService.updateUser(user);
+						if (auditNum > 0) {
+							User user2 = professorService.findUserByUserId(userId);
+							user2.setIsprofessor(1);
+							int r2 = userService.update(user2);
+							if (r2 > 0) {
+								result = "恭喜，审核通过！您已经成为网站的资讯专家！";
+							}else{
+								result = "申请成功，审核遇到未知错误！请重新申请或联系管理员！";
+							}
+						}
+					}else{
+						result = "您的条件还未达到，申请失败！";
 					}
+				} else {
+					result = "申请失败";
 				}
 			} else {
-				result = "申请失败";
+				result = "不可以申请，您已经是专家。";
 			}
-		} else {
-			result = "不可以申请，您已经是专家。";
 		}
-		model.addAttribute("result", result);
 		return result;
 	}
 
@@ -272,14 +282,14 @@ public class professorController {
 	@RequestMapping("/attentionProfessor/{id}")
 	public String attentionProfessor(@PathVariable("id") Integer professorId, HttpServletRequest req, Model model) {
 		int uId = (int) req.getSession().getAttribute("userId");
-		MyCollection myCollection = userControllerService.findCollectionUser(professorId,uId);
+		MyCollection myCollection = userControllerService.findCollectionUser(professorId, uId);
 		String result = "";
 		/**
 		 * 当表中没有这个专家的记录时 == 关注 当表中有这条记录(不为null),并且 记录中 isUser 的值为
 		 * 0（已经取消），再点击一次应该只关注
 		 **/
 		// 当表中没有这个记录 insert
-		if (myCollection.getuId()==null&&myCollection.getIsUser() == null 
+		if (myCollection.getuId() == null && myCollection.getIsUser() == null
 				&& myCollection.getMyAttentionUserId() == null) {
 			int num = userControllerService.insertProfessor(professorId, uId);
 			if (num > 0) {
@@ -291,7 +301,8 @@ public class professorController {
 			return "professor/attentionProfessorResult";
 		}
 		// 当表中有这个记录， 且 isUser 的值为 0（已经取消） ---- update 1
-		if (myCollection != null && !myCollection.equals("") && myCollection.getIsUser()!=null&&!myCollection.getIsUser().equals("")&&myCollection.getIsUser() == 0) {
+		if (myCollection != null && !myCollection.equals("") && myCollection.getIsUser() != null
+				&& !myCollection.getIsUser().equals("") && myCollection.getIsUser() == 0) {
 			int num1 = userControllerService.updateProfessorToAttention(professorId, uId);
 			if (num1 > 0) {
 				result = "关注成功！";
@@ -324,7 +335,7 @@ public class professorController {
 			for (MyCollection myCollection : myCollectionList) {
 				professorListVo listVo = new professorListVo();
 				listVo.setId(myCollection.getMyAttentionUserId());
-				User u= userService.findUserByPKId(myCollection.getMyAttentionUserId());
+				User u = userService.findUserByPKId(myCollection.getMyAttentionUserId());
 				listVo.setUserName(u.getUserName());
 				List<Article> articleList = infoservice.findMyArticleById(myCollection.getMyAttentionUserId());
 				if (null != articleList && articleList.size() > 0) {
@@ -364,7 +375,8 @@ public class professorController {
 					}
 					// Collections.sort(list, c);
 					// https://www.cnblogs.com/liujinhong/p/6113183.html
-					List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(typeMap.entrySet());
+					List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(
+							typeMap.entrySet());
 					Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
 						// 升序排序
 						public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
@@ -395,8 +407,8 @@ public class professorController {
 					System.out.println(professerType);
 					listVo.setType(professerType);
 					professorVoList.add(listVo);
+				}
 			}
-		}
 		}
 		model.addAttribute("professorVoList", professorVoList);
 		return "professor/MyAttentionProfessorList";

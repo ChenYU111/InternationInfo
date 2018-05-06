@@ -27,13 +27,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.internation.info.Config.AddMD5Encode;
 import com.internation.info.controller.question.questionController;
+import com.internation.info.dao.IntegrationMapper;
 import com.internation.info.dao.UserMapper;
 import com.internation.info.model.Article;
 import com.internation.info.model.Integration;
+import com.internation.info.model.IntegrationExample;
 import com.internation.info.model.Question;
 import com.internation.info.model.User;
 import com.internation.info.model.UserExample;
 import com.internation.info.service.InfoService;
+import com.internation.info.service.IntegrationService;
 import com.internation.info.service.QuestionService;
 import com.internation.info.service.UserService;
 import com.internation.info.service.professorService;
@@ -61,6 +64,8 @@ public class userController {
 	UserService userService;
 	@Autowired
 	InfoService infoService;
+	@Autowired
+	IntegrationService integrationService;
 
 	/*
 	 * @Autowired User user;
@@ -183,10 +188,20 @@ public class userController {
 		user.setSalt(user.getUserName());
 		int num = userMapper.insert(user);
 		logger.info("用户注册是否成功" + num);
-		if (num == 0) {
-			return "register";
-		} else {
+		if (num >0) {
+			Integration integrat = new Integration();
+			integrat.setIntegration_number(100);
+			List<User> allUser = userService.findAllUser();
+			User user2 = new User();
+			if(allUser!=null&&allUser.size()>0){
+				user2 = allUser.get(allUser.size()-1);
+			}
+			integrat.setUserId(user2.getId());
+			integrationService.insert(integrat);
 			return "login";
+		} else {
+			return "register";
+			
 		}
 	}
 

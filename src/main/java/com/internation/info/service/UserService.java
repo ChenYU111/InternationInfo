@@ -36,5 +36,11 @@ public class UserService {
 		int result = userMapper.updateByPrimaryKey(user);
 		return result;
 	}
+
+	public List<User> findAllUser() {
+		List<User> list = userMapper.selectByExample(userExample);
+		return list;
+		
+	}
 	
 }
