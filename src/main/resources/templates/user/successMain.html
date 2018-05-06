@@ -49,12 +49,12 @@
 					<li><a th:href="@{view}">网站留言墙 </a></li>
 					<li><a th:href="@{aboutUs}">关于我们 </a></li>
 					<li><a th:href="@{logout}">注销 </a></li>
+					欢迎你，<span th:utext="${username}">你</span>
 				</ul>
 			</div>
 		</div>
 	</nav>
-
-
+	
 	<div layout:fragment="contentInfo"
 		style="width: 96%; margin-left: auto; margin-right: auto;">
 		<div class="row">
@@ -82,7 +82,7 @@
 						</div>
 					</div>
 				<div id="myCarousel" class="carousel slide"
-					style="width: 800px; height: 430px; margin-left: 260px">
+					style="width: 1050px; height: 430px; margin-left: 220px">
 					<!-- 轮播（Carousel）指标  -->
 					<ol class="carousel-indicators">
 						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -90,7 +90,7 @@
 						<li data-target="#myCarousel" data-slide-to="2"></li>
 					</ol>
 					<!-- 轮播（Carousel）项目 -->
-					<div class="carousel-inner" style="width: 800px; height: 430px">
+					<div class="carousel-inner" style="width: 1050px; height: 430px">
 						<div class="item active">
 							<img src="../../img/portfolio/01-full.jpg" alt="First slide"
 								style="width: 100%;">
@@ -155,8 +155,7 @@
 				</div>
 			</div>
 			<div class="row">
-			
-				<div class="panel panel-default" style="width: 800px;margin-left: 200px">
+				<div class="panel panel-default" style="width: 800px;margin-left: 190px;float: left;">
 					<div class="panel-body">
 						<table  class="table table-hover">
 							<tr th:each="articleVo:${articleList}">
@@ -169,11 +168,31 @@
 					</div>
 				</div>
 				<!-- 从csdn上爬文章下来 -->
-				<div class="well well-lg"></div>
+					<div class="panel panel-warning" style="float: right;margin-right: 40px">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								<a th:href="@{/otherInfoTop10}">otherInfo</a>
+							</h3>
+						</div>
+						<div class="panel-body">
+							<table  class="table table-hover">
+								<thead>
+									<th>标题</th>
+									<th>用户名</th>
+									<th>查看次数</th>
+									<th>操作</th>
+								</thead>
+								<tbody>
+									<tr th:each="otherInfo:${otherInfoList}">
+										<td th:utext="${otherInfo.title}">标题</td>
+										<td th:utext="${otherInfo.username}">标题</td>
+										<td th:utext="${otherInfo.seecount}">标题</td>
+										<td><a th:href="@{'/otherInfoDetail/'+${otherInfo.id}}">查看</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 			</div>
-			
-			<h4>csdn爬虫 20条</h4>
-			<h4>用户发布的 文章 top10</h4>
-			
 		</div></body>
 </html>

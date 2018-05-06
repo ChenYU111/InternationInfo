@@ -47,8 +47,9 @@ public class QuestionService {
 
 	// 查看问题的
 	public List<Answer> findQuestionAnswerById(Integer questionId) {
-		answerExample.createCriteria().andQuestionIdEqualTo(questionId);
-		List<Answer> selectByExample = anserMapper.selectByExample(answerExample);
+		AnswerExample an = new AnswerExample();
+		an.createCriteria().andQuestionIdEqualTo(questionId);
+		List<Answer> selectByExample = anserMapper.selectByExample(an);
 		return selectByExample;
 	}
 	

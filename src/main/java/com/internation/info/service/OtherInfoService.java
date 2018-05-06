@@ -23,4 +23,11 @@ public class OtherInfoService {
 		OtherInfo otherInfo = otherInfoMapper.selectByPrimaryKey(id);
 		return otherInfo;
 	}
+
+	public List<OtherInfo> findOtherInfoTop10() {
+		OtherInfoExample oe = new OtherInfoExample();
+		oe.setOrderByClause("seecount desc");
+		List<OtherInfo> list = otherInfoMapper.selectByExample(oe);
+		return list;
+	}
 }

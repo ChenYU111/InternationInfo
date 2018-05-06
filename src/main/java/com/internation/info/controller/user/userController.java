@@ -32,11 +32,13 @@ import com.internation.info.dao.UserMapper;
 import com.internation.info.model.Article;
 import com.internation.info.model.Integration;
 import com.internation.info.model.IntegrationExample;
+import com.internation.info.model.OtherInfo;
 import com.internation.info.model.Question;
 import com.internation.info.model.User;
 import com.internation.info.model.UserExample;
 import com.internation.info.service.InfoService;
 import com.internation.info.service.IntegrationService;
+import com.internation.info.service.OtherInfoService;
 import com.internation.info.service.QuestionService;
 import com.internation.info.service.UserService;
 import com.internation.info.service.professorService;
@@ -66,7 +68,8 @@ public class userController {
 	InfoService infoService;
 	@Autowired
 	IntegrationService integrationService;
-
+	@Autowired
+	OtherInfoService otherInfoService;
 	/*
 	 * @Autowired User user;
 	 */
@@ -149,7 +152,29 @@ public class userController {
 						}
 					}
 					model.addAttribute("articleList", articleVoList);
+				
 				}
+				
+				List<OtherInfo> list2 = otherInfoService.findOtherInfoTop10();
+				List<OtherInfo> top10List = new ArrayList<>();
+				int index = 0;
+				if (list2 != null && list2.size() > 0) {
+					if (list2.size() > 10) {
+						if (index < 10) {
+							for (OtherInfo otherInfo : list2) {
+								index++;
+								top10List.add(otherInfo);
+							}
+						}
+					}else{
+						for (OtherInfo otherInfo : list2) {
+							top10List.add(otherInfo);
+						}
+					}
+				}
+				model.addAttribute("otherInfoList", top10List);
+				String un = (String)req.getSession().getAttribute("username");
+				model.addAttribute("username", (String)req.getSession().getAttribute("username"));
 				return "main";
 			} catch (AuthenticationException e) {
 				System.out.println("登录失败");
@@ -206,7 +231,7 @@ public class userController {
 	}
 
 	@RequestMapping("/main")
-	public String toMain(Model model) {
+	public String toMain(Model model,HttpServletRequest req) {
 		List<User> professorList = professorService.findProfessorList();
 		List<Integration> integrationList = new ArrayList<>();
 		if (professorList != null && professorList.size() > 0) {
@@ -260,6 +285,25 @@ public class userController {
 			}
 			model.addAttribute("articleList", articleVoList);
 		}
+		List<OtherInfo> list2 = otherInfoService.findOtherInfoTop10();
+		List<OtherInfo> top10List = new ArrayList<>();
+		int index = 0;
+		if (list2 != null && list2.size() > 0) {
+			if (list2.size() > 10) {
+				if (index < 10) {
+					for (OtherInfo otherInfo : list2) {
+						index++;
+						top10List.add(otherInfo);
+					}
+				}
+			}else{
+				for (OtherInfo otherInfo : list2) {
+					top10List.add(otherInfo);
+				}
+			}
+		}
+		model.addAttribute("otherInfoList", top10List);
+		model.addAttribute("username", (String)req.getSession().getAttribute("username"));
 		return "main";
 	}
 

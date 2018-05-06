@@ -1,16 +1,24 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="user/userTemplate">
 <head>
 <meta name="content-type" content="text/html; charset=UTF-8">
-<title>Thymeleaf</title>
+<title>详情</title>
 </head>
 <body>
-	<table>
-				<tr th:utext="${otherInfo.title}">标题</tr>
-				<tr th:utext="${otherInfo.username}">用户名</tr>
-				<tr th:utext="${otherInfo.seecount}">查看次数</tr>
-				<tr th:utext="${otherInfo.content}">正文</tr>
-		</tbody>
-	</table>
+	<div layout:fragment="contentInfo">
+		<table>
+			<tr th:utext="${otherInfoVo.title}">标题
+			</tr>
+			<tr th:utext="${otherInfoVo.username}">用户名
+			</tr>
+			<tr th:utext="${otherInfoVo.seecount}">查看次数
+			</tr>
+			<tr th:utext="${otherInfoVo.StrContent}">正文
+			</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>
