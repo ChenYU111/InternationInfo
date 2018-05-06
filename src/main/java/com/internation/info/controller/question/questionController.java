@@ -200,7 +200,6 @@ public class questionController {
 						}
 						answerVo.setQuestionRevertVoList(questionRevertVoList);
 					}
-					
 					answerVoList.add(answerVo);
 				}
 			}
@@ -290,7 +289,7 @@ public class questionController {
 					User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 					answerVo.setUserName(user.getUserName());
 					answerVo.setuId(user.getId());
-					List<QuestionRevert> answerRevertList = questionService.findQuestionAnswerRevert(questionId,answerfloor);
+					List<QuestionRevert> answerRevertList = questionService.findQuestionAnswerRevert(questionId,answer.getFloor());
 					if (answerRevertList != null && answerRevertList.size() > 0) {
 						List<questionRevertVo> questionRevertVoList = new ArrayList<>();
 						for (QuestionRevert questionRevert2 : answerRevertList) {
@@ -307,7 +306,6 @@ public class questionController {
 						}
 						answerVo.setQuestionRevertVoList(questionRevertVoList);
 					}
-					
 					answerVoList.add(answerVo);
 				}
 			}
