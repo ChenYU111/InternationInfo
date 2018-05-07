@@ -2,20 +2,86 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta name="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../css/_all.css" th:href="@{/css/_all.css}">
+<link rel="stylesheet" href="../../datatables/dataTables.bootstrap.css" />
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" src="../../js/validate/jquery.validate.min.js"></script>
+ <script src="../../js/icheck.min.js" th:src="@{/js/icheck.min.js}" type="text/javascript"></script>
+<script type="text/javascript" src="../../js/validate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../js/validate/messages_zh.min.js"></script>
 <title>注册新用户</title>
+<script type="text/javascript">
+	$(function() {
+		// 在键盘按下并释放及提交后验证提交表单
+		$("#frm").validate({
+			rules : {
+				userName : {
+					required : true,
+					minlength : 2
+				},
+				password : {
+					required : true,
+					minlength : 6
+				},
+				surpwd:{
+					required : true,
+					 equalTo:'#password'
+				},
+				tel:{
+					required : true,
+					minlength : 11
+				}
+			},
+			messages : {
+				userName : {
+					required : "请输入用户名",
+					minlength : "用户名必需由两个字母组成"
+				},
+				password : {
+					required : "请输入密码",
+					minlength : "密码长度不能小于 6 个字母"
+				},
+				surpwd : {
+					required : "请输入密码",
+					 equalTo:"两次密码必须一致" //表示和id="password"的值相同
+				}
+				,
+				tel : {
+					required : "请输入手机号",
+					minlength : "请输入11位手机号"
+				}
+			},
+			submitHandler : function(form) {
+				form.submit();
+			}
+		});
+	});
+</script>
 </head>
-<body>
-<div>
-	<img src="../../img/portfolio/05-thumbnail.jpg" alt="欢迎" style="float: left; width: 250px;height: 250px;margin-top: 70px;margin-left: 50px;"></img>
-	<form th:action="toregister" style="float: right;margin-top: 100px;margin-right: 80px;">
-		用户名：<input th:type="text" id="userName" name="userName" placeholder="用户名" required="required"/><br/>
-		手机号：<input th:type="tel" id="tel" name="tel" placeholder="手机号" required="required"/><br/>
-		密    码：<input th:type="password" id="password" name="password" placeholder="密码" required="required"/><br/>
-		确认密码：<input th:type="password" id="surpwd" name="surpwd" placeholder="确认密码" required="required"/><br/>
-		性别:<input th:type="radio" name="sex" value="1">男
-            <input th:type="radio" name="sex" value="2" checked>女<br/>
-		<input th:type="submit" value="注册"><br/>
+<body style="background-image: url('img/wall/wall.gif') ">
+ <div class="main">
+		<div class="alert alert-danger" th:if="${message}"
+			style="display: none;">
+			<span th:text="${message}"></span>
+		</div>
+		 <div class="text-center">Info</div><br>
+		  <h3 class="no-margins">注册：</h3>
+		  <div class="well">您好，我在 Well 中！
+		<form th:action="@{/toregister}" method="post"  style="margin-right: 80px;width: 500px;margin-left: 500px;background-image: url('/img/')"; id="frm">
+		<input th:type="text" id="userName" name="userName" class="form-control uname" placeholder="用户名" required="required"/><br/>
+		<input th:type="tel" id="tel" name="tel" class="form-control uname" placeholder="手机号" required="required"/><br/>
+		<input th:type="password" id="password" class="form-control pword m-b" name="password" placeholder="密码" required="required"/><br/>
+		<input th:type="password" id="surpwd" class="form-control pword m-b" name="surpwd" placeholder="确认密码" required="required"/><br/>
+		<label class="radio-inline">
+        <input type="radio" name="sex" value="2" id="optionsRadios3"  > 男
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="sex" value="2" id="optionsRadios4"  checked> 女
+    </label>
+		<input th:type="submit" value="注册" class="btn btn-primary btn-block"><br/>
 	</form>
-</div>
+		</div>
+	</div>
 </body>
 </html>

@@ -203,7 +203,7 @@ public class userController {
 	 * System.out.println("nanshou=========="); return "index"; }
 	 */
 
-	@RequestMapping("/toregister")
+	@RequestMapping(value="/toregister",method = { RequestMethod.POST })
 	public String toRegister(@ModelAttribute User user, Model model) {
 		System.out.println(user.getUserName());
 		String password = md5Encode.md5Pwd(user.getPassword(), user.getUserName());
