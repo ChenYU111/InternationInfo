@@ -23,7 +23,7 @@
 		// 在键盘按下并释放及提交后验证提交表单
 		$("#frm1").validate({
 			rules : {
-				userName : {
+				username : {
 					required : true,
 					minlength : 2
 				},
@@ -33,13 +33,13 @@
 				}
 			},
 			messages : {
-				userName : {
+				username : {
 					required : "请输入用户名",
-					minlength : "用户名必需由两个字母组成"
+					minlength : "用户名不能少于两位"
 				},
 				password : {
 					required : "请输入密码",
-					minlength : "密码长度不能小于 6 个字母"
+					minlength : "密码长度不能小于 六位"
 				}
 				
 			},

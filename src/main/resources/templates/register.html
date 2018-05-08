@@ -65,10 +65,8 @@
 			style="display: none;">
 			<span th:text="${message}"></span>
 		</div>
-		 <div class="text-center">Info</div><br>
-		  <h3 class="no-margins">注册：</h3>
-		  <div class="well">您好，我在 Well 中！
-		<form th:action="@{/toregister}" method="post"  style="margin-right: 80px;width: 500px;margin-left: 500px;background-image: url('/img/')"; id="frm">
+		 <div class="text-center"><h1 style="color: blue;">Info</h1></div><br>
+		<form th:action="@{/toregister}" method="post"  style="margin-right: 80px;width: 500px;margin-left: 500px;margin-top: 100px;background-image: url('/img/')"; id="frm">
 		<input th:type="text" id="userName" name="userName" class="form-control uname" placeholder="用户名" required="required"/><br/>
 		<input th:type="tel" id="tel" name="tel" class="form-control uname" placeholder="手机号" required="required"/><br/>
 		<input th:type="password" id="password" class="form-control pword m-b" name="password" placeholder="密码" required="required"/><br/>
