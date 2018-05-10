@@ -112,8 +112,9 @@
     });
     var wsServer = null;
     var ws = null;
-    wsServer = "ws://" + location.host+"/chatServer";
-    ws = new WebSocket(wsServer); //创建WebSocket对象
+   /*  wsServer = "ws://" + location.host+"/chatServer"; */
+    /* wsServer = "ws://localhost:8080/InternationInfoSystem/chatServer"; */
+    ws = new WebSocket("ws://localhost:8080/InternationInfoSystem/chatServer"); //创建WebSocket对象
     ws.onopen = function (evt) {
         layer.msg("已经建立连接", { offset: 0});
     };

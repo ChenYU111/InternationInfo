@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author  :  Amayadream
  * @time   :  2016.01.08 09:50
  */
-@ServerEndpoint(value = "/chatServer", configurator = HttpSessionConfigurator.class)
+@ServerEndpoint("/chatServer")
 public class ChatServer {
     private static int onlineCount = 0; //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static CopyOnWriteArraySet<ChatServer> webSocketSet = new CopyOnWriteArraySet<ChatServer>();
@@ -27,7 +27,6 @@ public class ChatServer {
     private HttpSession httpSession;    //request的session
 
     private static List list = new ArrayList<>();   //在线列表,记录用户名称
-    private static Map routetab = new HashMap<>();  //用户名和websocket的session绑定的路由表
 
     /**
      * 连接建立成功调用的方法
@@ -35,13 +34,13 @@ public class ChatServer {
      */
     @OnOpen
     public void onOpen(Session session, EndpointConfig config){
+    	System.err.println("websocket 连接！");
         this.session = session;
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1;
         this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
         this.userid=(String) httpSession.getAttribute("userid");    //获取当前用户
         list.add(userid);           //将用户名加入在线列表
-        routetab.put(userid, session);   //将用户名和session绑定到路由表
         String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list);
         broadcast(message);     //广播
     }
@@ -51,10 +50,10 @@ public class ChatServer {
      */
     @OnClose
     public void onClose(){
+    	System.err.println("websocket 关闭！");
         webSocketSet.remove(this);  //从set中删除
         subOnlineCount();           //在线数减1
         list.remove(userid);        //从在线列表移除这个用户
-        routetab.remove(userid);
         String message = getMessage("[" + userid +"]离开了聊天室,当前在线人数为"+getOnlineCount()+"位", "notice", list);
         broadcast(message);         //广播
     }
@@ -65,16 +64,15 @@ public class ChatServer {
      */
     @OnMessage
     public void onMessage(String _message) {
+    	System.err.println("websocket 处理信息！");
         JSONObject chat = JSON.parseObject(_message);
         JSONObject message = JSON.parseObject(chat.get("message").toString());
         if(message.get("to") == null || message.get("to").equals("")){      //如果to为空,则广播;如果不为空,则对指定的用户发送消息
             broadcast(_message);
         }else{
             String [] userlist = message.get("to").toString().split(",");
-            singleSend(_message, (Session) routetab.get(message.get("from")));      //发送给自己,这个别忘了
             for(String user : userlist){
                 if(!user.equals(message.get("from"))){
-                    singleSend(_message, (Session) routetab.get(user));     //分别发送给每个指定用户
                 }
             }
         }
@@ -86,6 +84,7 @@ public class ChatServer {
      */
     @OnError
     public void onError(Throwable error){
+    	System.err.println("websocket 遇到错误！");
         error.printStackTrace();
     }
 

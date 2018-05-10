@@ -5,7 +5,7 @@
 <head>
     <title>WebChat | 聊天</title>
     <jsp:include page="include/commonfile.jsp"/>
-    <script src="${ctx}/plugins/sockjs/sockjs.js"></script>
+    <script src="../../plugins/sockjs/sockjs.js"></script>
 </head>
 <body>
 <jsp:include page="include/header.jsp"/>
@@ -106,7 +106,7 @@
     });
     var wsServer = null;
     var ws = null;
-    wsServer = "ws://" + location.host+"${pageContext.request.contextPath}" + "/chatServer";
+    wsServer = "ws://" + location.host+ "/chatServer";
     ws = new WebSocket(wsServer); //创建WebSocket对象
     ws.onopen = function (evt) {
         layer.msg("已经建立连接", { offset: 0});
