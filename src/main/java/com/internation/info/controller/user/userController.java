@@ -192,7 +192,7 @@ public class userController {
 				}
 				model.addAttribute("otherInfoList", top10List);
 				String un = (String)req.getSession().getAttribute("username");
-				model.addAttribute("username", (String)req.getSession().getAttribute("username"));
+				model.addAttribute("username", (String)req.getSession().getAttribute("userName"));
 				return "main";
 			} catch (AuthenticationException e) {
 				System.out.println("登录失败");
@@ -321,7 +321,7 @@ public class userController {
 			}
 		}
 		model.addAttribute("otherInfoList", top10List);
-		model.addAttribute("username", (String)req.getSession().getAttribute("username"));
+		model.addAttribute("username", (String)req.getSession().getAttribute("userName"));
 		return "main";
 	}
 

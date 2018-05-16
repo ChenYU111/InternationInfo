@@ -6,6 +6,9 @@ import com.alibaba.fastjson.JSONObject;
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @time   :  2016.01.08 09:50
  */
 @ServerEndpoint("/chatServer")
+@Component
 public class ChatServer {
     private static int onlineCount = 0; //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static CopyOnWriteArraySet<ChatServer> webSocketSet = new CopyOnWriteArraySet<ChatServer>();
