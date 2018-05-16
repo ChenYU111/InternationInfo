@@ -57,12 +57,12 @@ public class otherInfoController {
 		otherInfoVo.setCreateTime(findOtherInfo.getCreateTime());
 		otherInfoVo.setSeecount(findOtherInfo.getSeecount());
 		otherInfoVo.setTitle(findOtherInfo.getTitle());
-		String strContent = new String(findOtherInfo.getContent()); 
 		String stContent;
 		try {
-			byte[] b_utf8 = strContent.getBytes("utf-8");
-			stContent = new String(b_utf8,"utf-8");
-			otherInfoVo.setStrContent(stContent);
+			String strContent = new String(findOtherInfo.getContent(),"gb2312"); 
+			//System.out.println(findOtherInfo.getContent().getClass());
+			otherInfoVo.setStrContent(strContent);
+			System.out.println(otherInfoVo.getStrContent());
 			otherInfoVo.setUsername(findOtherInfo.getUsername());
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
