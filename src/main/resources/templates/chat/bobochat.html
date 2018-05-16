@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>  
-<html>  
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="chat/chatTemplate">
 <head>  
 <meta name="content-type" content="text/html; charset=UTF-8">
 <title>聊天室</title>  
@@ -24,7 +25,8 @@
 </head>
 
 <body>
-<div class="well well-lg">
+<div layout:fragment="contentInfo">
+<div class="well well-lg" style="margin-left: 300px">
 	<div class="form-group">
 		<label for="firstname" class="col-sm-2 control-label" style="margin-left: 10px">昵称：</label><br/>
 		<div class="col-sm-10">
@@ -32,11 +34,10 @@
 		</div>
 	</div>
 
-	<br/>
-	<button onclick="conectWebSocket()" class="btn btn-primary" style="margin-left: -500px">连接WebSocket</button>
-	<button onclick="closeWebSocket()" class="btn btn-warning" style="width: 200px">断开连接</button>
+	<button onclick="conectWebSocket()" class="btn btn-primary" >连接WebSocket</button>
+	<button onclick="closeWebSocket()" class="btn btn-warning" >断开连接</button>
 	</div>
-	<div class="well well-lg">
+	<div class="well well-lg" style="margin-left: 300px">
 		<div class="form-group">
 		<label for="firstname" class="col-sm-2 control-label" style="margin-left: 10px">消息：</label>
 		<div class="col-sm-10">
@@ -45,12 +46,11 @@
 	</div>
 	<button onclick="send()" class="btn btn-primary" style="width: 200px">发送消息</button>
 	</div>
-	<div class="well well-lg">
+	<div class="well well-lg" style="margin-left: 300px">
 	<div id="message"></div>
 	<div >
-</body>
-
-<script type="text/javascript">
+	
+	<script type="text/javascript">
 	var websocket = null;
 	function conectWebSocket() {
 		var nickname = document.getElementById("nickname").value;
@@ -60,8 +60,7 @@
 		}
 		//判断当前浏览器是否支持WebSocket  
 		if ('WebSocket' in window) {
-			websocket = new WebSocket("ws://localhost:8080/websocket/"
-					+ nickname);
+			websocket = new WebSocket("ws://localhost:8080/websocket/" + nickname);
 		} else {
 			alert('Not support websocket')
 		}
@@ -108,4 +107,8 @@
 		websocket.send(message);
 	}
 </script>  
+</div>
+</body>
+
+
 </html>  
