@@ -59,7 +59,7 @@
 								<td th:utext="${article.ispublish}?'发布':'非发布'">是否发布</td>
 								<td
 									th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
-								<td><a th:href="@{'/seeOneArticle/'+${article.id}}">查看</a>
+								<td><a th:href="@{'/seeOneArticle/professor/'+${article.id}}">查看</a>
 								</td>
 							</tr>
 						</form>
@@ -91,7 +91,7 @@
 									th:text="${#dates.format(question.questionTime,'yyyy/MM/dd HH:mm')}">问题发表时间</td>
 								<td th:text="${question.isresolve} ? '已解决' : '未解决'">是否解决了</td>
 								<td><a href="javascript:void(0)"
-									th:href="@{'/seeQuestionDetail/'+${question.id}}">查看</a>
+									th:href="@{'/seeQuestionDetail/professor/'+${question.id}}">查看</a>
 							</tr>
 						</form>
 					</tbody>

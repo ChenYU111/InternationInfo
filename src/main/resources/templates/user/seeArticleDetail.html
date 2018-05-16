@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="user/userTemplate">
+<head>
+<meta charset="UTF-8">
+<title>查看文章详情</title>
+<script type="text/javascript"
+	src="http://www.daimajiayuan.com/download/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="../../ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="../../ueditor/ueditor.all.min.js">
+	<script type="text/javascript" charset="utf-8"
+	src="../../ueditor/ueditor.all.js">
+</script>
+<script type="text/javascript" charset="utf-8"
+	src="../../ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<script type="text/javascript"
+	src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.css">
+
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
+
+<script type="text/javascript"
+	src="http://www.daimajiayuan.com/download/jquery/jquery-1.10.2.min.js"></script>
+<!-- DataTables -->
+<link href="../../datatables/jquery.dataTables.css" rel="stylesheet" />
+<script src="../../datatables/jquery.dataTables.js"></script>
+
+</head>
+<body>
+	<div layout:fragment="contentInfo">
+		<script type="text/javascript"
+			src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+		<link rel="stylesheet"
+			href="../../jquery-ui-1.10.4.custom/css/base/jquery-ui-1.10.4.custom.min.css">
+		<script src="../../jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+		<link rel="stylesheet" href="jqueryui/style.css">
+		<center>
+			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
+			<table border="0px" ; style="text-align: center; margin-top: 20px;">
+				<tr>
+					<td th:utext="${article.title}">标题</td>
+				</tr>
+				<tr>
+					<td>类别：</td>
+					<td th:text="${article.blog_type}">文章类别</td>
+				</tr>
+				<tr>
+					<td>正文：</td>
+					<td th:utext="${article.content}">正文</td>
+				</tr>
+				<tr>
+					<td>是否发布：</td>
+					<td th:utext="${article.ispublish}?'发布':'未发布'">是否发布</td>
+				</tr>
+			</table>
+			<a href="javascript:void(0)" th:onclick="'attentionArticle()'">收藏文章</a>
+			<form th:action="@{'/addArticleReview'}" method="post">
+				<input th:type="text" id="message" name="message"
+					placeholder="说出你的疑问" required="required"> <input
+					th:type="submit" value="发表评论">
+			</form>
+			<div id="dialog" title="回复评论">
+				<form th:action="@{/addRevert}" method="post">
+					<input type="text" id="floor" name="floor" placeholder="回复哪一层" required="required">
+					<textarea rows="4" id="revert" name="revert" placeholder="回复内容" required="required"></textarea>
+					<input type="submit" value="回复">
+				</form>
+			</div>
+			<h3>相关评论</h3>
+			<table id="reviewTable" class="table" style="width: 100%">
+				<tr th:each="reviewVo:${reviewVoList}">
+					<td th:text="${reviewVo.floor_number}+'楼：'">楼层</td>
+					<td th:text="${reviewVo.username}+'说：'">用户名</td>
+					<td th:text="'评论时间：'+${#dates.format(reviewVo.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+					<td th:text="'查看次数：'+${reviewVo.seecount}">查看次数</td>
+					<td th:text="'评论内容：'+${reviewVo.message}">内容</td>
+					<td><button class="opener">回复</button></td>
+					<td th:text="${reviewVo.isRevert}"></td></br>
+					<td th:if="${not #lists.isEmpty(reviewVo.revertList)}">
+					<div>
+					<table >
+						<tr th:each="revertVo:${reviewVo.revertList}">
+							<td th:utext="${revertVo.username}+'说：'">用户名</td>
+							<td th:utext="'回复时间：'+${#dates.format(revertVo.revertCreateTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+							<td th:utext="'回复内容：'+${revertVo.revert}">内容</td>
+						</tr>
+					</table>
+					</div>
+					</td>
+					</tr>
+				</tr>
+			</table>
+			<!-- <button id="opener">打开对话框</button> -->
+		</center>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#artileTable').DataTable({
+					"processing" : true,
+					"paging" : true,
+					"pagingType" : "full_numbers"
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function attentionArticle() {
+				$.post('/attentionArticle', function(str) {
+					layer.open({
+						type : 3,
+						title : "收藏文章",
+						shadeClose : true,//点击外围   关闭
+						shade : [ 0.8, '#393D49' ],//遮蔽层
+						closeBtn : 2,
+						maxmin : true,
+						area : [ '700px', '600px' ],
+						content : str
+					// 注意，如果str是object，那么需要字符拼接。
+					});
+				});
+			}
+		</script>
+		<!-- 弹出对话框 -->
+		<script>
+			$(function() {
+				$("#dialog").dialog({
+					autoOpen : false,
+					 resizable: false,
+					 modal: true,
+					height:200,
+					width:200,
+					show : {
+						effect : "blind",
+						duration : 1000
+					},
+					hide : {
+						effect : "explode",
+						duration : 1000
+					}
+				});
+
+				$(".opener").click(function() {
+					$("#dialog").dialog("open");
+				});
+			});
+		</script>
+	</div>
+</body>
+</html>

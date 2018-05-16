@@ -1,0 +1,160 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="professor/professorTemplate">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>问题详情</title>
+</head>
+<body>
+	<div layout:fragment="contentInfo">
+		<table>
+			<tr>
+				<td>标题：</td>
+				<td th:utext="${questionDetail.title}">标题</td>
+				<td>查看次数：</td>
+				<td th:text="${questionDetail.seeCount}">查看次数</td>
+			</tr>
+			<tr>
+				<td>正文：</td>
+				<td th:utext="${questionDetail.content}">内容</td>
+			</tr>
+			<tr>
+				<td id="hidden" th:text="${questionDetail.id}"
+					style="display: none;"></td>
+			<tr>
+		</table>
+		<form th:action="@{/addAnswer}" method="post">
+			<!--style给定宽度可以影响编辑器的最终宽度-->
+			<script type="text/plain" id="content" name="content">
+        		<p>问题具体描述</p>
+       			 </script>
+			<script type="text/javascript">
+				UE.getEditor('content', {
+					//focus时自动清空初始化时的内容
+					autoClearinitialContent : true,
+					//关闭字数统计
+					wordCount : false,
+					//关闭elementPath
+					elementPathEnabled : false,
+					//默认的编辑区域高度
+					initialFrameHeight : 300
+				//更多其他参数，请参考ueditor.config.js中的配置项
+				})
+			</script>
+			<input th:type="submit" value="提交答案">
+		</form>
+			<div id="dialog" title="回复评论">
+				<form th:action="@{/addAnswerRevert}" method="post">
+					<input type="text" id="floor" name="answerfloor" placeholder="回复哪一层" required="required">
+					<textarea rows="4" id="revert" name="revertMessage" placeholder="回复内容" required="required"></textarea>
+					<input type="submit" value="回复">
+				</form>
+			</div>
+		<h3>相关评论：</h3>
+		<table id="answertable" class="display" style="width: 100%">
+			<tbody>
+				<tr th:each="answerVo:${answerVoList}">
+					<td th:text="${answerVo.floor}+'楼'">楼层</td>
+					<td th:utext="${answerVo.content}">文章标题</td>
+					<td th:text="${#dates.format(answerVo.answerTime,'yyyy/MM/dd HH:mm')}">时间</td>
+					<td><a href="javascript:void(0)" th:onClick="'isAdoptAnswer('+${answerVo.id}+')'">采纳</a> 
+					<td><button class="opener">回复</button></td>
+						<!-- <a href="javascript:void(0)" th:onClick="'isReturnAnswer('+${answer.id}+')'">回复</a></td> -->
+					<td th:if="${not #lists.isEmpty(answerVo. questionRevertVoList)}">
+					<div>
+					<table >
+						<tr th:each="questionRevertVo:${answerVo.questionRevertVoList}">
+							<td th:utext="${questionRevertVo.username}+'说：'">用户名</td>
+							<td th:utext="'回复时间：'+${#dates.format(questionRevertVo.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
+							<td th:utext="'回复内容：'+${questionRevertVo.revertMessage}">内容</td>
+						</tr>
+					</table>
+					</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+
+		<link href="../../datatables/jquery.dataTables.css" rel="stylesheet" />
+		<script src="../../datatables/jquery.dataTables.js"></script>
+		<script type="text/javascript"
+			src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+		<!-- <script type="text/javascript" src="../../layerjs/questionLayer.js"></script> -->
+		<script type="text/javascript">
+			function isAdoptAnswer(id) {
+				$.post("/isAdoptAnswer/" + id, {
+					"id" : id
+				}, function(str) {
+					layer.open({
+						type : 3,
+						title : "采纳答案结果",
+						shadeClose : true,//点击外围   关闭
+						shade : [ 0.8, '#393D49' ],//遮蔽层
+						closeBtn : 2,
+						maxmin : true,
+						area : [ '700px', '600px' ],
+						content : str
+					// 注意，如果str是object，那么需要字符拼接。
+					});
+				});
+			}
+		</script>
+		<script type="text/javascript">
+			function isReturnAnswer(id) {
+				$.post('/addReturnAnswer/' + id, {
+					"id" : id
+				}, function(str) {
+					layer.open({
+						type : 3,
+						title : "回复问题",
+						shadeClose : true,//点击外围   关闭
+						shade : [ 0.8, '#393D49' ],//遮蔽层
+						closeBtn : 2,
+						maxmin : true,
+						area : [ '700px', '600px' ],
+						content : str
+					// 注意，如果str是object，那么需要字符拼接。
+					});
+				});
+			}
+		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#answertable').DataTable({
+					"processing" : true,
+					"paging" : true,
+					"pagingType" : "full_numbers"
+				});
+			});
+		</script>
+		
+		<!-- 弹出对话框 -->
+		<script>
+			$(function() {
+				$("#dialog").dialog({
+					autoOpen : false,
+					 resizable: false,
+					 modal: true,
+					height:200,
+					width:200,
+					show : {
+						effect : "blind",
+						duration : 1000
+					},
+					hide : {
+						effect : "explode",
+						duration : 1000
+					}
+				});
+
+				$(".opener").click(function() {
+					$("#dialog").dialog("open");
+				});
+			});
+		</script>
+	</div>
+</body>
+</html>

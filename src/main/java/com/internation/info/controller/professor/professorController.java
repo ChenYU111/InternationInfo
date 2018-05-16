@@ -21,19 +21,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.internation.info.controller.user.userController;
+import com.internation.info.dao.ArticleMapper;
+import com.internation.info.model.Answer;
 import com.internation.info.model.Article;
 import com.internation.info.model.Integration;
 import com.internation.info.model.MyCollection;
 import com.internation.info.model.Question;
+import com.internation.info.model.QuestionRevert;
+import com.internation.info.model.Revert;
+import com.internation.info.model.Review;
 import com.internation.info.model.User;
 import com.internation.info.service.InfoService;
 import com.internation.info.service.QuestionService;
+import com.internation.info.service.RevertService;
 import com.internation.info.service.UserCollectionService;
 import com.internation.info.service.UserService;
 import com.internation.info.service.professorService;
+import com.internation.info.vo.answerVo;
 import com.internation.info.vo.professDetailVo;
 import com.internation.info.vo.professVo;
 import com.internation.info.vo.professorListVo;
+import com.internation.info.vo.questionRevertVo;
+import com.internation.info.vo.revertVo;
+import com.internation.info.vo.reviewVo;
 import com.internation.info.vo.userDetailVo;
 
 @Controller
@@ -48,7 +58,12 @@ public class professorController {
 	QuestionService questionService;
 	@Autowired
 	UserService userService;
-
+	@Autowired
+	ArticleMapper articleMapper;
+	@Autowired
+	RevertService revertService;
+	@Autowired
+	InfoService infoService;
 	@RequestMapping("/professorList")
 	public String findAllProfessorList(Model model) {
 		List<User> professorList = professorService.findProfessorList();
@@ -457,5 +472,108 @@ public class professorController {
 	/**
 	 * 自动审核是否能成为专家 积分超过 3000 发表 的文章超过 20篇
 	 */
-
+	
+	// 查看文章 和 本文章的资讯 如果 有 评论 就 展示出来
+	@RequestMapping("/seeOneArticle/professor/{id}")
+	public String seeOneArticle(@PathVariable("id") Integer articleId, HttpServletRequest req, Model model) {
+		Article article = articleMapper.selectByPrimaryKey(articleId);
+		if (!StringUtils.isEmpty(article)) {
+			model.addAttribute("article", article);
+			// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
+			List<Review> findReviewList = infoService.findReviewList(articleId);
+			List<reviewVo> reviewList = new ArrayList<>();
+			if (findReviewList != null && findReviewList.size() > 0) {
+				for (Review review : findReviewList) {
+					User user = infoService.findUserNameList(review.getObserver_id());
+					reviewVo reviewVo = new reviewVo();
+					reviewVo.setUsername(user.getUserName());
+					reviewVo.setCreateTime(review.getCreateTime());
+					reviewVo.setFloor_number(review.getFloor_number());
+					reviewVo.setMessage(review.getMessage());
+					reviewVo.setSeecount(review.getSeecount());
+					reviewVo.setIsRevert(review.getIsRevert());
+					if (null != review.getIsRevert() && !review.getIsRevert().equals("") && review.getIsRevert() == 1) {
+						List<Revert> revertList = revertService.findRevertByArticleIdAndFloor(articleId,
+								review.getFloor_number());
+						if (!StringUtils.isEmpty(revertList)) {
+							List<revertVo> revertVoList = new ArrayList<>();
+							for (Revert revert2 : revertList) {
+								revertVo revVo = new revertVo();
+								User user3 = infoService.findUserNameList(revert2.getuId());
+								revVo.setArticleId(revert2.getArticleId());
+								revVo.setIsRevert(revert2.getIsRevert());
+								revVo.setRevertCreateTime(revert2.getRevertCreateTime());
+								revVo.setRevertFloor(revert2.getRevertFloor());
+								revVo.setReviewFloor(revert2.getReviewFloor());
+								revVo.setUsername(user3.getUserName());
+								revVo.setuId(revert2.getuId());
+								revVo.setRevert(revert2.getRevert());
+								revertVoList.add(revVo);
+							}
+							reviewVo.setRevertList(revertVoList);
+						}
+					}
+					reviewList.add(reviewVo);
+				}
+				model.addAttribute("reviewVoList", reviewList);
+			} else {
+				model.addAttribute("review", "暂无评论");
+			}
+		}
+		HttpSession session = req.getSession();
+		session.setAttribute("articleId", articleId);
+		return "professor/seeArticleDetail";
+	}
+	@RequestMapping("/seeQuestionDetail/professor/{id}")
+	public String seeQuestionDetail(@PathVariable("id") Integer questionId, Model model, HttpServletRequest req) {
+		Question findQuestionDetailById = questionService.findQuestionDetailById(questionId);
+		int seecount = 0;
+		if (findQuestionDetailById.getSeeCount() != null) {
+			seecount = findQuestionDetailById.getSeeCount() + 1;
+		}
+		findQuestionDetailById.setSeeCount(seecount + 1);
+		int result = questionService.updateQuestion(findQuestionDetailById);
+		if (result > 0) {
+			findQuestionDetailById = questionService.findQuestionDetailById(questionId);
+		}
+		model.addAttribute("questionDetail", findQuestionDetailById);
+		List<Answer> findQuestionAnswerById = questionService.findQuestionAnswerById(questionId);
+		List<answerVo> answerVoList = new ArrayList<>();
+		if (findQuestionAnswerById != null && findQuestionAnswerById.size() > 0) {
+			for (Answer answer : findQuestionAnswerById) {
+				answerVo answerVo = new answerVo();
+				answerVo.setId(answer.getId());
+				answerVo.setContent(answer.getContent());
+				answerVo.setAnswerTime(answer.getAnswerTime());
+				answerVo.setFloor(answer.getFloor());
+				answerVo.setIsAdopt(answer.getIsAdopt());
+				answerVo.setQuestionId(answer.getQuestionId());
+				User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
+				answerVo.setUserName(user.getUserName());
+				answerVo.setuId(user.getId());
+				List<QuestionRevert> answerRevertList = questionService.findQuestionAnswerRevert(questionId,answer.getFloor());
+				if (answerRevertList != null && answerRevertList.size() > 0) {
+					List<questionRevertVo> questionRevertVoList = new ArrayList<>();
+					for (QuestionRevert questionRevert2 : answerRevertList) {
+						questionRevertVo qvo = new questionRevertVo();
+						qvo.setId(questionRevert2.getId());
+						qvo.setCreateTime(questionRevert2.getCreateTime());
+						qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
+						qvo.setRevertFloor(questionRevert2.getRevertFloor());
+						qvo.setRevertMessage(questionRevert2.getRevertMessage());
+						User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
+						qvo.setuId(user2.getId());
+						qvo.setUsername(user2.getUserName());
+						questionRevertVoList.add(qvo);
+					}
+					answerVo.setQuestionRevertVoList(questionRevertVoList);
+				}
+				answerVoList.add(answerVo);
+			}
+		}
+		model.addAttribute("answerVoList", answerVoList);
+		HttpSession session = req.getSession();
+		session.setAttribute("seeQuestionId", questionId);
+		return "professor/seeQuestionDetail";
+	}
 }

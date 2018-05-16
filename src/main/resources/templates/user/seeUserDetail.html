@@ -19,6 +19,70 @@
 		<tr><td>提出问题数量:</td><td th:text="${userDetailVo.questionCount}"></td></tr>
 	</table>
 	</div>
+	<div class="panel panel-warning" style="width: 700px">
+			<div class="panel-heading" style="width: 700px">
+				<h3 class="panel-title">我的文章</h3>
+			</div>
+			<div class="panel-body" style="width: 700px">
+				<table id="artileTable2" name="artileTable2">
+					<thead>
+						<tr>
+							<th>标题</th>
+							<th>原创</th>
+							<th>私密</th>
+							<th>发布</th>
+							<th>发布时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<form>
+							<tr th:each="article:${articleList}">
+								<td th:utext="${article.title}">文章标题</td>
+								<td th:utext="${article.original}?'原创':'非原创'">是否原创</td>
+								<td th:utext="${article.isprivate}?'私密':'非私密'">是否私密</td>
+								<td th:utext="${article.ispublish}?'发布':'非发布'">是否发布</td>
+								<td
+									th:text="${#dates.format(article.createTime,'yyyy/MM/dd HH:mm')}">发布时间</td>
+								<td><a th:href="@{'/seeOneArticle/user/'+${article.id}}">查看</a>
+								</td>
+							</tr>
+						</form>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="panel panel-success" style="width: 700px">
+			<div class="panel-heading" style="width: 700px">
+				<h3 class="panel-title">我提出的问题</h3>
+			</div>
+			<div class="panel-body" style="width: 700px">
+				<table id="MyQuestionTable2" class="table table-hover"
+					style="width: 100%">
+					<thead>
+						<tr>
+							<th>标题</th>
+							<th>发表时间</th>
+							<th>是否已经解决</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<form>
+							<tr th:each="question:${myQuestionList}">
+								<td th:utext="${question.title}">问题标题</td>
+								<td
+									th:text="${#dates.format(question.questionTime,'yyyy/MM/dd HH:mm')}">问题发表时间</td>
+								<td th:text="${question.isresolve} ? '已解决' : '未解决'">是否解决了</td>
+								<td><a href="javascript:void(0)"
+									th:href="@{'/seeQuestionDetail/user/'+${question.id}}">查看</a>
+							</tr>
+						</form>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
