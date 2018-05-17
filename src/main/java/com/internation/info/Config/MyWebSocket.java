@@ -1,4 +1,4 @@
-package com.internation.info.controller.web;
+package com.internation.info.Config;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -11,6 +11,8 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.stereotype.Component;
+
+import com.internation.info.common.SensitiveWord;
 /** 
  * websocket的具体实现类 
  * @author Angel --守护天使 
@@ -53,10 +55,15 @@ public class MyWebSocket {
      * @param message 客户端发送过来的消息*/  
     @OnMessage  
     public void onMessage(String message, Session session,@PathParam("nickname") String nickname) {  
-        System.out.println("来自客户端:"+nickname+"的消息:" + message);  
+    	//加载敏感词库
+    	SensitiveWord sw = new SensitiveWord("CensorWords.txt");
+    	sw.InitializationWork();  
+    	String mes = sw.filterInfo(message); 
+    	String nickName= sw.filterInfo(nickname);
+    	System.out.println("来自客户端:"+nickName+"的消息:" + mes);  
         //群发消息  
-        message=nickname+"说:"+message;
-        broadcast(message);  
+    	mes=nickName+"说:"+mes;
+        broadcast(mes);  
     }  
    
     /** 

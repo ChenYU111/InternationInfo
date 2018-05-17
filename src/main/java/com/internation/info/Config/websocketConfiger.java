@@ -1,4 +1,4 @@
-package com.internation.info.controller.web;
+package com.internation.info.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

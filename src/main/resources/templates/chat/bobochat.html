@@ -62,7 +62,7 @@
 		if ('WebSocket' in window) {
 			websocket = new WebSocket("ws://localhost:8080/websocket/" + nickname);
 		} else {
-			alert('Not support websocket')
+			alert('您的浏览器不支持WebSocket!请换其他浏览器！')
 		}
 
 		//连接发生错误的回调方法  

@@ -1,4 +1,4 @@
-package com.internation.info.controller.web;
+package com.internation.info.controller;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
