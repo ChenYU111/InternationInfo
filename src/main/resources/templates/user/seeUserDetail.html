@@ -12,7 +12,7 @@
 		<tr><td>姓名:</td><td th:text="${userDetailVo.userName}"></td></tr>
 		<tr><td>是否是资讯专家:</td><td th:text="${userDetailVo.isprofessor}?'专家':'差点就是专家了'"></td></tr>
 		<tr><td>电话:</td><td th:text="${userDetailVo.tel}"></td></tr>
-		<tr><td>性别:</td><td th:text="${userDetailVo.sex}"></td></tr>
+		<tr><td>性别:</td><td th:text="${userDetailVo.sex==1?'男':'女'}"></td></tr>
 		<tr><td>注册时间:</td><td th:text="${#dates.format(userDetailVo.createTime,'yyyy/MM/dd HH:mm')}"></td></tr>
 		<tr><td>积分:</td><td th:text="${userDetailVo.integration}"></td></tr>
 		<tr><td>发表文章数量:</td><td th:text="${userDetailVo.articleCount}"></td></tr>

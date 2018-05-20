@@ -44,7 +44,33 @@
 				$('#fileTable').DataTable({
 					"processing" : true,
 					"paging" : true,
-					"pagingType" : "full_numbers"
+					"pagingType" : "full_numbers",
+						
+						//支持国际化，将search转为中文
+				        language: {
+				          "decimal":        "",
+				          "emptyTable":     "表中没有数据",
+				          "info":           "显示 _START_ 到 _END_ 页共 _TOTAL_ 条",
+				          "infoEmpty":      "显示 0 到 0 页共 0 条",
+				          "infoFiltered":   "(filtered from _MAX_ total entries)",
+				          "infoPostFix":    "",
+				          "thousands":      ",",
+				          "lengthMenu":     "显示 _MENU_ 条",
+				          "loadingRecords": "加载...",
+				          "processing":     "Processing...",
+				          "search":         "搜索:",
+				          "zeroRecords":    "没有匹配项",
+				          "paginate": {
+				              "first":      "第一页",
+				              "last":       "最后一页",
+				              "next":       "下页",
+				              "previous":   "上页"
+				          },
+				          "aria": {
+				              "sortAscending":  ": activate to sort column ascending",
+				              "sortDescending": ": activate to sort column descending"
+				          },
+				        },
 				});
 			});
 		</script>
