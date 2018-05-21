@@ -11,9 +11,9 @@
 	src="../../ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8"
 	src="../../ueditor/ueditor.all.min.js">
-	<script type="text/javascript" charset="utf-8"
-	src="../../ueditor/ueditor.all.js">
 </script>
+	<script type="text/javascript" charset="utf-8"
+	src="../../ueditor/ueditor.all.js"/>
 <script type="text/javascript" charset="utf-8"
 	src="../../ueditor/lang/zh-cn/zh-cn.js"></script>
 
@@ -35,13 +35,11 @@
 </head>
 <body>
 	<div layout:fragment="contentInfo">
-		<script type="text/javascript"
-			src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
-		<link rel="stylesheet"
-			href="../../jquery-ui-1.10.4.custom/css/base/jquery-ui-1.10.4.custom.min.css">
+		<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+		<link rel="stylesheet" href="../../jquery-ui-1.10.4.custom/css/base/jquery-ui-1.10.4.custom.min.css">
 		<script src="../../jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
 		<link rel="stylesheet" href="jqueryui/style.css">
-		<center>
+		
 			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
 			<table border="0px" ; style="text-align: center; margin-top: 20px;">
 				<tr>
@@ -82,10 +80,9 @@
 					<td th:text="'查看次数：'+${reviewVo.seecount}">查看次数</td>
 					<td th:text="'评论内容：'+${reviewVo.message}">内容</td>
 					<td><button class="opener">回复</button></td>
-					<td th:text="${reviewVo.isRevert}"></td></br>
 					<td th:if="${not #lists.isEmpty(reviewVo.revertList)}">
 					<div>
-					<table >
+					<table>
 						<tr th:each="revertVo:${reviewVo.revertList}">
 							<td th:utext="${revertVo.username}+'说：'">用户名</td>
 							<td th:utext="'回复时间：'+${#dates.format(revertVo.revertCreateTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
@@ -98,13 +95,39 @@
 				</tr>
 			</table>
 			<!-- <button id="opener">打开对话框</button> -->
-		</center>
+		
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('#artileTable').DataTable({
 					"processing" : true,
 					"paging" : true,
-					"pagingType" : "full_numbers"
+					"pagingType" : "full_numbers",
+					
+					//支持国际化，将search转为中文
+			        language: {
+			          "decimal":        "",
+			          "emptyTable":     "表中没有数据",
+			          "info":           "显示 _START_ 到 _END_ 页共 _TOTAL_ 条",
+			          "infoEmpty":      "显示 0 到 0 页共 0 条",
+			          "infoFiltered":   "(filtered from _MAX_ total entries)",
+			          "infoPostFix":    "",
+			          "thousands":      ",",
+			          "lengthMenu":     "显示 _MENU_ 条",
+			          "loadingRecords": "加载...",
+			          "processing":     "Processing...",
+			          "search":         "搜索:",
+			          "zeroRecords":    "没有匹配项",
+			          "paginate": {
+			              "first":      "第一页",
+			              "last":       "最后一页",
+			              "next":       "下页",
+			              "previous":   "上页"
+			          },
+			          "aria": {
+			              "sortAscending":  ": activate to sort column ascending",
+			              "sortDescending": ": activate to sort column descending"
+			          },
+			        },
 				});
 			});
 		</script>
@@ -130,10 +153,10 @@
 			$(function() {
 				$("#dialog").dialog({
 					autoOpen : false,
-					 resizable: false,
-					 modal: true,
-					height:200,
-					width:200,
+					resizable: false,
+					modal: true,
+					height:300,
+					width:300,
 					show : {
 						effect : "blind",
 						duration : 1000
@@ -143,7 +166,6 @@
 						duration : 1000
 					}
 				});
-
 				$(".opener").click(function() {
 					$("#dialog").dialog("open");
 				});

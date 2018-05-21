@@ -291,8 +291,9 @@ public class InfoService {
 
 	//我收藏的文章
 	public List<MyCollection> findMyattentionArticle(int userId){
-		myCollectionExample.createCriteria().andUIdEqualTo(userId).andIsArticleEqualTo(1);
-		List<MyCollection> list = myCollectionMapper.selectByExample(myCollectionExample);
+		MyCollectionExample myCE = new MyCollectionExample();
+		myCE.createCriteria().andUIdEqualTo(userId).andIsArticleEqualTo(1);
+		List<MyCollection> list = myCollectionMapper.selectByExample(myCE);
 		return list;
 	}
 

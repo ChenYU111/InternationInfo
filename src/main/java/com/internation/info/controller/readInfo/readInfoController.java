@@ -176,8 +176,7 @@ public class readInfoController {
 		}
 		review.setSeecount(0);
 		int insertNum = infoService.insertReview(review);
-		//根据文章id查询   文章  
-		Article article2 = infoService.findArticleByPrimaryKey(articleId);
+		
 		// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
 		if (insertNum > 0) {
 			List<Review> findReviewList = infoService.findReviewList(review.getArticle_id());
@@ -185,24 +184,53 @@ public class readInfoController {
 				model.addAttribute("reviewList", findReviewList);
 			}
 		}
-		List<Review> findReviewList = infoService.findReviewList(articleId);
 		List<reviewVo> reviewVoList = new ArrayList<>();
-		for (Review review : findReviewList) {
-			User user = infoService.findUserNameList(review.getObserver_id());
-			//将相关评论查询出来   放到   文章的   vo中
-			reviewVo reVo = new reviewVo();
-			reVo.setUsername(user.getUserName());
-			reVo.setCreateTime(user.getCreateTime());
-			reVo.setCreaTime(review.getCreateTime());
-			reVo.setFloor_number(review.getFloor_number());
-			reVo.setMessage(review.getMessage());
-			int seecount = review.getSeecount()==null?0:review.getSeecount();
-			reVo.setSeecount(seecount);
-			reviewVoList.add(reVo);
-			
+		List<Review> findReviewList = infoService.findReviewList(articleId);
+		//根据文章id查询   文章  
+		Article article2 = infoService.findArticleByPrimaryKey(articleId);
+		int revertNum = 0;
+		// 文章不等于null
+		if (!StringUtils.isEmpty(article2)) {
+			// 评论也不等于null
+			if (!StringUtils.isEmpty(findReviewList)) {
+				// 遍历评论
+				for (Review review : findReviewList) {
+					User user = infoService.findUserNameList(review.getObserver_id());
+					reviewVo reviewVo = new reviewVo();
+					reviewVo.setUsername(user.getUserName());
+					reviewVo.setCreateTime(user.getCreateTime());
+					reviewVo.setCreaTime(review.getCreateTime());
+					reviewVo.setFloor_number(review.getFloor_number());
+					reviewVo.setMessage(review.getMessage());
+					reviewVo.setSeecount(review.getSeecount());
+					reviewVo.setIsRevert(1);
+						List<Revert> revertList = revertService.findRevertByArticleIdAndFloor(articleId,
+								review.getFloor_number());
+						if (!StringUtils.isEmpty(revertList)) {
+							List<revertVo> revertVoList = new ArrayList<>();
+							for (Revert revert2 : revertList) {
+								revertVo revVo = new revertVo();
+								User user3 = infoService.findUserNameList(revert2.getuId());
+								revVo.setArticleId(revert2.getArticleId());
+								revVo.setIsRevert(revert2.getIsRevert());
+								revVo.setRevertCreateTime(revert2.getRevertCreateTime());
+								User user5 = infoService.findUserNameList(revert2.getuId());				
+								revVo.setUsername(user5.getUserName());
+								revVo.setRevertFloor(revert2.getRevertFloor());
+								revVo.setReviewFloor(revert2.getReviewFloor());
+								revVo.setUsername(user3.getUserName());
+								revVo.setuId(revert2.getuId());
+								revVo.setRevert(revert2.getRevert());
+								revertVoList.add(revVo);
+							}
+							reviewVo.setRevertList(revertVoList);
+						}
+						reviewVoList.add(reviewVo);
+				}
+			}
 		}
-		model.addAttribute("reviewVoList",reviewVoList);
-		model.addAttribute("article",article2);
+		model.addAttribute("reviewVoList", reviewVoList);
+		model.addAttribute("article", article2);
 		return "readInfo/readInfoDetail";
 	}
 	
