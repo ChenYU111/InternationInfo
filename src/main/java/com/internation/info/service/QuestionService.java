@@ -40,7 +40,7 @@ public class QuestionService {
 	}
 
 	public List<Question> findMyQuestion(int userId) {
-		questionExample.createCriteria().andQuestionerEqualTo(userId);
+		questionExample.createCriteria().andQuestionerEqualTo(userId).andStatusEqualTo(1);
 		List<Question> myQuestionList = questionMapper.selectByExample(questionExample);
 		return myQuestionList;
 	}
@@ -116,8 +116,10 @@ public class QuestionService {
 	}
 	
 	public List<Question> findQuestionBySeeCount(){
-		questionExample.setOrderByClause("seeCount desc");
-		List<Question> questionList = questionMapper.selectByExample(questionExample);
+		QuestionExample qe = new QuestionExample();
+		qe.createCriteria().andStatusEqualTo(1);
+		qe.setOrderByClause("seeCount desc");
+		List<Question> questionList = questionMapper.selectByExample(qe);
 		return questionList;
 	}
 	

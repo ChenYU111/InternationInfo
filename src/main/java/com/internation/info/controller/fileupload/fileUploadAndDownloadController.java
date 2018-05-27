@@ -70,6 +70,7 @@ public class fileUploadAndDownloadController {
 	        fileUpload.setFileUrl(fileUrl);
 	        int userId = (int) req.getSession().getAttribute("userId");
 	        fileUpload.setuId(userId);
+	        fileUpload.setStatus(1);
 	        fileUploadService.insertFileUpload(fileUpload);   
 	        return modelAndView;  
 	    } catch (IOException e) {  

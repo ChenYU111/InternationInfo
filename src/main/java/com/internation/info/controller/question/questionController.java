@@ -62,6 +62,7 @@ public class questionController {
 		question.setQuestionTime(new Date());
 		question.setSeeCount(0);
 		question.setProfessorName(que.getProfessorName());
+		question.setStatus(1);
 		int num = questionService.addQuestion(question);
 		if (num > 0) {
 			model.addAttribute("result", "发表成功");

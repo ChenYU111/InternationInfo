@@ -189,9 +189,9 @@ public class InfoService {
 
 	// 查看所有发布的文章
 	public List<Article> findAllArticle() {
-		articleExample.createCriteria().andIsprivateEqualTo(0);
-		articleExample.createCriteria().andIspublishEqualTo(1);
-		List<Article> allArticleList = articleMapper.selectByExample(articleExample);
+		ArticleExample ae = new ArticleExample();
+		ae.createCriteria().andIsprivateEqualTo(0).andIspublishEqualTo(1).andIdentifyingCodeEqualTo("1");
+		List<Article> allArticleList = articleMapper.selectByExample(ae);
 		return allArticleList;
 	}
 
@@ -289,7 +289,7 @@ public class InfoService {
 		return num;
 	}
 
-	//我收藏的文章
+	//我收藏的文章  只有能显示出来   才可以关注  所以  只需要在查询列表的时候   限制 可用的资讯   才能显示
 	public List<MyCollection> findMyattentionArticle(int userId){
 		MyCollectionExample myCE = new MyCollectionExample();
 		myCE.createCriteria().andUIdEqualTo(userId).andIsArticleEqualTo(1);

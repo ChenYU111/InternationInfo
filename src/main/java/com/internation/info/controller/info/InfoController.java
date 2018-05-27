@@ -98,6 +98,7 @@ public class InfoController {
 		ar.setBlog_type(article.getBlog_type());
 		int uid = (int) session.getAttribute("userId");
 		ar.setUid(uid);
+		ar.setIdentifyingCode("1");
 		int result = articleMapper.insert(ar);
 		if (result > 0) {
 			System.err.println("插入返回的结果  " + result);
@@ -249,7 +250,7 @@ public class InfoController {
 	@RequestMapping("/seeArticleList")
 	public String articleList(HttpServletRequest req, Model model) {
 		HttpSession session = req.getSession();
-		articleExample.createCriteria().andUidEqualTo((int) session.getAttribute("userId"));
+		articleExample.createCriteria().andUidEqualTo((int) session.getAttribute("userId")).andIdentifyingCodeEqualTo("1");
 		articleExample.setOrderByClause("createTime desc");
 		List<Article> articleList = articleMapper.selectByExample(articleExample);
 		if (articleList != null && articleList.size() > 0) {

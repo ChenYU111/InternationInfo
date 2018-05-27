@@ -37,7 +37,9 @@ public class FileUploadService {
 	}
 	
 	public List<FileUpload> findAllFileList(){
-		List<FileUpload> fileAllList = fileUploadMapper.selectByExample(fileUploadExample);
+		FileUploadExample fE = new FileUploadExample();
+		fE.createCriteria().andStatusEqualTo(1);
+		List<FileUpload> fileAllList = fileUploadMapper.selectByExample(fE);
 		return fileAllList;
 	}
 	
@@ -56,8 +58,9 @@ public class FileUploadService {
 	}
 	
 	public List<FileUpload> findMyFileUpLoadList(int uId){
-		fileUploadExample.createCriteria().andUIdEqualTo(uId);
-		List<FileUpload> list = fileUploadMapper.selectByExample(fileUploadExample);
+		FileUploadExample fe = new FileUploadExample();
+		fe.createCriteria().andUIdEqualTo(uId).andStatusEqualTo(1);
+		List<FileUpload> list = fileUploadMapper.selectByExample(fe);
 		return list;
 	}
 	

@@ -117,7 +117,6 @@ public class userController {
 				}
 				logger.info("用户" + username + "登录认证通过");
 				req.setAttribute("user", ulist.get(0));
-
 				List<User> professorList = professorService.findProfessorList();
 				List<Integration> integrationList = new ArrayList<>();
 				if (professorList != null && professorList.size() > 0) {
