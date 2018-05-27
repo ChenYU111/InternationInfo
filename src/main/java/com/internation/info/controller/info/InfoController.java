@@ -175,13 +175,17 @@ public class InfoController {
 	// 添加评论并且查看评论
 	@RequestMapping("/addArticleReview")
 	public String addReview(String message, HttpServletRequest req, Model model) {
+		// 加载敏感词库
+		SensitiveWord sw = new SensitiveWord("CensorWords.txt");
+		sw.InitializationWork();
+		String reviewMessage = sw.filterInfo(message);
 		// 添加评论
 		int articleId = (int) req.getSession().getAttribute("articleId");
 		HttpSession session = req.getSession();
 		review.setObserver_id((Integer) session.getAttribute("userId"));
 		review.setCreateTime(new Date());
 		review.setArticle_id(articleId);
-		review.setMessage(message);
+		review.setMessage(reviewMessage);
 		int num = 0;
 		num = infoService.findFloor(review.getArticle_id());
 		if (num > 0) {
@@ -392,11 +396,15 @@ public class InfoController {
 	public String addRevert(int floor, HttpServletRequest req, Model model, String revert) {
 		HttpSession session = req.getSession();
 		int articleId = (int) session.getAttribute("articleId");
+		// 加载敏感词库
+		SensitiveWord sw = new SensitiveWord("CensorWords.txt");
+		sw.InitializationWork();
+		String revertMessage = sw.filterInfo(revert);
 		//User user = infoService.findUserNameList(review.getObserver_id());
 		//先添加一个   revert到数据库  
 		Revert revert3 = new Revert();
 		revert3.setIsRevert(1);
-		revert3.setRevert(revert);
+		revert3.setRevert(revertMessage);
 		revert3.setRevertCreateTime(new Date());
 		revert3.setuId((int)session.getAttribute("userId"));
 		revert3.setReviewFloor(floor);

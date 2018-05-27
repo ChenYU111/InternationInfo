@@ -41,11 +41,11 @@
 			
 			<label class="col-sm-2 control-label">问题描述：</label>
 			<!--style给定宽度可以影响编辑器的最终宽度-->
-			<script type="text/plain" id="content" name="content">
+			<script type="text/plain" id="myEditor" name="content">
         		<p>问题具体描述</p>
-       			 </script>
+       		</script>
 			<script type="text/javascript">
-				UE.getEditor('content', {
+				UE.getEditor('myEditor', {
 					//focus时自动清空初始化时的内容
 					autoClearinitialContent : true,
 					//关闭字数统计

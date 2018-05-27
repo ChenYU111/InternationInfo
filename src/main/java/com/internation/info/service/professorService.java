@@ -66,8 +66,9 @@ public class professorService {
 	
 	public List<Article> findPublishArticleCount(int uid){
 		//是当前这个专家的，并且是非私密的
-		articleExample.createCriteria().andUidEqualTo(uid).andIsprivateEqualTo(0);
-		List<Article> articlelist = articleMapper.selectByExample(articleExample);
+		ArticleExample aE = new ArticleExample();
+		aE.createCriteria().andUidEqualTo(uid).andIsprivateEqualTo(0);
+		List<Article> articlelist = articleMapper.selectByExample(aE);
 		return articlelist;
 	}
 

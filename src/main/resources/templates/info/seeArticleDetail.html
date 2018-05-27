@@ -39,36 +39,30 @@
 		<link rel="stylesheet" href="../../jquery-ui-1.10.4.custom/css/base/jquery-ui-1.10.4.custom.min.css">
 		<script src="../../jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
 		<link rel="stylesheet" href="jqueryui/style.css">
-		
+		<a href="javascript:void(0)" th:onclick="'attentionArticle()'">收藏文章</a>
 			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
 			<table border="0px" ; style="text-align: center; margin-top: 20px;">
 				<tr>
 					<td th:utext="${article.title}">标题</td>
 				</tr>
 				<tr>
-					<td>类别：</td>
 					<td th:text="${article.blog_type}">文章类别</td>
 				</tr>
 				<tr>
-					<td>正文：</td>
 					<td th:utext="${article.content}">正文</td>
 				</tr>
-				<tr>
-					<td>是否发布：</td>
-					<td th:utext="${article.ispublish}?'发布':'未发布'">是否发布</td>
-				</tr>
+					
 			</table>
-			<a href="javascript:void(0)" th:onclick="'attentionArticle()'">收藏文章</a>
+			
 			<form th:action="@{'/addArticleReview'}" method="post">
-				<input th:type="text" id="message" name="message"
-					placeholder="说出你的疑问" required="required"> <input
-					th:type="submit" value="发表评论">
+				<input th:type="text" id="message" name="message" class="form-control"  style="width: 500px" placeholder="友爱评论。。。" required="required">
+				<input th:type="submit"  class="btn btn-primary" value="发表评论">
 			</form>
 			<div id="dialog" title="回复评论">
 				<form th:action="@{/addRevert}" method="post">
-					<input type="text" id="floor" name="floor" placeholder="回复哪一层" required="required">
-					<textarea rows="4" id="revert" name="revert" placeholder="回复内容" required="required"></textarea>
-					<input type="submit" value="回复">
+					<input type="text" id="floor" name="floor" class="form-control" placeholder="回复哪一层评论（阿拉伯数字）" required="required">
+					<textarea rows="4" id="revert" name="revert" class="form-control" placeholder="友爱回复。。。" required="required"></textarea>
+					<input type="submit" class="btn btn-primary" value="回复">
 				</form>
 			</div>
 			<h3>相关评论</h3>
@@ -79,7 +73,7 @@
 					<td th:text="'评论时间：'+${#dates.format(reviewVo.createTime,'yyyy/MM/dd HH:mm')}">评论时间</td>
 					<td th:text="'查看次数：'+${reviewVo.seecount}">查看次数</td>
 					<td th:text="'评论内容：'+${reviewVo.message}">内容</td>
-					<td><button class="opener">回复</button></td>
+					<td><button class="opener" >回复</button></td>
 					<td th:if="${not #lists.isEmpty(reviewVo.revertList)}">
 					<div>
 					<table>

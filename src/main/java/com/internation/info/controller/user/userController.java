@@ -271,7 +271,6 @@ public class userController {
 					vo.setId(user.getId());
 					list.add(vo);
 				}
-
 			}
 		} else {
 			for (Integration integration : integrationList) {

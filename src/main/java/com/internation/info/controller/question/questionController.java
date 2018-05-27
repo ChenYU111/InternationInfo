@@ -256,12 +256,16 @@ public class questionController {
 	//添加回复并且返回信息
 	@RequestMapping("/addAnswerRevert")
 	public String addQuestionRevert(int answerfloor,String revertMessage,Model model,HttpServletRequest req){
+		// 加载敏感词库
+		SensitiveWord sw = new SensitiveWord("CensorWords.txt");
+		sw.InitializationWork();
+		String revertM = sw.filterInfo(revertMessage);
 		int questionId = (int) req.getSession().getAttribute("seeQuestionId");
 		QuestionRevert qv = new QuestionRevert();
 		qv.setCreateTime(new Date());
 		qv.setQuestionId(questionId);
 		qv.setQuestionFloor(answerfloor);
-		qv.setRevertMessage(revertMessage);
+		qv.setRevertMessage(revertM);
 		qv.setuId((int)req.getSession().getAttribute("userId"));
 		QuestionRevert questionRevert = questionService.findQuestionAnswerRevertFloor(questionId, answerfloor);
 		int revertFloor =0;
@@ -269,6 +273,7 @@ public class questionController {
 			revertFloor=questionRevert.getRevertFloor()==null?0:questionRevert.getRevertFloor();
 		}
 		qv.setRevertFloor(revertFloor+1);
+		//插入   回复
 		int result  = questionService.insert(qv);
 		if (result > 0) {
 			//得道答案的Id  改变  isanswer 
@@ -313,6 +318,7 @@ public class questionController {
 			return "question/seeQuestionDetail";
 		} else {
 			return "question/seeQuestionDetail";
+			
 		}
 	}
 }

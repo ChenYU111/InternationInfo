@@ -10,13 +10,12 @@
 	<div layout:fragment="contentInfo">
 		<table>
 			<tr>
-				<td>标题：</td>
 				<td th:utext="${questionDetail.title}">标题</td>
-				<td>查看次数：</td>
-				<td th:text="${questionDetail.seeCount}">查看次数</td>
 			</tr>
 			<tr>
-				<td>正文：</td>
+				<td th:text="'查看次数: '+${questionDetail.seeCount}">查看次数</td>
+			</tr>
+			<tr>
 				<td th:utext="${questionDetail.content}">内容</td>
 			</tr>
 			<tr>

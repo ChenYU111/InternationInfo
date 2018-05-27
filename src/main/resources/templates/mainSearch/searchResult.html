@@ -25,7 +25,6 @@
 				<th>归属</th>
 				<th>用户名</th>
 				<th>标题</th>
-				<th>内容</th>
 				<th>操作</th>
 				</tr>
 			</thead>
@@ -34,7 +33,6 @@
 					<td th:utext="${searchVo.type}">类别</td>
 					<td th:utext="${searchVo.username}">用户名</td>
 					<td th:utext="${searchVo.title}">标题</td>
-					<td th:utext="${searchVo.content}">标题内容</td>
 					<!-- 查看   就用   后台传  controller 的  requestionMapper 到前台  隐藏不显示 -->
 					<td>
 						<a th:href="@{'/'+${searchVo.seeUrl}+'/'+${searchVo.id}}">查看</a>

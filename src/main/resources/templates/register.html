@@ -75,8 +75,8 @@
 		<input th:type="tel" id="tel" name="tel" class="form-control uname" placeholder="手机号" required="required"/><br/>
 		<input th:type="password" id="password" class="form-control pword m-b" name="password" placeholder="密码" required="required"/><br/>
 		<input th:type="password" id="surpwd" class="form-control pword m-b" name="surpwd" placeholder="确认密码" required="required"/><br/>
-		<label class="radio-inline">
-        <input type="radio" name="sex" value="2" id="optionsRadios3"  > 男
+	<label class="radio-inline">
+        <input type="radio" name="sex" value="1" id="optionsRadios3"  > 男
     </label>
     <label class="radio-inline">
         <input type="radio" name="sex" value="2" id="optionsRadios4"  checked> 女
@@ -84,6 +84,9 @@
 		<input th:type="submit" value="注册" class="btn btn-primary btn-block"><br/>
 	</form>
 		</div>
+			<span style="margin-left: 750px">已经有账号？点击<a th:href="@{/login}">登录</a>！</span>
+		<div class="page-header" style="text-align: center;">
+	</div>
 	</div>
 </body>
 </html>

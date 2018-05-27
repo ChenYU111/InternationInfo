@@ -66,8 +66,9 @@ public class QuestionService {
 	}
 	
 	public List<Answer> findAnswerByQuestionId(Integer questionId){
-		answerExample.createCriteria().andQuestionIdEqualTo(questionId);
-		List<Answer> selectByExampleList = anserMapper.selectByExample(answerExample);
+		AnswerExample aE = new AnswerExample();
+		aE.createCriteria().andQuestionIdEqualTo(questionId);
+		List<Answer> selectByExampleList = anserMapper.selectByExample(aE);
 		return selectByExampleList;
 	}
 	
@@ -115,16 +116,16 @@ public class QuestionService {
 	}
 	
 	public List<Question> findQuestionBySeeCount(){
-		questionExample.setOrderByClause("seecount desc");
+		questionExample.setOrderByClause("seeCount desc");
 		List<Question> questionList = questionMapper.selectByExample(questionExample);
 		return questionList;
 	}
 	
 	public List<Question> findQuestionByQuestioner(Integer uId){
-		questionExample.createCriteria().andQuestionerEqualTo(uId);
-		List<Question> questionList = questionMapper.selectByExample(questionExample);
+		QuestionExample qE = new QuestionExample();
+		qE.createCriteria().andQuestionerEqualTo(uId);
+		List<Question> questionList = questionMapper.selectByExample(qE);
 		return questionList;
-		
 	}
 
 	public List<Question> findQuestionByQuestioner(String str) {
@@ -150,7 +151,7 @@ public class QuestionService {
 	public QuestionRevert findQuestionAnswerRevertFloor(int questionId,int answerFloor){
 		QuestionRevertExample qe = new QuestionRevertExample();
 		qe.createCriteria().andQuestionIdEqualTo(questionId).andQuestionFloorEqualTo(answerFloor);
-		List<QuestionRevert> list = questionRevertMapper.selectByExample(questionRevertExample);
+		List<QuestionRevert> list = questionRevertMapper.selectByExample(qe);
 		QuestionRevert qr = new QuestionRevert();
 		if(list!=null&&list.size()>0){
 			qr = list.get(list.size()-1);

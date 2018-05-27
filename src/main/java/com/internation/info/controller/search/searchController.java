@@ -54,7 +54,7 @@ public class searchController {
 			searchVo.setType("问答");
 			searchVo.setTitle(question.getTitle());
 			searchVo.setContent(question.getContent());
-			User u = userService.findUserByPKId(question.getProfessorId());
+			User u = userService.findUserByPKId(question.getQuestioner());
 			searchVo.setId(question.getId());
 			searchVo.setUsername(u.getUserName());
 			searchVo.setSeeUrl("seeQuestionDetail");

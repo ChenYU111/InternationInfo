@@ -179,19 +179,19 @@ public class professorController {
 							user2.setIsprofessor(1);
 							int r2 = userService.update(user2);
 							if (r2 > 0) {
-								result = "恭喜，审核通过！您已经成为网站的资讯专家！";
+								result = "恭喜，审核通过！";
 							}else{
-								result = "申请成功，审核遇到未知错误！请重新申请或联系管理员！";
+								result = "审核遇到未知错误！请重新申请或联系管理员！";
 							}
 						}
 					}else{
-						result = "您的条件还未达到，申请失败！";
+						result = "抱歉，目前您的条件为满足资讯专家条件！";
 					}
 				} else {
 					result = "申请失败";
 				}
 			} else {
-				result = "不可以申请，您已经是专家。";
+				result = "您已是资讯专家，不可重复申请。";
 			}
 		}
 		return result;
