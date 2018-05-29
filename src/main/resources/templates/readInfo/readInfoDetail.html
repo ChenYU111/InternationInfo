@@ -39,14 +39,16 @@
 		<script src="../../jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
 		<link rel="stylesheet" href="jqueryui/style.css">
 			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
-			<table border="0px" ; style="text-align: center; margin-top: 20px;">
+			<table border="0px" ; style=" margin-top: 20px;">
 				<tr>
-					<td th:utext=${article.original}?'原创文章':'非原创文章'></td>
+					
 					<td th:utext="${article.title}">标题</td>
 				</tr>
 				<tr>
-					<td>类别：</td>
-					<td th:text="${article.blog_type}">文章类别</td>
+					<td th:utext=${article.original}?'原创文章':'非原创文章'></td>
+				</tr>
+				<tr>
+					<td th:text="${'类别：'+article.blog_type}">文章类别</td>
 				</tr>
 				<tr>
 					<td th:utext="${article.content}">正文</td>

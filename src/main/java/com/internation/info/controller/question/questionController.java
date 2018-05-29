@@ -82,6 +82,9 @@ public class questionController {
 
 	@RequestMapping("/myQuestion")
 	public String MyQuestionList(HttpServletRequest req, Model model) {
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		int userId = (int) req.getSession().getAttribute("userId");
 		List<Question> findMyQuestion = questionService.findMyQuestion(userId);
 		if (findMyQuestion != null && findMyQuestion.size() > 0) {
@@ -93,11 +96,8 @@ public class questionController {
 	@RequestMapping("/seeQuestionDetail/{id}")
 	public String seeQuestionDetail(@PathVariable("id") Integer questionId, Model model, HttpServletRequest req) {
 		Question findQuestionDetailById = questionService.findQuestionDetailById(questionId);
-		int seecount = 0;
-		if (findQuestionDetailById.getSeeCount() != null) {
-			seecount = findQuestionDetailById.getSeeCount() + 1;
-		}
-		findQuestionDetailById.setSeeCount(seecount + 1);
+		int questionSeecount = findQuestionDetailById.getSeeCount()==null?0:findQuestionDetailById.getSeeCount();
+		findQuestionDetailById.setSeeCount(questionSeecount + 1);
 		int result = questionService.updateQuestion(findQuestionDetailById);
 		if (result > 0) {
 			findQuestionDetailById = questionService.findQuestionDetailById(questionId);
@@ -114,6 +114,9 @@ public class questionController {
 				answerVo.setFloor(answer.getFloor());
 				answerVo.setIsAdopt(answer.getIsAdopt());
 				answerVo.setQuestionId(answer.getQuestionId());
+				if(req.getSession().getAttribute("userId")==null){
+					return "login";
+				}
 				User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 				answerVo.setUserName(user.getUserName());
 				answerVo.setuId(user.getId());
@@ -127,6 +130,9 @@ public class questionController {
 						qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
 						qvo.setRevertFloor(questionRevert2.getRevertFloor());
 						qvo.setRevertMessage(questionRevert2.getRevertMessage());
+						if(req.getSession().getAttribute("userId")==null){
+							return "login";
+						}
 						User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 						qvo.setuId(user2.getId());
 						qvo.setUsername(user2.getUserName());
@@ -150,6 +156,9 @@ public class questionController {
 		sw.InitializationWork();
 		an.setContent(sw.filterInfo(an.getContent()));
 		int questionId = (int) req.getSession().getAttribute("seeQuestionId");
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		answer.setuId((int) req.getSession().getAttribute("userId"));
 		List<Answer> findAnswerByQuestionId = questionService.findAnswerByQuestionId(questionId);
 		int f = 0;
@@ -181,6 +190,9 @@ public class questionController {
 					answerVo.setFloor(answer.getFloor());
 					answerVo.setIsAdopt(answer.getIsAdopt());
 					answerVo.setQuestionId(answer.getQuestionId());
+					if(req.getSession().getAttribute("userId")==null){
+						return "login";
+					}
 					User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 					answerVo.setUserName(user.getUserName());
 					answerVo.setuId(user.getId());
@@ -194,6 +206,9 @@ public class questionController {
 							qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
 							qvo.setRevertFloor(questionRevert2.getRevertFloor());
 							qvo.setRevertMessage(questionRevert2.getRevertMessage());
+							if(req.getSession().getAttribute("userId")==null){
+								return "login";
+							}
 							User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 							qvo.setuId(user2.getId());
 							qvo.setUsername(user2.getUserName());
@@ -267,6 +282,9 @@ public class questionController {
 		qv.setQuestionId(questionId);
 		qv.setQuestionFloor(answerfloor);
 		qv.setRevertMessage(revertM);
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		qv.setuId((int)req.getSession().getAttribute("userId"));
 		QuestionRevert questionRevert = questionService.findQuestionAnswerRevertFloor(questionId, answerfloor);
 		int revertFloor =0;
@@ -292,6 +310,9 @@ public class questionController {
 					answerVo.setFloor(answer.getFloor());
 					answerVo.setIsAdopt(answer.getIsAdopt());
 					answerVo.setQuestionId(answer.getQuestionId());
+					if(req.getSession().getAttribute("userId")==null){
+						return "login";
+					}
 					User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 					answerVo.setUserName(user.getUserName());
 					answerVo.setuId(user.getId());
@@ -305,6 +326,9 @@ public class questionController {
 							qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
 							qvo.setRevertFloor(questionRevert2.getRevertFloor());
 							qvo.setRevertMessage(questionRevert2.getRevertMessage());
+							if(req.getSession().getAttribute("userId")==null){
+								return "login";
+							}
 							User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 							qvo.setuId(user2.getId());
 							qvo.setUsername(user2.getUserName());

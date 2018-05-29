@@ -26,9 +26,9 @@ href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel=
 				<table class="table table-hover">
 					<tr ><td th:utext="${otherInfoVo.title}">标题</td>
 					</tr>
-					<tr ><td th:utext="${otherInfoVo.username}">用户名</td>
+					<tr ><td th:utext="'来自博客园的：'+${otherInfoVo.username}">用户名</td>
 					</tr>
-					<tr ><td th:utext="${otherInfoVo.seecount}">查看次数</td>
+					<tr ><td th:utext="'查看次数：'+${otherInfoVo.seecount}">查看次数</td>
 					</tr>
 					<tr></tr>
 					<tr ><td th:utext="${otherInfoVo.StrContent}">正文</td>

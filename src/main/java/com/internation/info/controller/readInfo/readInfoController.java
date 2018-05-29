@@ -90,6 +90,9 @@ public class readInfoController {
 					}
 					reviewList.add(reviewVo);
 				}
+				int seecount = article.getSeecount()==null?0:article.getSeecount();
+				article.setSeecount(seecount+1);
+				infoService.updateArticle(article);
 				model.addAttribute("reviewVoList", reviewList);
 			} else {
 				model.addAttribute("review", "暂无评论");
@@ -167,6 +170,10 @@ public class readInfoController {
 		review.setCreateTime(new Date());
 		review.setArticle_id(articleId);
 		review.setMessage(rev.getMessage());
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
+		review.setObserver_id((int)req.getSession().getAttribute("userId"));
 		int num = 0;
 		num = infoService.findFloor(review.getArticle_id());
 		if(num>0){
@@ -245,7 +252,8 @@ public class readInfoController {
 					index++;
 					articleVo articleVo= new articleVo();
 					articleVo.setTitle(ar.getTitle());
-					articleVo.setSeecount(ar.getSeecount());
+					int seecount = ar.getSeecount()==null?0:ar.getSeecount();;
+					articleVo.setSeecount(seecount);
 					User user = userService.findUserByPKId(ar.getUid());
 					articleVo.setUsername(user.getUserName());
 					articleVo.setId(ar.getId());
@@ -269,6 +277,9 @@ public class readInfoController {
 			revert3.setIsRevert(1);
 			revert3.setRevert(revert);
 			revert3.setRevertCreateTime(new Date());
+			if(session.getAttribute("userId")==null){
+				return "login";
+				}
 			revert3.setuId((int)session.getAttribute("userId"));
 			revert3.setReviewFloor(floor);
 			revert3.setArticleId(articleId);

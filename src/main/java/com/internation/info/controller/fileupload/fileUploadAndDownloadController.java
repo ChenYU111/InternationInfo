@@ -190,6 +190,9 @@ public class fileUploadAndDownloadController {
 	
 	@RequestMapping("/myUploadList")
 	public String findMyFileUploadList(HttpServletRequest req,Model model){
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		List<FileUpload> fileUpLoadList = fileUploadService.findMyFileUpLoadList((int)req.getSession().getAttribute("userId"));
 		List<fileUploadVo> findAllFileVoList = new ArrayList<>();
 		if(fileUpLoadList!=null&&!fileUpLoadList.equals("")){
@@ -213,6 +216,9 @@ public class fileUploadAndDownloadController {
 	
 	@RequestMapping("/myDownList")
 	public String myDownLoadFileList(HttpServletRequest req,Model model){
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		List<FileDownload> downLoadList = fileUploadService.findMyFileDownLoadList((int)req.getSession().getAttribute("userId"));
 		List<fileUploadVo> findAllFileVoList = new ArrayList<>();
 		if(downLoadList!=null&&!downLoadList.equals("")){

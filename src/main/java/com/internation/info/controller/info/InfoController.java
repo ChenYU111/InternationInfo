@@ -37,9 +37,11 @@ import com.internation.info.model.ArticleExample;
 import com.internation.info.model.MyCollection;
 import com.internation.info.model.Revert;
 import com.internation.info.model.ArticleExample.Criteria;
+import com.internation.info.model.Integration;
 import com.internation.info.model.Review;
 import com.internation.info.model.User;
 import com.internation.info.service.InfoService;
+import com.internation.info.service.IntegrationService;
 import com.internation.info.service.RevertService;
 import com.internation.info.service.UserService;
 import com.internation.info.vo.revertVo;
@@ -64,6 +66,8 @@ public class InfoController {
 	Revert rev;
 	@Autowired
 	RevertService revertService;
+	@Autowired
+	IntegrationService integrationService;
 	@RequestMapping("/writeInfo")
 	public String addInfo() {
 		return "info/writeInfo";
@@ -85,6 +89,18 @@ public class InfoController {
 		ar.setContent(article.getContent());
 		if (submit.equals("发布")) {
 			ar.setIspublish(1);// 发布
+			if(req.getSession().getAttribute("userId")==null){
+				return "login";
+			}
+			int uid = (int)req.getSession().getAttribute("userId");
+			List<Integration> list = integrationService.findIntegrationByUId(uid);
+			Integration integration = new Integration();
+			if(list!=null&&list.size()>0){
+				integration= list.get(0);
+				int integrationNumber = integration.getIntegration_number()==null?0:integration.getIntegration_number();
+				integration.setIntegration_number(integrationNumber+10);
+				integrationService.update(integration);
+			}
 		} else if (submit.equals("保存到草稿箱")) {
 			ar.setIspublish(0);// 提交到草稿箱
 		}
@@ -196,6 +212,15 @@ public class InfoController {
 		}
 		review.setSeecount(0);
 		int insertNum = infoService.insertReview(review);
+		int uid = (int)req.getSession().getAttribute("userId");
+		List<Integration> list = integrationService.findIntegrationByUId(uid);
+		Integration integration = new Integration();
+		if(list!=null&&list.size()>0){
+			integration= list.get(0);
+			int integrationNumber = integration.getIntegration_number()==null?0:integration.getIntegration_number();
+			integration.setIntegration_number(integrationNumber+15);
+			integrationService.update(integration);
+		}
 		// 根据文章id查询 文章
 		Article article2 = infoService.findArticleByPrimaryKey(articleId);
 		// 判断评论是否添加成功 如果添加成功 返回所用评论给 页面
@@ -323,6 +348,9 @@ public class InfoController {
 
 	@RequestMapping("/myDrafts")
 	public String myDrafts(HttpServletRequest req, Model model) {
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		int uId = (int) req.getSession().getAttribute("userId");
 		List<Article> articleList = infoService.findMyDrafts(uId);
 		if (articleList != null && !articleList.equals("") && articleList.size() > 0) {
@@ -335,6 +363,9 @@ public class InfoController {
 	@RequestMapping("/attentionArticle")
 	public String attentionProfessor(HttpServletRequest req, Model model) {
 		int articleId = (int) req.getSession().getAttribute("articleId");
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		int uId = (int) req.getSession().getAttribute("userId");
 		MyCollection myCollection = infoService.findCollectionArticle(articleId, uId);
 		String result = "";
@@ -379,6 +410,9 @@ public class InfoController {
 
 	@RequestMapping("/myattentionArticle")
 	public String myAttentionArticle(HttpServletRequest req, Model model) {
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		List<MyCollection> list = infoService.findMyattentionArticle((int) req.getSession().getAttribute("userId"));
 		List<Article> articleList = new ArrayList<>();
 		if (!StringUtils.isEmpty(list)) {
@@ -420,6 +454,18 @@ public class InfoController {
 		int revertResult = revertService.insertRevert(revert3);
 		if(revertResult>0){
 		List<Review> reviewList = infoService.findReviewByFloorAndArticleId(floor, articleId);
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
+		int uid = (int)req.getSession().getAttribute("userId");
+		List<Integration> integrationList = integrationService.findIntegrationByUId(uid);
+		Integration integration = new Integration();
+		if(list!=null&&list.size()>0){
+			integration= integrationList.get(0);
+			int integrationNumber = integration.getIntegration_number()==null?0:integration.getIntegration_number();
+			integration.setIntegration_number(integrationNumber+15);
+			integrationService.update(integration);
+		}
 		if(reviewList!=null&&reviewList.size()>0){
 			reviewList.get(0).setIsRevert(1);
 			infoService.updateReview(reviewList.get(0));
@@ -476,6 +522,9 @@ public class InfoController {
 	
 	@RequestMapping("/myarticle")
 	public String findMyArticle(Model model,HttpServletRequest req){
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		List<Article> list = infoService.findMyArticleById((int)req.getSession().getAttribute("userId"));
 		model.addAttribute("articleList", list);
 		return "info/myArticle";

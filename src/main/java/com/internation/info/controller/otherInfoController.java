@@ -23,7 +23,7 @@ public class otherInfoController {
 	public String findAllOtherInfo(Model model){
 		List<OtherInfo> list = otherInfoService.findAllOtherInfo();
 		model.addAttribute("otherInfoList", list);
-		return "otherInfoList";
+		return "otherInfo/otherInfoList";
 	}
 	@RequestMapping("/otherInfoTop10")
 	public String findOtherInfoTop10(Model model) {
@@ -69,6 +69,13 @@ public class otherInfoController {
 			e.printStackTrace();
 		}
 		model.addAttribute("otherInfoVo", otherInfoVo);
-		return "otherInfoDetail";
+		return "otherInfo/otherInfoDetail";
+	}
+	
+	@RequestMapping("/findAllOtherInfo")
+	public String findAllOtherInfoList(Model model){
+		List<OtherInfo> otherInfoList = otherInfoService.findAllOtherInfo();
+		model.addAttribute("otherInfoList", otherInfoList);
+		return "otherInfo/allOtherInfoList";
 	}
 }

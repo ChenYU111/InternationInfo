@@ -311,8 +311,10 @@ public class InfoService {
 	}
 
 	public List<Article> findArticleBySeeCount() {
-		articleExample.setOrderByClause("seecount desc");
-		List<Article> articleList = articleMapper.selectByExample(articleExample);
+		ArticleExample ae = new ArticleExample();
+		ae.createCriteria().andIdentifyingCodeNotEqualTo("0");
+		ae.setOrderByClause("seeCount desc");
+		List<Article> articleList = articleMapper.selectByExample(ae);
 		return articleList;
 	}
 }

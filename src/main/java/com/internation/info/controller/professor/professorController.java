@@ -296,6 +296,9 @@ public class professorController {
 
 	@RequestMapping("/attentionProfessor/{id}")
 	public String attentionProfessor(@PathVariable("id") Integer professorId, HttpServletRequest req, Model model) {
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		int uId = (int) req.getSession().getAttribute("userId");
 		MyCollection myCollection = userControllerService.findCollectionUser(professorId, uId);
 		String result = "";
@@ -342,7 +345,11 @@ public class professorController {
 	// 查看我的关注专家
 	@RequestMapping("/myAttentionProfessor")
 	public String myAttentionProfessorList(Model model, HttpServletRequest req) {
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		int userId = (int) req.getSession().getAttribute("userId");
+		
 		List<MyCollection> myCollectionList = userControllerService.findMyCollectionList(userId);
 		List<User> userList = new ArrayList<>();
 		List<professorListVo> professorVoList = new ArrayList<>();
@@ -453,7 +460,6 @@ public class professorController {
 					vo.setId(user.getId());
 					list.add(vo);
 				}
-
 			}
 		} else {
 			for (Integration integration : integrationList) {
@@ -464,7 +470,6 @@ public class professorController {
 				list.add(vo);
 			}
 		}
-
 		model.addAttribute("professVoList", list);
 		return "user/successMain";
 	}
@@ -548,6 +553,9 @@ public class professorController {
 				answerVo.setFloor(answer.getFloor());
 				answerVo.setIsAdopt(answer.getIsAdopt());
 				answerVo.setQuestionId(answer.getQuestionId());
+				if(req.getSession().getAttribute("userId")==null){
+					return "login";
+				}
 				User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 				answerVo.setUserName(user.getUserName());
 				answerVo.setuId(user.getId());
@@ -561,6 +569,9 @@ public class professorController {
 						qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
 						qvo.setRevertFloor(questionRevert2.getRevertFloor());
 						qvo.setRevertMessage(questionRevert2.getRevertMessage());
+						if(req.getSession().getAttribute("userId")==null){
+							return "login";
+						}
 						User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 						qvo.setuId(user2.getId());
 						qvo.setUsername(user2.getUserName());

@@ -45,7 +45,7 @@ public class QuestionService {
 		return myQuestionList;
 	}
 
-	// 查找问题详细
+	// 查找问题详细88
 	public Question findQuestionDetailById(Integer questionId) {
 		Question question = questionMapper.selectByPrimaryKey(questionId);
 		return question;

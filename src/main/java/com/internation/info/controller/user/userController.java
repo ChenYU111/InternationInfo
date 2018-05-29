@@ -338,6 +338,9 @@ public class userController {
 
 	@RequestMapping("/seeUserDetail")
 	public String seeUserDetail(Model model, HttpServletRequest req) {
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		int uId = (int) req.getSession().getAttribute("userId");
 		User user1 = userMapper.selectByPrimaryKey(uId);
 		userDetailVo userDetailVo = new userDetailVo();
@@ -480,6 +483,9 @@ public class userController {
 	public String updatePassword(String userName, String newpassword, String surepasswore, HttpServletRequest req,
 			Model model) {
 		String str = "";
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
 		User user2 = userMapper.selectByPrimaryKey((int) req.getSession().getAttribute("userId"));
 
 		if (user2 != null) {
@@ -600,6 +606,9 @@ public class userController {
 				answerVo.setFloor(answer.getFloor());
 				answerVo.setIsAdopt(answer.getIsAdopt());
 				answerVo.setQuestionId(answer.getQuestionId());
+				if(req.getSession().getAttribute("userId")==null){
+					return "login";
+				}
 				User user = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 				answerVo.setUserName(user.getUserName());
 				answerVo.setuId(user.getId());
@@ -613,6 +622,9 @@ public class userController {
 						qvo.setQuestionFloor(questionRevert2.getQuestionFloor());
 						qvo.setRevertFloor(questionRevert2.getRevertFloor());
 						qvo.setRevertMessage(questionRevert2.getRevertMessage());
+						if(req.getSession().getAttribute("userId")==null){
+							return "login";
+						}
 						User user2 = userService.findUserByPKId((int) req.getSession().getAttribute("userId"));
 						qvo.setuId(user2.getId());
 						qvo.setUsername(user2.getUserName());

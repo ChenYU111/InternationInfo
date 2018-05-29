@@ -25,8 +25,10 @@ public class IntegrationService {
 	}
 	
 	public List<Integration> findIntegrationByUId(int uId){
-		integrationExample.createCriteria().andUserIdEqualTo(uId);
-		List<Integration> list = integrationMapper.selectByExample(integrationExample);
+		IntegrationExample ie = new IntegrationExample();
+		ie.createCriteria().andUserIdEqualTo(uId);
+		List<Integration> list = integrationMapper.selectByExample(ie);
 		return list;
 	}
+	
 }
