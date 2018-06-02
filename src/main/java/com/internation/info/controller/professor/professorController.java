@@ -130,7 +130,7 @@ public class professorController {
 							}
 						}
 
-					} else if (list != null && list.size() > 0 && list.size() < 3) {
+					} else if (list != null && list.size() > 0 && list.size() <= 3) {
 						for (Entry<String, Integer> entry : list) {
 							System.out.println(entry.getKey() + ":" + entry.getValue());
 							type.append(entry.getKey()).append(",");
@@ -185,13 +185,13 @@ public class professorController {
 							}
 						}
 					}else{
-						result = "抱歉，目前您的条件为满足资讯专家条件！";
+						result = "抱歉，目前您的条件未满足资讯专家条件！";
 					}
 				} else {
-					result = "申请失败";
+					result = "申请失败！";
 				}
 			} else {
-				result = "您已是资讯专家，不可重复申请。";
+				result = "您已是资讯专家，不可重复申请！";
 			}
 		}
 		return result;
@@ -264,7 +264,7 @@ public class professorController {
 					}
 				}
 
-			} else if (list != null && list.size() > 0 && list.size() < 3) {
+			} else if (list != null && list.size() > 0 && list.size() <= 3) {
 				for (Entry<String, Integer> entry : list) {
 					System.out.println(entry.getKey() + ":" + entry.getValue());
 					type.append(entry.getKey()).append(",");
@@ -349,7 +349,6 @@ public class professorController {
 			return "login";
 		}
 		int userId = (int) req.getSession().getAttribute("userId");
-		
 		List<MyCollection> myCollectionList = userControllerService.findMyCollectionList(userId);
 		List<User> userList = new ArrayList<>();
 		List<professorListVo> professorVoList = new ArrayList<>();
@@ -416,7 +415,7 @@ public class professorController {
 							}
 						}
 
-					} else if (list != null && list.size() > 0 && list.size() < 3) {
+					} else if (list != null && list.size() > 0 && list.size() <= 3) {
 						for (Entry<String, Integer> entry : list) {
 							System.out.println(entry.getKey() + ":" + entry.getValue());
 							type.append(entry.getKey()).append(",");
@@ -586,5 +585,96 @@ public class professorController {
 		HttpSession session = req.getSession();
 		session.setAttribute("seeQuestionId", questionId);
 		return "professor/seeQuestionDetail";
+	}
+	@RequestMapping("/myFenList")
+	public String myfen(Model model,HttpServletRequest req){
+		if(req.getSession().getAttribute("userId")==null){
+			return "login";
+		}
+		int uId = (int) req.getSession().getAttribute("userId");
+		List<MyCollection> myCollectionList = userControllerService.findMyfen(uId);
+		List<User> userList = new ArrayList<>();
+		List<professorListVo> professorVoList = new ArrayList<>();
+		if (null != myCollectionList && myCollectionList.size() > 0) {
+			for (MyCollection myCollection : myCollectionList) {
+				professorListVo listVo = new professorListVo();
+				listVo.setId(myCollection.getMyAttentionUserId());
+				User u = userService.findUserByPKId(myCollection.getMyAttentionUserId());
+				listVo.setUserName(u.getUserName());
+				List<Article> articleList = infoservice.findMyArticleById(myCollection.getMyAttentionUserId());
+				if (null != articleList && articleList.size() > 0) {
+					// 统计专家类别
+					List<String> typeCount = new ArrayList<>();
+					HashMap<String, Integer> typeMap = new HashMap<>();
+					for (Article article : articleList) {
+						if (article.getBlog_type().contains("Java")) {
+							if (typeMap.get("Java") == null) {
+								typeMap.put("Java", 1);
+							} else {
+								typeMap.put("Java", typeMap.get("Java") + 1);
+							}
+						}
+						if (article.getBlog_type().contains("php")) {
+							if (typeMap.get("php") == null) {
+								typeMap.put("php", 1);
+							} else {
+								typeMap.put("php", typeMap.get("php") + 1);
+							}
+						}
+						if (article.getBlog_type().contains("数据库")) {
+							if (typeMap.get("数据库") == null) {
+								typeMap.put("数据库", 1);
+							} else {
+								typeMap.put("数据库", typeMap.get("数据库") + 1);
+							}
+						}
+						if (article.getBlog_type().contains("人工智能")) {
+							if (typeMap.get("人工智能") == null) {
+								typeMap.put("人工智能", 1);
+							} else {
+								typeMap.put("人工智能", typeMap.get("人工智能") + 1);
+							}
+						}
+
+					}
+					// Collections.sort(list, c);
+					// https://www.cnblogs.com/liujinhong/p/6113183.html
+					List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(
+							typeMap.entrySet());
+					Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+						// 升序排序
+						public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
+							return o1.getValue().compareTo(o2.getValue());
+						}
+
+					});
+					StringBuffer type = new StringBuffer();
+					if (list != null && list.size() > 3) {
+						int num = 0;
+						if (num < 3) {
+							for (Entry<String, Integer> entry : list) {
+								System.out.println(entry.getKey() + ":" + entry.getValue());
+								type.append(entry.getKey()).append(",");
+							}
+						}
+
+					} else if (list != null && list.size() > 0 && list.size() <= 3) {
+						for (Entry<String, Integer> entry : list) {
+							System.out.println(entry.getKey() + ":" + entry.getValue());
+							type.append(entry.getKey()).append(",");
+						}
+					}
+					String professerType = type.toString();
+					if (professerType.length() > 1) {
+						professerType = professerType.substring(0, professerType.length() - 1);
+					}
+					System.out.println(professerType);
+					listVo.setType(professerType);
+					professorVoList.add(listVo);
+				}
+			}
+		}
+		model.addAttribute("professorVoList", professorVoList);
+		return "professor/myFenList";
 	}
 }

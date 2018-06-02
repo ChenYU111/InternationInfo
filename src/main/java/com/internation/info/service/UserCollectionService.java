@@ -35,7 +35,7 @@ public class UserCollectionService {
 		//查找   关注表中的   专家  人
 		public MyCollection findCollectionUser(int professorId,int uId){
 			MyCollectionExample myE = new MyCollectionExample();
-			myE.createCriteria().andMyAttentionUserIdEqualTo(professorId).andIsUserEqualTo(uId);
+			myE.createCriteria().andMyAttentionUserIdEqualTo(professorId).andUIdEqualTo(uId);
 			List<MyCollection> selectByExample = myCollectionMapper.selectByExample(myE);
 			MyCollection mColl = new MyCollection();
 			if(null!=selectByExample&&selectByExample.size()>0){
@@ -83,5 +83,12 @@ public class UserCollectionService {
 				num = updateMyCollectionUser(myCollection2);
 			}
 			return num;
+		}
+		
+		public List<MyCollection> findMyfen(int uId){
+			MyCollectionExample myE = new MyCollectionExample();
+			myE.createCriteria().andUIdEqualTo(uId).andIsUserEqualTo(1);
+			List<MyCollection> selectByExample = myCollectionMapper.selectByExample(myE);
+			return selectByExample;
 		}
 }

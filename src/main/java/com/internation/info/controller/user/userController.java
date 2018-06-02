@@ -223,28 +223,34 @@ public class userController {
 	@RequestMapping(value="/toregister",method = { RequestMethod.POST })
 	public String toRegister(@ModelAttribute User user, Model model) {
 		System.out.println(user.getUserName());
-		String password = md5Encode.md5Pwd(user.getPassword(), user.getUserName());
-		user.setPassword(password);
-		user.setCreateTime(new Date());
-		user.setStatus(1);
-		user.setSalt(user.getUserName());
-		int num = userMapper.insert(user);
-		logger.info("用户注册是否成功" + num);
-		if (num >0) {
-			Integration integrat = new Integration();
-			integrat.setIntegration_number(100);
-			List<User> allUser = userService.findAllUser();
-			User user2 = new User();
-			if(allUser!=null&&allUser.size()>0){
-				user2 = allUser.get(allUser.size()-1);
+		List<User> list = userService.findUserByUN(user.getUserName());
+		if(list==null||list.size()==0){
+			String password = md5Encode.md5Pwd(user.getPassword(), user.getUserName());
+			user.setPassword(password);
+			user.setCreateTime(new Date());
+			user.setStatus(1);
+			user.setSalt(user.getUserName());
+			int num = userMapper.insert(user);
+			logger.info("用户注册是否成功" + num);
+			if (num >0) {
+				Integration integrat = new Integration();
+				integrat.setIntegration_number(100);
+				List<User> allUser = userService.findAllUser();
+				User user2 = new User();
+				if(allUser!=null&&allUser.size()>0){
+					user2 = allUser.get(allUser.size()-1);
+				}
+				integrat.setUserId(user2.getId());
+				integrationService.insert(integrat);
+				return "login";
+			} else {
+				return "register";
+				
 			}
-			integrat.setUserId(user2.getId());
-			integrationService.insert(integrat);
-			return "login";
-		} else {
+		}else{
 			return "register";
-			
 		}
+		
 	}
 
 	@RequestMapping("/main")

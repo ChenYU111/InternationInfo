@@ -38,6 +38,7 @@
 		<link rel="stylesheet" href="../../jquery-ui-1.10.4.custom/css/base/jquery-ui-1.10.4.custom.min.css">
 		<script src="../../jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
 		<link rel="stylesheet" href="jqueryui/style.css">
+		<a href="javascript:void(0)" th:onclick="'attentionArticle()'">收藏文章</a>
 			<!-- 在富文本编辑器中 保存到数据库 后 去出的值带html标签  http://blog.csdn.net/jsdxshi/article/details/70147593 -->
 			<table border="0px" ; style=" margin-top: 20px;">
 				<tr>
@@ -148,6 +149,23 @@
 					$("#dialog").dialog("open");
 				});
 			});
+		</script>
+		<script type="text/javascript">
+			function attentionArticle() {
+				$.post('/attentionArticle', function(str) {
+					layer.open({
+						type : 3,
+						title : "收藏文章",
+						shadeClose : true,//点击外围   关闭
+						shade : [ 0.8, '#393D49' ],//遮蔽层
+						closeBtn : 2,
+						maxmin : true,
+						area : [ '700px', '600px' ],
+						content : str
+					// 注意，如果str是object，那么需要字符拼接。
+					});
+				});
+			}
 		</script>
 	</div>
 </body>

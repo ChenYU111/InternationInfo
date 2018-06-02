@@ -109,7 +109,17 @@ public class QuestionService {
 		return num;
 	}
 
-
+	public Question findQuestionByQid(int questionId){
+		QuestionExample qE = new QuestionExample();
+		qE.createCriteria().andIdEqualTo(questionId).andStatusEqualTo(1);
+		List<Question> list = questionMapper.selectByExample(qE);
+		Question q = new Question();
+		if(list!=null&&list.size()>0){
+			q=list.get(0);
+		}
+		return q;
+	}
+	
 	public int updateQuestion(Question quest){
 		int result = questionMapper.updateByPrimaryKeySelective(quest);
 		return result;
@@ -125,15 +135,16 @@ public class QuestionService {
 	
 	public List<Question> findQuestionByQuestioner(Integer uId){
 		QuestionExample qE = new QuestionExample();
-		qE.createCriteria().andQuestionerEqualTo(uId);
+		qE.createCriteria().andQuestionerEqualTo(uId).andStatusEqualTo(1);
 		List<Question> questionList = questionMapper.selectByExample(qE);
 		return questionList;
 	}
 
 	public List<Question> findQuestionByQuestioner(String str) {
 		String string = "%"+str+"%";
-		questionExample.createCriteria().andContentLike(string);
-		List<Question> questionList = questionMapper.selectByExample(questionExample);
+		QuestionExample qe = new QuestionExample();
+		qe.createCriteria().andContentLike(string).andStatusEqualTo(1);
+		List<Question> questionList = questionMapper.selectByExample(qe);
 		return questionList;
 	}
 	

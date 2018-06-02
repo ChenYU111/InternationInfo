@@ -343,7 +343,9 @@ public class InfoController {
 	@PostMapping("/deleteArticleById/{id}")
 	@ResponseBody
 	public void deleteById(@PathVariable("id") Integer id) {
-		int result = infoService.deleteArticeById(id);
+		Article article = infoService.findArticleByPrimaryKey(id);
+		article.setIdentifyingCode("0");
+		infoService.updateArticle(article);
 	}
 
 	@RequestMapping("/myDrafts")

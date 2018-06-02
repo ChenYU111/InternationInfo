@@ -214,7 +214,7 @@ public class InfoService {
 
 	public List<Article> findMyArticleById(Integer uId) {
 		ArticleExample aExample = new ArticleExample();
-		aExample.createCriteria().andUidEqualTo(uId);
+		aExample.createCriteria().andUidEqualTo(uId).andIdentifyingCodeEqualTo("1");
 		List<Article> myArticleList = articleMapper.selectByExample(aExample);
 		return myArticleList;
 	}

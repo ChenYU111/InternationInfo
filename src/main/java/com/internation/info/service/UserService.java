@@ -42,5 +42,13 @@ public class UserService {
 		return list;
 		
 	}
+
+	public List<User> findUserByUN(String userName) {
+		// TODO Auto-generated method stub
+		UserExample ue = new UserExample();
+		ue.createCriteria().andUserNameEqualTo(userName);
+		List<User>  list= userMapper.selectByExample(ue);
+		return list;
+	}
 	
 }

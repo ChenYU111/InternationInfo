@@ -1,0 +1,111 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="professor/professorTemplate">
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>我的粉丝</title>
+</head>
+<body>
+<div layout:fragment="contentInfo">
+	<div>
+			<table id="artileTable" name="artileTable">
+				<thead>
+					<tr>
+						<th>用户名</th>
+						<th>类别</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<form>
+						<tr th:each="professorListVo:${professorVoList}">
+							<td th:utext="${professorListVo.userName}">专家姓名</td>
+							<td th:utext="${professorListVo.type}">专家类别</td>
+							<td>
+							<a th:href="@{seeProfessorDetail+'/'+${professorListVo.id}}" >查看</a>
+							<a href="javascript:void(0)" th:onclick="'attentionProfessor('+${professorListVo.id}+')'">关注</a>
+							</td>
+						</tr>
+					</form>
+				</tbody>
+			</table>
+		</div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#artileTable').DataTable({
+					"processing" : true,
+					"paging" : true,
+					"pagingType" : "full_numbers",
+					
+					//支持国际化，将search转为中文
+			        language: {
+			          "decimal":        "",
+			          "emptyTable":     "表中没有数据",
+			          "info":           "显示 _START_ 到 _END_ 页共 _TOTAL_ 条",
+			          "infoEmpty":      "显示 0 到 0 页共 0 条",
+			          "infoFiltered":   "(filtered from _MAX_ total entries)",
+			          "infoPostFix":    "",
+			          "thousands":      ",",
+			          "lengthMenu":     "显示 _MENU_ 条",
+			          "loadingRecords": "加载...",
+			          "processing":     "Processing...",
+			          "search":         "搜索:",
+			          "zeroRecords":    "没有匹配项",
+			          "paginate": {
+			              "first":      "第一页",
+			              "last":       "最后一页",
+			              "next":       "下页",
+			              "previous":   "上页"
+			          },
+			          "aria": {
+			              "sortAscending":  ": activate to sort column ascending",
+			              "sortDescending": ": activate to sort column descending"
+			          },
+			        },
+				});
+			});
+		</script>
+		<script type="text/javascript" src="../../layer-v3.1.1/layer/mobile/layer.js"></script>
+		<script type="text/javascript">
+		function seeProfessor(id) {
+			$.post('/seeProfessorDetail/' + id, {
+				"id" : id
+			}, function(str) {
+				layer.open({
+					type :3,
+					title:"文章详情",
+					shadeClose: true,//点击外围   关闭
+			        shade: [0.8, '#393D49'],//遮蔽层
+			        closeBtn: 2,
+			        maxmin: true,
+			        area: ['700px', '600px'],
+					content : str
+				// 注意，如果str是object，那么需要字符拼接。
+				});
+			});
+		}
+		</script>
+		
+		<script type="text/javascript">
+			function attentionProfessor(id) {
+				$.post('/attentionProfessor/' + id, {
+					"id" : id
+				}, function(str) {
+					layer.open({
+						type :3,
+						title:"关注资讯专家",
+						shadeClose: true,//点击外围   关闭
+				        shade: [0.8, '#393D49'],//遮蔽层
+				        closeBtn: 2,
+				        maxmin: true,
+				        area: ['700px', '600px'],
+						content : str
+					// 注意，如果str是object，那么需要字符拼接。
+					});
+				});
+			}
+		</script>
+	</div>
+	
+</body>
+</html>

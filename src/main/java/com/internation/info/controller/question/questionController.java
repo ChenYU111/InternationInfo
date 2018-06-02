@@ -228,7 +228,9 @@ public class questionController {
 
 	@RequestMapping("/deleteQuestion/{id}")
 	public void deleteQuestionById(@PathVariable("id") Integer questionId) {
-		int num = questionService.deleteQuestionById(questionId);
+		Question question = questionService.findQuestionByQid(questionId);
+		question.setStatus(0);
+		questionService.updateQuestion(question);
 	}
 
 	@RequestMapping("/isAdoptAnswer/{id}")
